@@ -4,18 +4,29 @@
 This document outlines an improved USD-based data structure for a modular hair quality control system, leveraging USD's built-in schemas and composition features for better performance, maintainability, and industry standard compliance.
 
 ## Case Study: Blendshape Sample
-This document uses the following blendshape configuration as examples throughout:
+This document uses the following blendshape configuration as examples throughout, organized by module type:
 
 - **Scalp**: `hairline_fix`
 - **Crown**: `lengthen`, `curly`, `volumeOut`, `volumeIn`, `hairline`  
 - **Tail**: `lengthen`, `wavy`, `spread`
 - **Bang**: `lengthen`, `frizzle`, `spread`
 
-**Note**: The `scalp.hairline_fix` blendshape fires automatically with any `hairline` blendshape from other modules. This is handled implicitly and doesn't require special USD tracking.
+**Note**: The `scalp.hairline_fix` blendshape fires automatically with any `hairline` blendshape from other module types. This is handled implicitly and doesn't require special USD tracking.
 
 ## File Organization
 
-**Critical**: Each module and style is stored as a **separate .usd file**. This is not a single large USD with multiple prims, but individual USD files that reference each other:
+**Critical**: Each group, style, and module is stored as a **separate .usd file**. This is not a single large USD with multiple prims, but individual USD files that reference each other in a hierarchy:
+
+**Group > Style > Module** relationship:
+- **Groups** define default module sets and QC boundaries  
+- **Styles** reference specific modules from their group
+- **Modules** contain actual geometry and blendshapes
+
+### **Group Files** (Individual .usd files)
+```
+Group/short.usd                                # Short group definition (module whitelists + alpha whitelists)
+Group/long.usd                                 # Long group definition (module whitelists + alpha whitelists)
+```
 
 ### **Module Files** (Individual .usd files)
 ```
@@ -41,7 +52,7 @@ module/scalp/normal/ripple.png                  # Normal maps within modules
 module/crown/alpha/[texture files]              # Crown-specific textures
 ```
 
-**Each style .usd file contains USD references to the specific module .usd files it needs.**
+**Hierarchy**: Groups define whitelists → Styles reference specific modules from their group → Modules contain actual assets.
 
 ## Complete Module Examples
 
@@ -103,6 +114,31 @@ def "HairModule" (
                 </BlendShapes/volumeOut>,
                 </BlendShapes/volumeIn>
             ]
+        }
+    }
+    
+    # Optional: Alpha texture blacklist for this specific module  
+    # (Crown QC determines what scalp alphas don't work with this crown)
+    def "AlphaBlacklist" {
+        def "Scalp" {
+            def "fade" {
+                # Crown-specific restrictions on scalp fade alphas
+                asset[] blacklistedTextures = [
+                    @module/scalp/alpha/fade/highFade.png@  # High fade conflicts with this crown style
+                ]
+            }
+            
+            def "hairline" {
+                # Crown-specific restrictions on scalp hairline alphas  
+                asset[] blacklistedTextures = [
+                    @module/scalp/alpha/hairline/receding.png@  # Receding hairline doesn't work with this crown
+                ]
+            }
+            
+            def "sideburn" {
+                # Crown-specific restrictions on scalp sideburn alphas
+                asset[] blacklistedTextures = []  # No restrictions for this crown
+            }
         }
     }
 }
@@ -243,23 +279,12 @@ def "Materials" {
     def Material "HairMaterial" {
         token outputs:surface.connect = </Materials/HairMaterial/HairShader.outputs:surface>
         
-        def Shader "HairShader" {
+                def Shader "HairShader" {
             uniform token info:id = "UsdPreviewSurface"
             
-            # Shader parameters as inputs
-            color3f inputs:diffuseColor = (0.8, 0.6, 0.4)
-            float inputs:roughness = 0.7
-            float inputs:metallic = 0.0
-            
-            # Connect textures
-            color3f inputs:diffuseColor.connect = </Materials/HairMaterial/DiffuseTexture.outputs:rgb>
+            # Basic shader parameters (no diffuse/metallic/roughness)
+            # Additional shader parameters will be set procedurally in Blender
         }
-        
-                  def Shader "DiffuseTexture" {
-              uniform token info:id = "UsdUVTexture"
-              asset inputs:file = @module/scalp/normal/ripple.png
-              float2 inputs:st.connect = </Materials/HairMaterial/Primvar.outputs:result>
-          }
         
         def Shader "Primvar" {
             uniform token info:id = "UsdPrimvarReader_float2"
@@ -274,25 +299,17 @@ def "Materials" {
 def "TextureAssets" {
     # Whitelisted texture collections using USD Collections
     def "WhitelistedTextures" (
-        apiSchemas = ["CollectionAPI:diffuseTextures", "CollectionAPI:alphaTextures"]
+        apiSchemas = ["CollectionAPI:alphaTextures", "CollectionAPI:normalTextures"]
     ) {
-        # Diffuse texture slot configuration
-        def "DiffuseSlots" {
-            def "Slot1" {
-                asset[] texturePaths = [
-                    @module/scalp/normal/ripple.png,
-                    @module/scalp/normal/wavy.png
-                ]
-            }
-            def "Slot2" {
-                asset[] texturePaths = [
-                    @module/crown/normal/texture1.png, 
-                    @module/crown/normal/texture2.png
-                ]
-            }
+        # Normal texture references (for procedural shader reconstruction)
+        def "NormalTextures" {
+            asset[] texturePaths = [
+                @module/scalp/normal/ripple.png,
+                @module/scalp/normal/wavy.png
+            ]
         }
         
-        # Alpha texture slot configuration
+        # Alpha texture slot configuration (whitelisted at group level)
         def "AlphaSlots" {
             def "Slot1" {
                 asset[] texturePaths = [
@@ -302,8 +319,8 @@ def "TextureAssets" {
             }
             def "Slot2" {
                 asset[] texturePaths = [
-                    @module/crown/alpha/fade1.png,
-                    @module/crown/alpha/fade2.png
+                    @module/scalp/alpha/hairline/texture1.png,
+                    @module/scalp/alpha/hairline/texture2.png
                 ]
             }
         }
@@ -311,7 +328,39 @@ def "TextureAssets" {
 }
 ```
 
-#### 5. Internal Blendshape Exclusions
+#### 5. Two-Level Alpha Texture System
+
+**Alpha textures use a two-level whitelist/blacklist system:**
+
+1. **Group Level Whitelist**: Default approved alpha textures (defined in Group USD)
+2. **Module Level Blacklist**: Optional restrictions for specific modules (defined in Module USD)
+
+**Logic**: Alpha textures are allowed if they are:
+- ✅ Whitelisted at the group level **AND**
+- ❌ **NOT** blacklisted at the module level
+
+```usd
+# Optional: Alpha texture blacklist for this specific module  
+def "AlphaBlacklist" {
+    def "Scalp" {
+        def "fade" {
+            asset[] blacklistedTextures = [
+                @module/scalp/alpha/fade/highFade.png@  # This crown can't use high fade
+            ]
+        }
+        def "hairline" {
+            asset[] blacklistedTextures = [
+                @module/scalp/alpha/hairline/receding.png@  # Doesn't work with this crown
+            ]
+        }
+        def "sideburn" {
+            asset[] blacklistedTextures = []  # No restrictions
+        }
+    }
+}
+```
+
+#### 6. Internal Blendshape Exclusions
 ```usd
 # USD-native approach for mutually exclusive blendshapes within a module
 def "BlendshapeExclusions" {
@@ -330,6 +379,165 @@ def "BlendshapeExclusions" {
 }
 ```
 
+## Group USD Structure
+
+**Groups** are delivery buckets of modules meant to work together by default for QC purposes. Each group defines:
+- **Module Whitelists**: Which modules are included in this group
+- **Alpha Texture Whitelists**: Which scalp alpha textures are approved for this group
+- **Default QC Boundaries**: Modules in the same group are tested together
+
+### **Group Files** (Individual .usd files)
+```
+Group/short.usd                                # Short group instance  
+Group/long.usd                                 # Long group instance
+```
+
+### Generic Group USD Format
+
+**Example Group File**: `Group/short.usd`
+
+```usd
+def "HairGroup" (
+    variants = {
+        string groupType = "short"
+    }
+) {
+    # Module whitelist - modules included in this group
+    def "ModuleWhitelist" {
+        def "Crown" {
+            asset[] moduleFiles = [
+                @module/crown/short_crown_smallAfro.usd@,
+                @module/crown/short_crown_medAfro.usd@,
+                @module/crown/short_crown_slicked.usd@,
+                @module/crown/short_crown_combed.usd@
+            ]
+        }
+        
+        def "Tail" {
+            # Note: Short group may have no tail modules
+            asset[] moduleFiles = []
+        }
+        
+        def "Bang" {
+            # Short group typically has minimal bang options
+            asset[] moduleFiles = [
+                @module/bang/short_bang_trim.usd@
+            ]
+        }
+        
+        def "Scalp" {
+            # Scalp is required for all groups
+            asset[] moduleFiles = [
+                @module/scalp/scalp.usd@
+            ]
+        }
+    }
+    
+    # Alpha texture whitelist for this group
+    def "AlphaWhitelist" {
+        def "Scalp" {
+            def "fade" {
+                asset[] whitelistedTextures = [
+                    @module/scalp/alpha/fade/lineUp.png@,
+                    @module/scalp/alpha/fade/midFade.png@,
+                    @module/scalp/alpha/fade/highFade.png@
+                ]
+            }
+            
+            def "hairline" {
+                asset[] whitelistedTextures = [
+                    @module/scalp/alpha/hairline/natural.png@,
+                    @module/scalp/alpha/hairline/sharp.png@
+                ]
+            }
+            
+            def "sideburn" {
+                asset[] whitelistedTextures = [
+                    @module/scalp/alpha/sideburn/short.png@,
+                    @module/scalp/alpha/sideburn/trimmed.png@
+                ]
+            }
+        }
+    }
+}
+```
+
+### **Long Group Example**
+
+**Example Group File**: `Group/long.usd`
+
+```usd
+def "HairGroup" (
+    variants = {
+        string groupType = "long"
+    }
+) {
+    # Module whitelist - modules included in this group
+    def "ModuleWhitelist" {
+        def "Crown" {
+            asset[] moduleFiles = [
+                @module/crown/Long_crown_simple.usd@,
+                @module/crown/Long_crown_braided.usd@,
+                @module/crown/Long_crown_fancy.usd@
+            ]
+        }
+        
+        def "Tail" {
+            # Long group has extensive tail options
+            asset[] moduleFiles = [
+                @module/tail/long_tail_braided.usd@,
+                @module/tail/long_tail_pony.usd@,
+                @module/tail/long_tail_beaded.usd@
+            ]
+        }
+        
+        def "Bang" {
+            asset[] moduleFiles = [
+                @module/bang/long_bang_straightCut.usd@,
+                @module/bang/long_bang_messy.usd@,
+                @module/bang/long_bang_parted.usd@
+            ]
+        }
+        
+        def "Scalp" {
+            asset[] moduleFiles = [
+                @module/scalp/scalp.usd@
+            ]
+        }
+    }
+    
+    # Alpha texture whitelist for this group (more permissive for long styles)
+    def "AlphaWhitelist" {
+        def "Scalp" {
+            def "fade" {
+                asset[] whitelistedTextures = [
+                    @module/scalp/alpha/fade/lineUp.png@,
+                    @module/scalp/alpha/fade/midFade.png@,
+                    @module/scalp/alpha/fade/lowFade.png@,
+                    @module/scalp/alpha/fade/noFade.png@
+                ]
+            }
+            
+            def "hairline" {
+                asset[] whitelistedTextures = [
+                    @module/scalp/alpha/hairline/natural.png@,
+                    @module/scalp/alpha/hairline/receding.png@,
+                    @module/scalp/alpha/hairline/widows_peak.png@
+                ]
+            }
+            
+            def "sideburn" {
+                asset[] whitelistedTextures = [
+                    @module/scalp/alpha/sideburn/long.png@,
+                    @module/scalp/alpha/sideburn/full.png@,
+                    @module/scalp/alpha/sideburn/shaped.png@
+                ]
+            }
+        }
+    }
+}
+```
+
 ## Style USD Structure
 
 **Key Principle**: Style USDs are lean data containers with **references only**. All texture/material data lives in Module USDs.
@@ -343,7 +551,7 @@ def "BlendshapeExclusions" {
 
 ### **What Module USD Contains:**
 - ✅ All geometry and blendshapes
-- ✅ All materials, shaders, and texture connections
+- ✅ All materials, basic shaders, and texture references
 - ✅ whitelisted texture collections
 - ✅ Internal exclusions (within-module blendshape conflicts)
 
@@ -550,7 +758,7 @@ def "AnimationRules" {
 # Module references use relative paths:
 references = @modules/scalp_v001.usd@</HairModule>
 
-# Texture paths in modules use relative paths:
+# Normal texture paths in modules use relative paths:
 asset inputs:file = @module/scalp/normal/ripple.png
 ```
 
@@ -562,7 +770,11 @@ This section shows how USD asset paths map to the actual file system directory s
 
 ### **USD References to Physical Files**
 ```
-# USD Reference Path                    →    Physical File Location
+# Group USD Reference Path             →    Physical File Location
+@Group/short.usd@                       →    modular_hair/Group/short.usd
+@Group/long.usd@                        →    modular_hair/Group/long.usd
+
+# Module USD Reference Path            →    Physical File Location  
 @module/scalp/scalp.usd@                →    modular_hair/module/scalp/scalp.usd
 @module/crown/short_crown_smallAfro.usd@ →   modular_hair/module/crown/short_crown_smallAfro.usd
 @module/tail/long_tail_braided.usd@     →    modular_hair/module/tail/long_tail_braided.usd
@@ -578,8 +790,12 @@ This section shows how USD asset paths map to the actual file system directory s
 @module/tail/normal/texture.png        →    modular_hair/module/tail/normal/texture.png
 ```
 
-### **Style Files in Directory Structure**
+### **Group and Style Files in Directory Structure**
 ```
+# Group USD File                       →    Physical File Location
+Group/short.usd                        →    modular_hair/Group/short.usd  
+Group/long.usd                         →    modular_hair/Group/long.usd
+
 # Style USD File                       →    Physical File Location
 style/short_medAfro.usd                →    modular_hair/style/short_medAfro.usd
 style/long_braided_beaded_messy.usd    →    modular_hair/style/long_braided_beaded_messy.usd
@@ -589,15 +805,43 @@ style/long_simple_pony_parted.usd      →    modular_hair/style/long_simple_pon
 **Key Points:**
 - USD `@` syntax creates relative asset paths
 - USD resolver maps these to actual file system paths
-- Each style `.usd` file references specific module `.usd` files
+- **Hierarchy**: Groups define whitelists → Styles reference modules → Modules contain assets
+- Groups provide module whitelists and alpha texture whitelists for QC boundaries
+- Each style `.usd` file references specific module `.usd` files from their group
 - Texture paths are relative to the module that contains them
+- Alpha textures use two-level system: Group whitelist + Module blacklist
 - No absolute paths are stored in USD files
 
 ## USD Path Reference
 
 This section provides a complete reference of all USD paths used in the proposed structure, organized by file and hierarchy level.
 
-### Module USD Files (e.g., `scalp.usd`, `crown.usd`, `tail.usd`, `bang.usd`)
+### Group USD Files (e.g., `short.usd`, `long.usd`)
+
+#### Root Level Paths
+```
+/HairGroup                                    # Root group prim with variants
+```
+
+#### Module Whitelist Paths
+```
+/HairGroup/ModuleWhitelist                    # Module whitelists container
+/HairGroup/ModuleWhitelist/Crown              # Crown module whitelist
+/HairGroup/ModuleWhitelist/Tail               # Tail module whitelist  
+/HairGroup/ModuleWhitelist/Bang               # Bang module whitelist
+/HairGroup/ModuleWhitelist/Scalp              # Scalp module whitelist (required)
+```
+
+#### Alpha Whitelist Paths  
+```
+/HairGroup/AlphaWhitelist                     # Alpha texture whitelists container
+/HairGroup/AlphaWhitelist/Scalp               # Scalp alpha whitelists
+/HairGroup/AlphaWhitelist/Scalp/fade          # Fade alpha whitelist
+/HairGroup/AlphaWhitelist/Scalp/hairline      # Hairline alpha whitelist  
+/HairGroup/AlphaWhitelist/Scalp/sideburn      # Sideburn alpha whitelist
+```
+
+### Module USD Files (e.g., `scalp.usd`, `short_crown_smallAfro.usd`, `long_tail_braided.usd`, `long_bang_messy.usd`)
 
 #### Root Level Paths
 ```
@@ -638,8 +882,7 @@ This section provides a complete reference of all USD paths used in the proposed
 ```
 /HairModule/Materials                         # Materials container
 /HairModule/Materials/HairMaterial            # Main hair material
-/HairModule/Materials/HairMaterial/HairShader # Main shader node
-/HairModule/Materials/HairMaterial/DiffuseTexture # Diffuse texture shader
+/HairModule/Materials/HairMaterial/HairShader # Main shader node (basic parameters only)
 /HairModule/Materials/HairMaterial/Primvar    # UV coordinate reader
 ```
 
@@ -647,10 +890,8 @@ This section provides a complete reference of all USD paths used in the proposed
 ```
 /HairModule/TextureAssets                     # Texture assets container
 /HairModule/TextureAssets/WhitelistedTextures # Whitelisted texture collections
-/HairModule/TextureAssets/WhitelistedTextures/DiffuseSlots # Diffuse texture slots
-/HairModule/TextureAssets/WhitelistedTextures/DiffuseSlots/Slot1 # First diffuse slot
-/HairModule/TextureAssets/WhitelistedTextures/DiffuseSlots/Slot2 # Second diffuse slot
-/HairModule/TextureAssets/WhitelistedTextures/AlphaSlots # Alpha texture slots
+/HairModule/TextureAssets/WhitelistedTextures/NormalTextures # Normal texture references
+/HairModule/TextureAssets/WhitelistedTextures/AlphaSlots # Alpha texture slots (whitelisted at group level)
 /HairModule/TextureAssets/WhitelistedTextures/AlphaSlots/Slot1 # First alpha slot
 /HairModule/TextureAssets/WhitelistedTextures/AlphaSlots/Slot2 # Second alpha slot
 ```
@@ -659,6 +900,15 @@ This section provides a complete reference of all USD paths used in the proposed
 ```
 /HairModule/BlendshapeExclusions              # Internal blendshape exclusions container
 /HairModule/BlendshapeExclusions/VolumeExclusion # Volume exclusion (volumeOut ↔ volumeIn)
+```
+
+#### Alpha Blacklist Paths (Optional)
+```
+/HairModule/AlphaBlacklist                    # Alpha texture blacklists container (optional)
+/HairModule/AlphaBlacklist/Scalp              # Scalp alpha blacklists
+/HairModule/AlphaBlacklist/Scalp/fade         # Fade alpha blacklist
+/HairModule/AlphaBlacklist/Scalp/hairline     # Hairline alpha blacklist
+/HairModule/AlphaBlacklist/Scalp/sideburn     # Sideburn alpha blacklist
 ```
 
 ### Style USD Files (e.g., `hairstyle_casual.usd`, `hairstyle_formal.usd`)
@@ -768,6 +1018,12 @@ Here's how a complete hairstyle would look when all modules are loaded:
 
 These are the asset paths referenced from within USD files:
 
+#### Group File References
+```
+@Group/short.usd@</HairGroup>                                   # Short group reference
+@Group/long.usd@</HairGroup>                                    # Long group reference
+```
+
 #### Module File References
 ```
 @module/scalp/scalp.usd@</HairModule>                           # Scalp module reference
@@ -778,16 +1034,18 @@ These are the asset paths referenced from within USD files:
 
 #### Texture File References
 ```
-@module/scalp/normal/ripple.png             # Main diffuse texture
+# Normal textures (for shader reconstruction)
+@module/scalp/normal/ripple.png             # Scalp ripple normal texture
 @module/scalp/normal/wavy.png               # Scalp wavy normal texture
 @module/crown/normal/texture1.png           # Crown normal texture 1
 @module/crown/normal/texture2.png           # Crown normal texture 2
+@module/tail/normal/texture.png             # Tail normal texture
+
+# Alpha textures (whitelisted at group level, blacklistable at module level)
 @module/scalp/alpha/fade/lineUp.png         # Scalp fade alpha texture
 @module/scalp/alpha/fade/midFade.png        # Scalp mid fade alpha texture
-@module/crown/alpha/fade1.png               # Crown alpha texture 1
-@module/crown/alpha/fade2.png               # Crown alpha texture 2
-@module/tail/normal/texture.png             # Tail normal texture
-@module/bang/alpha/texture.png              # Bang alpha texture
+@module/scalp/alpha/hairline/texture1.png   # Scalp hairline alpha texture
+@module/scalp/alpha/sideburn/texture1.png   # Scalp sideburn alpha texture
 ```
 
 ### Path Relationship Examples
@@ -812,8 +1070,9 @@ These are the asset paths referenced from within USD files:
 #### Material Connection Paths
 ```
 </Materials/HairMaterial/HairShader.outputs:surface>           # Surface output
-</Materials/HairMaterial/DiffuseTexture.outputs:rgb>           # Diffuse texture output  
+
 </Materials/HairMaterial/Primvar.outputs:result>               # UV coordinate output
 ```
 
 This reference provides a complete roadmap for navigating and understanding the proposed USD structure. Each path represents a specific location in the hierarchy where data is stored or referenced.
+
