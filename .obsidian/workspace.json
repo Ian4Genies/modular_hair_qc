@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/USD.md",
+                "file": "docs/General Info.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "USD"
+              "title": "General Info"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "378c24c69a3295de",
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/USD.md",
+                "file": "docs/General Info.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for USD"
+              "title": "Backlinks for General Info"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/USD.md",
+                "file": "docs/General Info.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from USD"
+              "title": "Outgoing links from General Info"
             }
           },
           {
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/USD.md",
+                "file": "docs/General Info.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of USD"
+              "title": "Outline of General Info"
             }
           }
         ]
@@ -171,8 +171,14 @@
   "active": "020bb5c44ab37f77",
   "lastOpenFiles": [
     "docs/Terminology.md",
-    "docs/USD.md",
+    "docs/UI Mockup.md",
+    "docs/General Info.md",
+    "docs/USD_features.md",
+    "docs/USD_Summary.md",
+    "docs/USD_reference.md",
+    "docs/USD_paths.md",
     "docs/USD_directory.md",
+    "docs/USD.md",
     "docs/directory.md",
     "docs/Blendshape Rules.md"
   ]

@@ -1,0 +1,5 @@
+- This tool should be in the form of a Maya menu, I should be able to call a simple main script that launches this menu in maya\
+- This menu and tool is designed to work from the usd directory described in [[USD_directory]]
+- The maya tool should use lazy loading wherever possible to improve the speed of asset loading in maya
+- Please create reusable utility scripts and property organize them
+- I think for the UI and USD specifically re-usable utilities will help us expand and modify functionality in the future. 
