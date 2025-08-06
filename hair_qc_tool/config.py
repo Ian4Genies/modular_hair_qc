@@ -96,9 +96,181 @@ class HairQCConfig:
                 missing_dirs.append(dir_name)
         
         if missing_dirs:
-            return False, f"Missing required directories: {', '.join(missing_dirs)}"
+            # Check if directory is completely empty
+            if self.is_directory_empty():
+                return "empty", f"Directory is empty. Would you like to initialize it with the required USD structure?"
+            else:
+                return False, f"Missing required directories: {', '.join(missing_dirs)}"
         
         return True, "USD directory structure is valid"
+    
+    def is_directory_empty(self):
+        """Check if the USD directory is completely empty"""
+        if not self.usd_directory or not self.usd_directory.exists():
+            return True
+        
+        # Check if directory has any files or folders
+        try:
+            return len(list(self.usd_directory.iterdir())) == 0
+        except:
+            return True
+    
+    def initialize_usd_directory(self):
+        """Initialize USD directory with required structure and sample files"""
+        if not self.usd_directory:
+            return False, "No USD directory set"
+        
+        try:
+            # Create required directories
+            required_structure = {
+                "Group": [],
+                "module": ["scalp", "crown", "tail", "bang"],
+                "style": []
+            }
+            
+            for main_dir, subdirs in required_structure.items():
+                main_path = self.usd_directory / main_dir
+                main_path.mkdir(exist_ok=True)
+                
+                for subdir in subdirs:
+                    sub_path = main_path / subdir
+                    sub_path.mkdir(exist_ok=True)
+                    
+                    # Create alpha directories for scalp
+                    if subdir == "scalp":
+                        alpha_dirs = ["fade", "hairline", "sideburn"]
+                        alpha_path = sub_path / "alpha"
+                        alpha_path.mkdir(exist_ok=True)
+                        
+                        for alpha_dir in alpha_dirs:
+                            (alpha_path / alpha_dir).mkdir(exist_ok=True)
+                        
+                        # Create normal directory
+                        (sub_path / "normal").mkdir(exist_ok=True)
+                    
+                    # Create normal directories for other modules
+                    elif subdir in ["crown", "tail", "bang"]:
+                        (sub_path / "normal").mkdir(exist_ok=True)
+            
+            # Create sample group files
+            self._create_sample_group_files()
+            
+            # Create README file
+            self._create_readme_file()
+            
+            print(f"[Hair QC Tool] Initialized USD directory structure at: {self.usd_directory}")
+            return True, "USD directory initialized successfully"
+            
+        except Exception as e:
+            return False, f"Failed to initialize USD directory: {str(e)}"
+    
+    def _create_sample_group_files(self):
+        """Create sample group USD files"""
+        sample_groups = ["short", "long"]
+        
+        for group_name in sample_groups:
+            group_file = self.usd_directory / "Group" / f"{group_name}.usd"
+            
+            # Create basic group USD structure
+            group_content = f'''#usda 1.0
+(
+    doc = "Sample {group_name} hair group"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+def "HairGroup" (
+    variants = {{
+        string groupType = "{group_name}"
+    }}
+)
+{{
+    # Module whitelist - modules included in this group
+    def "ModuleWhitelist" {{
+        def "Crown" {{
+            asset[] moduleFiles = []
+        }}
+        
+        def "Tail" {{
+            asset[] moduleFiles = []
+        }}
+        
+        def "Bang" {{
+            asset[] moduleFiles = []
+        }}
+        
+        def "Scalp" {{
+            asset[] moduleFiles = [@module/scalp/scalp.usd@]
+        }}
+    }}
+    
+    # Alpha texture whitelist for this group
+    def "AlphaWhitelist" {{
+        def "Scalp" {{
+            def "fade" {{
+                asset[] whitelistedTextures = []
+            }}
+            
+            def "hairline" {{
+                asset[] whitelistedTextures = []
+            }}
+            
+            def "sideburn" {{
+                asset[] whitelistedTextures = []
+            }}
+        }}
+    }}
+    
+    # Cross-module rules storage
+    def "CrossModuleRules" {{
+        def "Exclusions" {{
+            # Cross-module exclusions will be stored here
+        }}
+        
+        def "WeightConstraints" {{
+            # Cross-module weight constraints will be stored here
+        }}
+    }}
+}}
+'''
+            
+            with open(group_file, 'w') as f:
+                f.write(group_content)
+    
+    def _create_readme_file(self):
+        """Create README file explaining the directory structure"""
+        readme_content = '''# Hair QC Tool USD Directory
+
+This directory has been initialized for use with the Hair QC Tool.
+
+## Directory Structure
+
+- **Group/**: Contains group USD files that define module collections and QC boundaries
+- **module/**: Contains individual module USD files organized by type
+  - **scalp/**: Scalp modules with alpha texture directories
+  - **crown/**: Crown hair modules  
+  - **tail/**: Tail/ponytail modules
+  - **bang/**: Bang/fringe modules
+- **style/**: Contains style USD files that combine modules with animation data
+
+## Getting Started
+
+1. Create modules using the Hair QC Tool's Module tab
+2. Generate style combinations using the Style tab
+3. Set up QC rules and exclusions for quality control
+4. Export animation timelines for testing
+
+## Sample Files
+
+- `Group/short.usd` and `Group/long.usd` are sample group files
+- Add your own groups as needed for different hair categories
+
+For more information, see the Hair QC Tool documentation.
+'''
+        
+        readme_file = self.usd_directory / "README.md"
+        with open(readme_file, 'w') as f:
+            f.write(readme_content)
 
 
 # Global config instance

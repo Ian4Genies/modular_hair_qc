@@ -13,9 +13,32 @@ A comprehensive Maya tool for managing modular hair assets using USD-based data 
 
 ## Installation
 
-1. Copy the `hair_qc_tool` folder to your Maya scripts directory or project folder
-2. Run `install_hair_qc_tool.py` in Maya's Script Editor
-3. The tool will be available in Maya's "Hair QC" menu and as a shelf button
+### Option 1: Direct Installation (Recommended)
+1. Copy the entire project folder to your desired location
+2. In Maya's Script Editor (Python tab), run:
+   ```python
+   exec(open(r'C:\path\to\your\project\install_direct.py').read())
+   ```
+3. The script will automatically detect the project location and install the tool
+4. Choose "Launch Tool" to start using it immediately
+
+### Option 2: Manual Installation
+```python
+import sys
+sys.path.insert(0, r'C:\path\to\your\project')
+from hair_qc_tool.main import install_maya_menu, create_shelf_button
+from hair_qc_tool import launch_hair_qc_tool
+
+install_maya_menu()
+create_shelf_button()
+launch_hair_qc_tool()
+```
+
+### Installation Features
+- **Automatic Path Detection**: No need to edit installation scripts
+- **USD Directory Initialization**: Automatically creates proper directory structure
+- **Maya Integration**: Menu bar and shelf button installation
+- **Error Handling**: Clear feedback and troubleshooting
 
 ## Quick Start
 

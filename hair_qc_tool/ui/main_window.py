@@ -31,6 +31,9 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
     
     def setup_ui(self):
         """Set up the main UI layout"""
+        # Create menu bar first
+        self.create_menu_bar()
+        
         central_widget = QtWidgets.QWidget()
         self.setCentralWidget(central_widget)
         
@@ -59,13 +62,73 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         hotkey_layout = QtWidgets.QHBoxLayout(hotkey_frame)
         
-        hotkey_label = QtWidgets.QLabel("Shortcuts: Tab=Switch Tabs | F5=Refresh | Ctrl+R=Regen Timeline | Ctrl+S=Save")
+        hotkey_label = QtWidgets.QLabel("Shortcuts: Tab=Switch Tabs | F5=Refresh | Ctrl+R=Regen Timeline | Ctrl+S=Save | Ctrl+O=Change Directory")
         hotkey_label.setStyleSheet("font-size: 11px; color: #666;")
         
         hotkey_layout.addWidget(hotkey_label)
         hotkey_layout.addStretch()
         
         parent_layout.addWidget(hotkey_frame)
+    
+    def create_menu_bar(self):
+        """Create the menu bar with File menu"""
+        menubar = self.menuBar()
+        
+        # File menu
+        file_menu = menubar.addMenu('File')
+        
+        # Change USD Directory action
+        change_dir_action = QtWidgets.QAction('Change USD Directory...', self)
+        change_dir_action.setShortcut('Ctrl+O')
+        change_dir_action.setStatusTip('Change the USD directory location')
+        change_dir_action.triggered.connect(self.change_usd_directory)
+        file_menu.addAction(change_dir_action)
+        
+        # Show current directory action
+        show_dir_action = QtWidgets.QAction('Show Current Directory', self)
+        show_dir_action.setStatusTip('Show the current USD directory path')
+        show_dir_action.triggered.connect(self.show_current_directory)
+        file_menu.addAction(show_dir_action)
+        
+        file_menu.addSeparator()
+        
+        # Validate directory action
+        validate_action = QtWidgets.QAction('Validate Directory Structure', self)
+        validate_action.setStatusTip('Check if current directory has valid USD structure')
+        validate_action.triggered.connect(self.validate_directory)
+        file_menu.addAction(validate_action)
+        
+        # Initialize directory action
+        init_action = QtWidgets.QAction('Initialize Empty Directory...', self)
+        init_action.setStatusTip('Initialize an empty directory with USD structure')
+        init_action.triggered.connect(self.initialize_directory)
+        file_menu.addAction(init_action)
+        
+        file_menu.addSeparator()
+        
+        # Refresh action
+        refresh_action = QtWidgets.QAction('Refresh Data', self)
+        refresh_action.setShortcut('F5')
+        refresh_action.setStatusTip('Refresh all data from USD files')
+        refresh_action.triggered.connect(self.refresh_data)
+        file_menu.addAction(refresh_action)
+        
+        # Settings menu
+        settings_menu = menubar.addMenu('Settings')
+        
+        # Preferences action
+        prefs_action = QtWidgets.QAction('Preferences...', self)
+        prefs_action.setStatusTip('Open preferences dialog')
+        prefs_action.triggered.connect(self.show_preferences)
+        settings_menu.addAction(prefs_action)
+        
+        # Help menu
+        help_menu = menubar.addMenu('Help')
+        
+        # About action
+        about_action = QtWidgets.QAction('About Hair QC Tool', self)
+        about_action.triggered.connect(self.show_about)
+        help_menu.addAction(about_action)
     
     def create_group_section(self, parent_layout):
         """Create group selection section"""
@@ -131,7 +194,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         self.module_list = QtWidgets.QTableWidget()
         self.module_list.setColumnCount(4)
         self.module_list.setHorizontalHeaderLabels(["Selection", "Type", "Name", ""])
-        self.module_list.currentRowChanged.connect(self.on_module_selected)
+        self.module_list.currentItemChanged.connect(self.on_module_selected)
         module_select_layout.addWidget(self.module_list)
         
         # Module controls
@@ -234,7 +297,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         self.style_list = QtWidgets.QTableWidget()
         self.style_list.setColumnCount(6)
         self.style_list.setHorizontalHeaderLabels(["Selection", "Status", "Crown", "Tail", "Bang", ""])
-        self.style_list.currentRowChanged.connect(self.on_style_selected)
+        self.style_list.currentItemChanged.connect(self.on_style_selected)
         style_select_layout.addWidget(self.style_list)
         
         layout.addWidget(style_select_frame)
@@ -336,15 +399,15 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             self.statusBar().showMessage(f"Selected group: {group_name}")
             # TODO: Load modules and styles for this group
     
-    def on_module_selected(self, row):
+    def on_module_selected(self, current_item, previous_item):
         """Handle module selection change"""
-        if row >= 0:
+        if current_item:
             self.module_edit_frame.setEnabled(True)
             # TODO: Load module data into edit form
     
-    def on_style_selected(self, row):
+    def on_style_selected(self, current_item, previous_item):
         """Handle style selection change"""
-        if row >= 0:
+        if current_item:
             self.style_edit_frame.setEnabled(True)
             # TODO: Load style data and timeline
     
@@ -405,3 +468,164 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             self.save_module()
         elif current_tab == 1:  # Style tab
             self.save_timeline()
+    
+    # Menu action handlers
+    def change_usd_directory(self):
+        """Change USD directory with validation and initialization"""
+        from ..main import HairQCTool
+        
+        # Create a temporary tool instance to use its directory methods
+        temp_tool = HairQCTool()
+        temp_tool._browse_usd_directory()
+        
+        # Refresh data if directory was changed successfully
+        self.refresh_data()
+    
+    def show_current_directory(self):
+        """Show current USD directory path"""
+        current_dir = config.usd_directory
+        if current_dir:
+            QtWidgets.QMessageBox.information(
+                self,
+                "Current USD Directory",
+                f"Current USD directory:\n\n{current_dir}"
+            )
+        else:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "No Directory Set",
+                "No USD directory is currently set.\n\nUse 'Change USD Directory' to set one."
+            )
+    
+    def validate_directory(self):
+        """Validate current directory structure"""
+        validation_result, message = config.validate_usd_directory()
+        
+        if validation_result == True:
+            QtWidgets.QMessageBox.information(
+                self,
+                "Directory Valid",
+                f"Directory structure is valid!\n\n{message}"
+            )
+        elif validation_result == "empty":
+            result = QtWidgets.QMessageBox.question(
+                self,
+                "Empty Directory",
+                f"{message}\n\nWould you like to initialize it now?",
+                QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
+            )
+            if result == QtWidgets.QMessageBox.Yes:
+                self.initialize_current_directory()
+        else:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Directory Invalid",
+                f"Directory structure is invalid:\n\n{message}"
+            )
+    
+    def initialize_directory(self):
+        """Initialize an empty directory"""
+        # Browse for directory first
+        directory = QtWidgets.QFileDialog.getExistingDirectory(
+            self,
+            "Select Directory to Initialize",
+            str(config.usd_directory) if config.usd_directory else ""
+        )
+        
+        if directory:
+            # Temporarily set the directory
+            old_directory = config.usd_directory
+            config.usd_directory = directory
+            
+            # Check if it's empty and initialize
+            validation_result, message = config.validate_usd_directory()
+            if validation_result == "empty":
+                result = QtWidgets.QMessageBox.question(
+                    self,
+                    "Initialize Directory",
+                    f"Initialize directory with USD structure?\n\n{directory}\n\nThis will create:\n• Group/, module/, style/ directories\n• Sample group files\n• Required subdirectory structure",
+                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
+                )
+                
+                if result == QtWidgets.QMessageBox.Yes:
+                    success, init_message = config.initialize_usd_directory()
+                    if success:
+                        QtWidgets.QMessageBox.information(
+                            self,
+                            "Initialization Success",
+                            f"Directory initialized successfully!\n\n{init_message}"
+                        )
+                        self.refresh_data()
+                    else:
+                        QtWidgets.QMessageBox.critical(
+                            self,
+                            "Initialization Failed",
+                            f"Failed to initialize directory:\n\n{init_message}"
+                        )
+                        # Restore old directory
+                        config.usd_directory = old_directory
+                else:
+                    # Restore old directory
+                    config.usd_directory = old_directory
+            else:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "Directory Not Empty",
+                    f"Selected directory is not empty or has existing USD structure.\n\nUse 'Validate Directory Structure' to check the current directory."
+                )
+                # Restore old directory
+                config.usd_directory = old_directory
+    
+    def initialize_current_directory(self):
+        """Initialize the current USD directory"""
+        success, message = config.initialize_usd_directory()
+        
+        if success:
+            QtWidgets.QMessageBox.information(
+                self,
+                "Initialization Success",
+                f"Directory initialized successfully!\n\n{message}"
+            )
+            self.refresh_data()
+        else:
+            QtWidgets.QMessageBox.critical(
+                self,
+                "Initialization Failed",
+                f"Failed to initialize directory:\n\n{message}"
+            )
+    
+    def show_preferences(self):
+        """Show preferences dialog"""
+        # TODO: Implement preferences dialog
+        QtWidgets.QMessageBox.information(
+            self,
+            "Preferences",
+            "Preferences dialog not yet implemented.\n\nCurrent settings are stored in:\n~/.hair_qc_tool_config.json"
+        )
+    
+    def show_about(self):
+        """Show about dialog"""
+        QtWidgets.QMessageBox.about(
+            self,
+            "About Hair QC Tool",
+            """<h3>Hair QC Tool v1.0</h3>
+            <p>A comprehensive Maya tool for managing modular hair assets using USD-based data structures.</p>
+            
+            <p><b>Features:</b></p>
+            <ul>
+            <li>USD-based data management</li>
+            <li>Modular hair system (scalp, crown, tail, bang)</li>
+            <li>Blendshape QC and combination generation</li>
+            <li>Cross-module rules and constraints</li>
+            <li>Maya timeline integration</li>
+            </ul>
+            
+            <p><b>Keyboard Shortcuts:</b></p>
+            <ul>
+            <li>Tab - Switch tabs</li>
+            <li>F5 - Refresh data</li>
+            <li>Ctrl+R - Regenerate timeline</li>
+            <li>Ctrl+S - Save current</li>
+            <li>Ctrl+O - Change directory</li>
+            </ul>"""
+        )

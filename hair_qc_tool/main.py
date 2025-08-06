@@ -32,8 +32,11 @@ class HairQCTool:
                 return
             
             # Validate configuration
-            is_valid, message = config.validate_usd_directory()
-            if not is_valid:
+            validation_result, message = config.validate_usd_directory()
+            if validation_result == "empty":
+                self._show_initialization_dialog(message)
+                return
+            elif not validation_result:
                 self._show_setup_dialog(message)
                 return
             
@@ -69,6 +72,40 @@ class HairQCTool:
         if result == "Browse for Directory":
             self._browse_usd_directory()
     
+    def _show_initialization_dialog(self, message):
+        """Show initialization dialog for empty directories"""
+        result = cmds.confirmDialog(
+            title="Initialize USD Directory",
+            message=f"{message}\n\nThis will create:\n• Group/, module/, style/ directories\n• Sample group files (short.usd, long.usd)\n• Required subdirectory structure\n• README documentation",
+            button=["Initialize Directory", "Browse for Different Directory", "Cancel"],
+            defaultButton="Initialize Directory",
+            cancelButton="Cancel"
+        )
+        
+        if result == "Initialize Directory":
+            self._initialize_current_directory()
+        elif result == "Browse for Different Directory":
+            self._browse_usd_directory()
+    
+    def _initialize_current_directory(self):
+        """Initialize the current USD directory"""
+        success, message = config.initialize_usd_directory()
+        
+        if success:
+            cmds.confirmDialog(
+                title="Success",
+                message=f"USD directory initialized successfully!\n\n{message}\n\nThe Hair QC Tool will now launch.",
+                button=["OK"]
+            )
+            # Launch the tool after successful initialization
+            self.launch()
+        else:
+            cmds.confirmDialog(
+                title="Initialization Failed",
+                message=f"Failed to initialize USD directory:\n\n{message}",
+                button=["OK"]
+            )
+    
     def _browse_usd_directory(self):
         """Open file browser to select USD directory"""
         directory = cmds.fileDialog2(
@@ -82,9 +119,11 @@ class HairQCTool:
             print(f"[Hair QC Tool] USD directory set to: {config.usd_directory}")
             
             # Validate and launch if valid
-            is_valid, message = config.validate_usd_directory()
-            if is_valid:
+            validation_result, message = config.validate_usd_directory()
+            if validation_result == True:
                 self.launch()
+            elif validation_result == "empty":
+                self._show_initialization_dialog(message)
             else:
                 cmds.confirmDialog(
                     title="Invalid Directory",
@@ -155,8 +194,9 @@ def install_maya_menu():
 def create_shelf_button():
     """Create Hair QC Tool shelf button"""
     try:
-        # Get current shelf
-        current_shelf = cmds.tabLayout(mel.eval("$gShelfTopLevel"), query=True, selectTab=True)
+        # Get current shelf using proper MEL evaluation
+        shelf_top_level = mel.eval('$tempVar = $gShelfTopLevel')
+        current_shelf = cmds.tabLayout(shelf_top_level, query=True, selectTab=True)
         
         # Create shelf button
         cmds.shelfButton(
