@@ -38,25 +38,62 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         # Create menu bar first
         self.create_menu_bar()
         
-        central_widget = QtWidgets.QWidget()
-        self.setCentralWidget(central_widget)
+        # Create scroll area as central widget
+        scroll_area = QtWidgets.QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        scroll_area.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+        self.setCentralWidget(scroll_area)
         
-        # Main layout
-        main_layout = QtWidgets.QVBoxLayout(central_widget)
+        # Create the main content widget - size will be dynamic based on splitter content
+        content_widget = QtWidgets.QWidget()
+        scroll_area.setWidget(content_widget)
+        
+        # Store references for dynamic sizing
+        self.scroll_area = scroll_area
+        self.content_widget = content_widget
+        
+        # Main layout for content
+        main_layout = QtWidgets.QVBoxLayout(content_widget)
         main_layout.setSpacing(10)
         main_layout.setContentsMargins(10, 10, 10, 10)
         
         # Hotkey reference widget at top
         self.create_hotkey_widget(main_layout)
         
+        # Create main splitter for resizable sections
+        main_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        
         # Group selection section
-        self.create_group_section(main_layout)
+        self.create_group_section_splitter(main_splitter)
         
         # Module/Style tab section
-        self.create_tab_section(main_layout)
+        self.create_tab_section_splitter(main_splitter)
+        
+        # Set initial splitter sizes (give more space to tabs)
+        main_splitter.setSizes([300, 500])
+        main_splitter.setCollapsible(0, False)
+        main_splitter.setCollapsible(1, False)
+        
+        # Allow unlimited expansion by removing size constraints
+        main_splitter.setMaximumHeight(16777215)  # Qt's QWIDGETSIZE_MAX
+        size_policy = main_splitter.sizePolicy()
+        size_policy.setVerticalPolicy(QtWidgets.QSizePolicy.Expanding)
+        main_splitter.setSizePolicy(size_policy)
+        
+        # Store reference to main splitter for dynamic sizing
+        self.main_splitter = main_splitter
+        
+        # Connect splitter moved signal to update content size
+        main_splitter.splitterMoved.connect(self.update_content_size)
+        
+        main_layout.addWidget(main_splitter)
         
         # Status bar
         self.statusBar().showMessage("Ready")
+        
+        # Initial content size update
+        QtCore.QTimer.singleShot(100, self.update_content_size)
     
     def create_hotkey_widget(self, parent_layout):
         """Create hotkey reference widget at top"""
@@ -66,7 +103,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         hotkey_layout = QtWidgets.QHBoxLayout(hotkey_frame)
         
-        hotkey_label = QtWidgets.QLabel("Shortcuts: Tab=Switch Tabs | F5=Refresh | Ctrl+R=Regen Timeline | Ctrl+S=Save Group | Ctrl+O=Change Directory")
+        hotkey_label = QtWidgets.QLabel("Shortcuts: Tab=Switch Tabs | F5=Refresh | Ctrl+R=Regen Timeline | Ctrl+S=Save All | Ctrl+O=Change Directory")
         hotkey_label.setStyleSheet("font-size: 11px; color: #666;")
         
         hotkey_layout.addWidget(hotkey_label)
@@ -134,17 +171,30 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
     
-    def create_group_section(self, parent_layout):
+    def create_group_section_splitter(self, parent_splitter):
+        """Create group selection section with splitter support"""
+        group_widget = QtWidgets.QWidget()
+        self.create_group_section(group_widget)
+        parent_splitter.addWidget(group_widget)
+    
+    def create_group_section(self, parent_widget):
         """Create group selection section"""
-        # Group section frame
-        group_frame = QtWidgets.QGroupBox("Select Group")
-        group_layout = QtWidgets.QVBoxLayout(group_frame)
+        # Create layout for parent widget
+        parent_layout = QtWidgets.QVBoxLayout(parent_widget)
+        parent_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # Create vertical splitter for group section components
+        group_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        
+        # Group selection frame
+        group_select_frame = QtWidgets.QGroupBox("Select Group")
+        group_select_layout = QtWidgets.QVBoxLayout(group_select_frame)
         
         # Group list
         self.group_list = QtWidgets.QListWidget()
-        self.group_list.setMaximumHeight(120)
+        # Remove fixed height to allow resizing
         self.group_list.currentRowChanged.connect(self.on_group_selected)
-        group_layout.addWidget(self.group_list)
+        group_select_layout.addWidget(self.group_list)
         
         # Group controls
         group_controls = QtWidgets.QHBoxLayout()
@@ -153,7 +203,10 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         group_controls.addWidget(self.add_group_btn)
         group_controls.addStretch()
         
-        group_layout.addLayout(group_controls)
+        group_select_layout.addLayout(group_controls)
+        
+        # Add group selection frame to splitter
+        group_splitter.addWidget(group_select_frame)
         
         # Alpha whitelist (expandable)
         self.alpha_expander = QtWidgets.QGroupBox("Alpha Whitelist")
@@ -175,12 +228,38 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         alpha_layout.addLayout(alpha_controls)
         
-        group_layout.addWidget(self.alpha_expander)
+        # Add alpha whitelist to splitter
+        group_splitter.addWidget(self.alpha_expander)
         
-        parent_layout.addWidget(group_frame)
+        # Set initial sizes for group splitter (group list smaller, alpha list larger)
+        group_splitter.setSizes([120, 180])
+        group_splitter.setCollapsible(0, False)
+        group_splitter.setCollapsible(1, True)  # Alpha can be collapsed
+        
+        # Allow unlimited expansion for group splitter
+        group_splitter.setMaximumHeight(16777215)
+        size_policy = group_splitter.sizePolicy()
+        size_policy.setVerticalPolicy(QtWidgets.QSizePolicy.Expanding)
+        group_splitter.setSizePolicy(size_policy)
+        
+        # Connect group splitter to update content size
+        group_splitter.splitterMoved.connect(self.update_content_size)
+        
+        # Add splitter to parent layout
+        parent_layout.addWidget(group_splitter)
     
-    def create_tab_section(self, parent_layout):
+    def create_tab_section_splitter(self, parent_splitter):
+        """Create module/style tab section with splitter support"""
+        tab_widget = QtWidgets.QWidget()
+        self.create_tab_section(tab_widget)
+        parent_splitter.addWidget(tab_widget)
+    
+    def create_tab_section(self, parent_widget):
         """Create module/style tab section"""
+        # Create layout for parent widget
+        parent_layout = QtWidgets.QVBoxLayout(parent_widget)
+        parent_layout.setContentsMargins(0, 0, 0, 0)
+        
         # Tab widget
         self.tab_widget = QtWidgets.QTabWidget()
         
@@ -200,6 +279,9 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         """Set up the module management tab"""
         layout = QtWidgets.QVBoxLayout(self.module_tab)
         
+        # Create vertical splitter for module tab sections
+        module_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        
         # Module selection
         module_select_frame = QtWidgets.QGroupBox("Module Selection")
         module_select_layout = QtWidgets.QVBoxLayout(module_select_frame)
@@ -218,7 +300,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         module_controls.addStretch()
         
         module_select_layout.addLayout(module_controls)
-        layout.addWidget(module_select_frame)
+        module_splitter.addWidget(module_select_frame)
         
         # Edit Module (expandable)
         self.module_edit_frame = QtWidgets.QGroupBox("Edit Module")
@@ -279,11 +361,30 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         save_layout.addWidget(self.save_module_btn)
         
         module_edit_layout.addLayout(save_layout)
-        layout.addWidget(self.module_edit_frame)
+        module_splitter.addWidget(self.module_edit_frame)
+        
+        # Set initial sizes for module splitter (selection smaller, edit larger)
+        module_splitter.setSizes([200, 400])
+        module_splitter.setCollapsible(0, False)
+        module_splitter.setCollapsible(1, True)  # Edit section can be collapsed
+        
+        # Allow unlimited expansion for module splitter
+        module_splitter.setMaximumHeight(16777215)
+        size_policy = module_splitter.sizePolicy()
+        size_policy.setVerticalPolicy(QtWidgets.QSizePolicy.Expanding)
+        module_splitter.setSizePolicy(size_policy)
+        
+        # Connect module splitter to update content size
+        module_splitter.splitterMoved.connect(self.update_content_size)
+        
+        layout.addWidget(module_splitter)
     
     def setup_style_tab(self):
         """Set up the style management tab"""
         layout = QtWidgets.QVBoxLayout(self.style_tab)
+        
+        # Create vertical splitter for style tab sections
+        style_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         
         # Style selection
         style_select_frame = QtWidgets.QGroupBox("Style Selection")
@@ -313,7 +414,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         self.style_list.currentItemChanged.connect(self.on_style_selected)
         style_select_layout.addWidget(self.style_list)
         
-        layout.addWidget(style_select_frame)
+        style_splitter.addWidget(style_select_frame)
         
         # Edit Style (expandable)
         self.style_edit_frame = QtWidgets.QGroupBox("Edit Style")
@@ -353,7 +454,61 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         save_timeline_layout.addWidget(self.save_timeline_btn)
         
         style_edit_layout.addLayout(save_timeline_layout)
-        layout.addWidget(self.style_edit_frame)
+        style_splitter.addWidget(self.style_edit_frame)
+        
+        # Set initial sizes for style splitter (selection smaller, edit larger)
+        style_splitter.setSizes([200, 400])
+        style_splitter.setCollapsible(0, False)
+        style_splitter.setCollapsible(1, True)  # Edit section can be collapsed
+        
+        # Allow unlimited expansion for style splitter
+        style_splitter.setMaximumHeight(16777215)
+        size_policy = style_splitter.sizePolicy()
+        size_policy.setVerticalPolicy(QtWidgets.QSizePolicy.Expanding)
+        style_splitter.setSizePolicy(size_policy)
+        
+        # Connect style splitter to update content size
+        style_splitter.splitterMoved.connect(self.update_content_size)
+        
+        layout.addWidget(style_splitter)
+    
+    def update_content_size(self):
+        """Dynamically update content widget size based on splitter content"""
+        try:
+            # Use the main splitter's actual size hint to determine required height
+            splitter_size_hint = self.main_splitter.sizeHint()
+            
+            # Add padding for hotkey widget, margins, and splitter handles
+            hotkey_height = 40  # Approximate height of hotkey widget
+            margins = 20  # Top and bottom margins
+            
+            # Calculate minimum required height based on size hint
+            required_height = splitter_size_hint.height() + hotkey_height + margins
+            
+            # Ensure we have a reasonable minimum but allow unlimited expansion
+            min_height = max(required_height, 400)
+            
+            # Update content widget size if it has changed significantly
+            current_min_height = self.content_widget.minimumHeight()
+            if abs(current_min_height - min_height) > 20:  # 20px tolerance to avoid excessive updates
+                self.content_widget.setMinimumHeight(min_height)
+                
+                # Also set a minimum width to prevent horizontal scrolling issues
+                self.content_widget.setMinimumWidth(780)
+                
+                # Force layout updates
+                self.content_widget.updateGeometry()
+                self.scroll_area.updateGeometry()
+                
+        except Exception as e:
+            # Fail silently to avoid disrupting the UI
+            pass
+    
+    def resizeEvent(self, event):
+        """Handle window resize events"""
+        super().resizeEvent(event)
+        # Update content size when window is resized
+        QtCore.QTimer.singleShot(50, self.update_content_size)
     
     def setup_shortcuts(self):
         """Set up keyboard shortcuts"""
@@ -389,6 +544,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         if success:
             self.load_groups()
             self.load_alpha_whitelist()
+            self.load_modules()
             self.statusBar().showMessage("Data refreshed", 2000)
         else:
             self.statusBar().showMessage(f"Refresh failed: {message}", 5000)
@@ -425,7 +581,8 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
                 self.statusBar().showMessage(f"Loaded group: {group_name}", 3000)
                 # Update alpha whitelist UI
                 self.load_alpha_whitelist()
-                # TODO: Load modules and styles for this group
+                # Load modules for this group
+                self.load_modules()
             else:
                 self.statusBar().showMessage(f"Failed to load group: {message}", 5000)
                 QtWidgets.QMessageBox.warning(self, "Load Group Failed", f"Failed to load group '{group_name}':\n\n{message}")
@@ -479,20 +636,64 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             self.statusBar().showMessage("Group has unsaved changes", 2000)
     
     def add_alpha_texture(self):
-        """Add new alpha texture path"""
-        # Get texture path from user
-        texture_path, ok = QtWidgets.QInputDialog.getText(
-            self,
-            "Add Alpha Texture",
-            "Enter texture path (relative to module directory):\nExample: scalp/alpha/fade/newTexture.png",
-            QtWidgets.QLineEdit.Normal,
-            ""
-        )
+        """Add new alpha texture path using file browser"""
+        from ..config import config
         
-        if not ok or not texture_path.strip():
+        if not config.usd_directory:
+            QtWidgets.QMessageBox.warning(
+                self, 
+                "No USD Directory", 
+                "Please set a USD directory first before adding alpha textures."
+            )
             return
         
-        texture_path = texture_path.strip()
+        # Define the alpha texture directory structure based on project docs
+        module_dir = config.usd_directory / "module"
+        if not module_dir.exists():
+            QtWidgets.QMessageBox.warning(
+                self, 
+                "Module Directory Missing", 
+                f"Module directory not found: {module_dir}\n\nPlease ensure your USD directory has the correct structure."
+            )
+            return
+        
+        # Start file browser from the module directory
+        file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self,
+            "Select Alpha Texture",
+            str(module_dir),
+            "PNG Images (*.png);;All Files (*.*)"
+        )
+        
+        if not file_path:
+            return  # User cancelled
+        
+        # Convert absolute path to relative path from module directory
+        try:
+            file_path = Path(file_path)
+            relative_path = file_path.relative_to(module_dir)
+            texture_path = str(relative_path).replace('\\', '/')  # Ensure forward slashes
+            
+            # Validate that this is actually an alpha texture path
+            path_parts = relative_path.parts
+            if len(path_parts) < 4 or path_parts[1] != "alpha":
+                result = QtWidgets.QMessageBox.question(
+                    self,
+                    "Confirm Alpha Texture",
+                    f"The selected file doesn't appear to be in a standard alpha texture location:\n{texture_path}\n\nExpected format: module_type/alpha/category/texture.png\n\nAdd it anyway?",
+                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                    QtWidgets.QMessageBox.No
+                )
+                if result != QtWidgets.QMessageBox.Yes:
+                    return
+            
+        except ValueError:
+            QtWidgets.QMessageBox.warning(
+                self, 
+                "Invalid Path", 
+                f"Selected file must be within the module directory:\n{module_dir}"
+            )
+            return
         
         # Add texture path using data manager
         success, message = self.data_manager.add_alpha_texture_path(texture_path, True)
@@ -523,30 +724,251 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             else:
                 QtWidgets.QMessageBox.warning(self, "Remove Texture Failed", message)
     
-    def save_current_group(self):
-        """Save current group data"""
-        if not self.data_manager.get_current_group():
-            self.statusBar().showMessage("No group selected to save", 3000)
+    def load_modules(self):
+        """Load modules for current group"""
+        self.module_list.setRowCount(0)
+        
+        current_group = self.data_manager.get_current_group()
+        if not current_group:
             return
         
-        if not self.data_manager.has_unsaved_changes('group'):
+        # Get modules from data manager
+        modules = self.data_manager.get_modules(force_refresh=True)
+        
+        # Get module types from group whitelist for display
+        module_types = {}
+        current_group = self.data_manager.get_current_group()
+        if current_group and hasattr(self.data_manager.group_manager, 'group_data'):
+            try:
+                from ..config import config
+                group_file = config.usd_directory / "Group" / f"{current_group}.usd"
+                if group_file.exists():
+                    from ..utils import USDGroupUtils
+                    group_utils = USDGroupUtils(group_file)
+                    module_whitelist = group_utils.get_module_whitelist()
+                    if module_whitelist:
+                        for mod_name, mod_info in module_whitelist.items():
+                            module_types[mod_name] = mod_info.get('type', 'unknown')
+            except Exception:
+                pass
+        
+        # Populate module list
+        row = 0
+        for module_name in modules:
+            self.module_list.insertRow(row)
+            
+            # Selection checkbox
+            checkbox = QtWidgets.QCheckBox()
+            self.module_list.setCellWidget(row, 0, checkbox)
+            
+            # Type - get from group whitelist or unknown
+            module_type = module_types.get(module_name, "unknown")
+            type_item = QtWidgets.QTableWidgetItem(module_type)
+            type_item.setFlags(type_item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.module_list.setItem(row, 1, type_item)
+            
+            # Name
+            name_item = QtWidgets.QTableWidgetItem(module_name)
+            name_item.setFlags(name_item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.module_list.setItem(row, 2, name_item)
+            
+            # Empty column for future actions
+            empty_item = QtWidgets.QTableWidgetItem("")
+            empty_item.setFlags(empty_item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.module_list.setItem(row, 3, empty_item)
+            
+            row += 1
+        
+        # Resize columns
+        self.module_list.resizeColumnsToContents()
+        
+        # Restore selection if we had a current module
+        current_module = self.data_manager.get_current_module()
+        if current_module:
+            # Find the row with this module name
+            for row in range(self.module_list.rowCount()):
+                name_item = self.module_list.item(row, 2)
+                if name_item and name_item.text() == current_module:
+                    self.module_list.selectRow(row)
+                    break
+    
+    def save_current_group(self):
+        """Save current group and module data"""
+        # Check what needs saving
+        has_group_changes = self.data_manager.has_unsaved_changes('group')
+        has_module_changes = self.data_manager.has_unsaved_changes('modules')
+        
+        if not has_group_changes and not has_module_changes:
             self.statusBar().showMessage("No changes to save", 2000)
             return
         
-        self.statusBar().showMessage("Saving group...")
-        success, message = self.data_manager.save_current_group()
+        saved_items = []
+        failed_items = []
         
-        if success:
-            self.statusBar().showMessage("Group saved successfully", 3000)
-        else:
-            self.statusBar().showMessage(f"Save failed: {message}", 5000)
-            QtWidgets.QMessageBox.warning(self, "Save Failed", f"Failed to save group:\n\n{message}")
+        # Save group if needed
+        if has_group_changes and self.data_manager.get_current_group():
+            self.statusBar().showMessage("Saving group...")
+            success, message = self.data_manager.save_current_group()
+            
+            if success:
+                saved_items.append("group")
+            else:
+                failed_items.append(f"group: {message}")
+        
+        # Save module if needed
+        if has_module_changes and self.data_manager.get_current_module():
+            self.statusBar().showMessage("Saving module...")
+            success, message = self.data_manager.save_current_module()
+            
+            if success:
+                saved_items.append("module")
+            else:
+                failed_items.append(f"module: {message}")
+        
+        # Report results
+        if saved_items and not failed_items:
+            saved_text = " and ".join(saved_items)
+            self.statusBar().showMessage(f"Saved {saved_text} successfully", 3000)
+        elif saved_items and failed_items:
+            saved_text = " and ".join(saved_items)
+            failed_text = "; ".join(failed_items)
+            self.statusBar().showMessage(f"Saved {saved_text}, but failed: {failed_text}", 5000)
+            QtWidgets.QMessageBox.warning(self, "Partial Save Failed", f"Saved: {saved_text}\n\nFailed: {failed_text}")
+        elif failed_items:
+            failed_text = "; ".join(failed_items)
+            self.statusBar().showMessage(f"Save failed: {failed_text}", 5000)
+            QtWidgets.QMessageBox.warning(self, "Save Failed", f"Failed to save:\n\n{failed_text}")
     
     def on_module_selected(self, current_item, previous_item):
         """Handle module selection change"""
         if current_item:
-            self.module_edit_frame.setEnabled(True)
-            # TODO: Load module data into edit form
+            # Get module name from the selected row
+            row = current_item.row()
+            name_item = self.module_list.item(row, 2)
+            
+            if name_item:
+                module_name = name_item.text()
+                self.statusBar().showMessage(f"Loading module: {module_name}...")
+                
+                # Load module using data manager
+                success, message = self.data_manager.load_module(module_name)
+                
+                if success:
+                    self.statusBar().showMessage(f"Loaded module: {module_name}", 3000)
+                    # Enable edit frame and load module data
+                    self.module_edit_frame.setEnabled(True)
+                    self.load_module_edit_data()
+                else:
+                    self.statusBar().showMessage(f"Failed to load module: {message}", 5000)
+                    QtWidgets.QMessageBox.warning(self, "Load Module Failed", f"Failed to load module '{module_name}':\n\n{message}")
+                    self.module_edit_frame.setEnabled(False)
+            else:
+                self.module_edit_frame.setEnabled(False)
+        else:
+            self.module_edit_frame.setEnabled(False)
+    
+    def load_module_edit_data(self):
+        """Load current module data into edit form"""
+        current_module = self.data_manager.get_current_module()
+        if not current_module:
+            return
+        
+        # Update module properties
+        self.module_name_edit.setText(current_module)
+        
+        # Get module type from module manager if available
+        if hasattr(self.data_manager.module_manager, 'modules') and current_module in self.data_manager.module_manager.modules:
+            module_info = self.data_manager.module_manager.modules[current_module]
+            module_type = module_info.module_type
+            
+            # Set combo box to correct type
+            type_index = self.module_type_combo.findText(module_type)
+            if type_index >= 0:
+                self.module_type_combo.setCurrentIndex(type_index)
+            
+            # Update base mesh status
+            if module_info.geometry_loaded:
+                self.base_mesh_label.setText("Geometry loaded")
+            else:
+                self.base_mesh_label.setText("No geometry loaded")
+        
+        # Load blendshapes
+        self.load_module_blendshapes()
+    
+    def load_module_blendshapes(self):
+        """Load blendshapes for current module"""
+        self.blendshape_list.setRowCount(0)
+        
+        current_module = self.data_manager.get_current_module()
+        if not current_module:
+            return
+        
+        # Get blendshapes and exclusions from data manager
+        blendshapes = self.data_manager.get_module_blendshapes()
+        exclusions = self.data_manager.get_module_exclusions()
+        
+        # Populate blendshape list
+        row = 0
+        for bs_name, weight in blendshapes.items():
+            self.blendshape_list.insertRow(row)
+            
+            # Selection checkbox
+            checkbox = QtWidgets.QCheckBox()
+            self.blendshape_list.setCellWidget(row, 0, checkbox)
+            
+            # Name (editable)
+            name_item = QtWidgets.QTableWidgetItem(bs_name)
+            self.blendshape_list.setItem(row, 1, name_item)
+            
+            # Weight slider
+            weight_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+            weight_slider.setRange(0, 100)
+            weight_slider.setValue(int(weight * 100))
+            weight_slider.valueChanged.connect(lambda val, name=bs_name: self.on_blendshape_weight_changed(name, val / 100.0))
+            self.blendshape_list.setCellWidget(row, 2, weight_slider)
+            
+            # Exclusions indicator
+            excluded_count = len(exclusions.get(bs_name, []))
+            excluded_item = QtWidgets.QTableWidgetItem(f"{excluded_count} excluded")
+            excluded_item.setFlags(excluded_item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.blendshape_list.setItem(row, 3, excluded_item)
+            
+            # Remove button
+            remove_btn = QtWidgets.QPushButton("Remove")
+            remove_btn.clicked.connect(lambda checked, name=bs_name: self.remove_module_blendshape(name))
+            self.blendshape_list.setCellWidget(row, 4, remove_btn)
+            
+            row += 1
+        
+        # Resize columns
+        self.blendshape_list.resizeColumnsToContents()
+    
+    def on_blendshape_weight_changed(self, blendshape_name: str, weight: float):
+        """Handle blendshape weight change"""
+        success, message = self.data_manager.set_blendshape_weight(blendshape_name, weight)
+        
+        if not success:
+            self.statusBar().showMessage(f"Failed to set weight: {message}", 3000)
+    
+    def remove_module_blendshape(self, blendshape_name: str):
+        """Remove blendshape from current module"""
+        # Confirm removal
+        result = QtWidgets.QMessageBox.question(
+            self,
+            "Remove Blendshape",
+            f"Remove blendshape '{blendshape_name}' from module?\n\nThis will also remove any exclusions involving this blendshape.",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+            QtWidgets.QMessageBox.No
+        )
+        
+        if result == QtWidgets.QMessageBox.Yes:
+            success, message = self.data_manager.remove_blendshape(blendshape_name)
+            
+            if success:
+                self.load_module_blendshapes()  # Refresh the list
+                self.statusBar().showMessage(f"Removed blendshape: {blendshape_name}", 3000)
+            else:
+                QtWidgets.QMessageBox.warning(self, "Remove Blendshape Failed", message)
     
     def on_style_selected(self, current_item, previous_item):
         """Handle style selection change"""
@@ -587,23 +1009,195 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
     
     def add_module(self):
         """Add new module"""
-        # TODO: Implement module creation
-        pass
+        if not self.data_manager.get_current_group():
+            QtWidgets.QMessageBox.warning(
+                self, 
+                "No Group Selected", 
+                "Please select a group before creating modules."
+            )
+            return
+        
+        # Create dialog for module creation
+        dialog = QtWidgets.QDialog(self)
+        dialog.setWindowTitle("Create New Module")
+        dialog.setModal(True)
+        dialog.resize(400, 200)
+        
+        layout = QtWidgets.QVBoxLayout(dialog)
+        
+        # Module name
+        name_layout = QtWidgets.QHBoxLayout()
+        name_layout.addWidget(QtWidgets.QLabel("Module Name:"))
+        name_edit = QtWidgets.QLineEdit()
+        name_layout.addWidget(name_edit)
+        layout.addLayout(name_layout)
+        
+        # Module type
+        type_layout = QtWidgets.QHBoxLayout()
+        type_layout.addWidget(QtWidgets.QLabel("Module Type:"))
+        type_combo = QtWidgets.QComboBox()
+        type_combo.addItems(["scalp", "crown", "tail", "bang"])
+        type_layout.addWidget(type_combo)
+        layout.addLayout(type_layout)
+        
+        # Buttons
+        button_layout = QtWidgets.QHBoxLayout()
+        create_btn = QtWidgets.QPushButton("Create")
+        cancel_btn = QtWidgets.QPushButton("Cancel")
+        
+        create_btn.clicked.connect(dialog.accept)
+        cancel_btn.clicked.connect(dialog.reject)
+        
+        button_layout.addWidget(create_btn)
+        button_layout.addWidget(cancel_btn)
+        layout.addLayout(button_layout)
+        
+        # Show dialog
+        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+            module_name = name_edit.text().strip()
+            module_type = type_combo.currentText()
+            
+            if not module_name:
+                QtWidgets.QMessageBox.warning(self, "Invalid Name", "Please enter a module name.")
+                return
+            
+            # Create module using data manager
+            self.statusBar().showMessage(f"Creating module: {module_name}...")
+            success, message = self.data_manager.create_module(module_name, module_type)
+            
+            if success:
+                self.statusBar().showMessage(f"Created module: {module_name}", 3000)
+                # Refresh modules list and select the new module
+                self.load_modules()
+                
+                # Find and select the new module
+                for row in range(self.module_list.rowCount()):
+                    name_item = self.module_list.item(row, 2)
+                    if name_item and name_item.text() == module_name:
+                        self.module_list.selectRow(row)
+                        break
+            else:
+                self.statusBar().showMessage(f"Failed to create module: {message}", 5000)
+                QtWidgets.QMessageBox.warning(self, "Create Module Failed", f"Failed to create module '{module_name}':\n\n{message}")
     
     def add_blendshape(self):
         """Add blendshape to current module"""
-        # TODO: Implement blendshape addition
-        pass
+        if not self.data_manager.get_current_module():
+            QtWidgets.QMessageBox.warning(
+                self, 
+                "No Module Selected", 
+                "Please select a module before adding blendshapes."
+            )
+            return
+        
+        # Get selected object in Maya scene
+        import maya.cmds as cmds
+        selected = cmds.ls(selection=True)
+        
+        if not selected:
+            QtWidgets.QMessageBox.warning(
+                self, 
+                "No Selection", 
+                "Please select a mesh object in the Maya scene to use as a blendshape."
+            )
+            return
+        
+        maya_object = selected[0]
+        
+        # Get blendshape name from user (optional)
+        blendshape_name, ok = QtWidgets.QInputDialog.getText(
+            self,
+            "Add Blendshape",
+            f"Enter blendshape name for '{maya_object}':\n(Leave empty to use object name)",
+            QtWidgets.QLineEdit.Normal,
+            maya_object
+        )
+        
+        if not ok:
+            return
+        
+        # Use object name if no name provided
+        if not blendshape_name.strip():
+            blendshape_name = maya_object
+        else:
+            blendshape_name = blendshape_name.strip()
+        
+        # Add blendshape using data manager
+        self.statusBar().showMessage(f"Adding blendshape: {blendshape_name}...")
+        success, message = self.data_manager.add_blendshape_from_scene(maya_object, blendshape_name)
+        
+        if success:
+            self.statusBar().showMessage(f"Added blendshape: {blendshape_name}", 3000)
+            # Refresh blendshapes list
+            self.load_module_blendshapes()
+        else:
+            self.statusBar().showMessage(f"Failed to add blendshape: {message}", 5000)
+            QtWidgets.QMessageBox.warning(self, "Add Blendshape Failed", f"Failed to add blendshape '{blendshape_name}':\n\n{message}")
     
     def replace_base_mesh(self):
         """Replace base mesh for current module"""
-        # TODO: Implement mesh replacement
-        pass
+        if not self.data_manager.get_current_module():
+            QtWidgets.QMessageBox.warning(
+                self, 
+                "No Module Selected", 
+                "Please select a module before replacing geometry."
+            )
+            return
+        
+        # Get selected object in Maya scene
+        import maya.cmds as cmds
+        selected = cmds.ls(selection=True)
+        
+        if not selected:
+            QtWidgets.QMessageBox.warning(
+                self, 
+                "No Selection", 
+                "Please select a mesh object in the Maya scene to use as base geometry."
+            )
+            return
+        
+        maya_object = selected[0]
+        
+        # Confirm replacement
+        result = QtWidgets.QMessageBox.question(
+            self,
+            "Replace Base Mesh",
+            f"Replace base geometry with '{maya_object}'?\n\nThis will overwrite the existing geometry in the module.",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+            QtWidgets.QMessageBox.No
+        )
+        
+        if result == QtWidgets.QMessageBox.Yes:
+            # Import geometry using data manager
+            self.statusBar().showMessage(f"Importing geometry: {maya_object}...")
+            success, message = self.data_manager.import_geometry_from_scene(maya_object)
+            
+            if success:
+                self.statusBar().showMessage(f"Imported geometry: {maya_object}", 3000)
+                # Update UI to show geometry is loaded
+                self.base_mesh_label.setText("Geometry loaded")
+            else:
+                self.statusBar().showMessage(f"Failed to import geometry: {message}", 5000)
+                QtWidgets.QMessageBox.warning(self, "Import Geometry Failed", f"Failed to import geometry from '{maya_object}':\n\n{message}")
     
     def save_module(self):
         """Save current module to USD"""
-        # TODO: Implement module saving
-        pass
+        if not self.data_manager.get_current_module():
+            self.statusBar().showMessage("No module selected to save", 3000)
+            return
+        
+        if not self.data_manager.has_unsaved_changes('modules'):
+            self.statusBar().showMessage("No changes to save", 2000)
+            return
+        
+        self.statusBar().showMessage("Saving module...")
+        success, message = self.data_manager.save_current_module()
+        
+        if success:
+            self.statusBar().showMessage("Module saved successfully", 3000)
+        else:
+            self.statusBar().showMessage(f"Save failed: {message}", 5000)
+            QtWidgets.QMessageBox.warning(self, "Save Failed", f"Failed to save module:\n\n{message}")
     
     def generate_styles(self):
         """Generate style combinations"""

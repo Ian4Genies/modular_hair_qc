@@ -153,15 +153,90 @@ class USDGroupUtils(USDUtilsBase):
             print(f"[USD Group Utils] Error creating group structure: {e}")
             return False
     
-    def get_module_whitelist(self, module_type: str) -> List[str]:
-        """Get module whitelist for specific type"""
+    def get_module_whitelist(self, module_type: str = None) -> Dict[str, Dict[str, Any]]:
+        """
+        Get module whitelist. 
+        
+        Args:
+            module_type: Specific type to get (deprecated, use get_module_whitelist_by_type)
+            
+        Returns:
+            Dictionary of {module_name: {"type": type, "enabled": bool}}
+        """
+        if not self.stage:
+            self.open_stage()
+        
+        # If module_type is specified, return old format for backward compatibility
+        if module_type:
+            files = self.get_custom_data(f"/HairGroup/ModuleWhitelist/{module_type}", "moduleFiles", [])
+            # Convert to new format
+            result = {}
+            for file_path in files:
+                # Extract module name from path like "@module/scalp/scalp.usd@"
+                if file_path.startswith("@") and file_path.endswith("@"):
+                    path_parts = file_path[1:-1].split("/")
+                    if len(path_parts) >= 3:
+                        module_name = path_parts[-1].replace(".usd", "")
+                        result[module_name] = {"type": module_type.lower(), "enabled": True}
+            return result
+        
+        # Get all modules from all types
+        all_modules = {}
+        module_types = ["Crown", "Tail", "Bang", "Scalp"]  # USD uses capitalized names
+        
+        for usd_type in module_types:
+            files = self.get_custom_data(f"/HairGroup/ModuleWhitelist/{usd_type}", "moduleFiles", [])
+            for file_path in files:
+                # Extract module name from path like "@module/scalp/scalp.usd@"
+                if file_path.startswith("@") and file_path.endswith("@"):
+                    path_parts = file_path[1:-1].split("/")
+                    if len(path_parts) >= 3:
+                        module_name = path_parts[-1].replace(".usd", "")
+                        all_modules[module_name] = {"type": usd_type.lower(), "enabled": True}
+        
+        return all_modules
+    
+    def get_module_whitelist_by_type(self, module_type: str) -> List[str]:
+        """Get module whitelist for specific type (returns list of file paths)"""
         if not self.stage:
             self.open_stage()
         
         return self.get_custom_data(f"/HairGroup/ModuleWhitelist/{module_type}", "moduleFiles", [])
     
-    def set_module_whitelist(self, module_type: str, module_files: List[str]):
-        """Set module whitelist for specific type"""
+    def set_module_whitelist(self, module_whitelist: Dict[str, Dict[str, Any]]):
+        """
+        Set complete module whitelist across all types
+        
+        Args:
+            module_whitelist: Dictionary of {module_name: {"type": type, "enabled": bool}}
+        """
+        if not self.stage:
+            self.open_stage()
+        
+        # Group modules by type
+        modules_by_type = {"Crown": [], "Tail": [], "Bang": [], "Scalp": []}
+        
+        for module_name, module_info in module_whitelist.items():
+            module_type = module_info.get("type", "scalp").lower()
+            enabled = module_info.get("enabled", True)
+            
+            if enabled:  # Only add enabled modules
+                # Convert to USD path format
+                usd_path = f"@module/{module_type}/{module_name}.usd@"
+                
+                # Add to appropriate type (capitalize for USD)
+                usd_type = module_type.capitalize()
+                if usd_type in modules_by_type:
+                    modules_by_type[usd_type].append(usd_path)
+        
+        # Set each type's whitelist
+        for usd_type, module_files in modules_by_type.items():
+            self.set_custom_data(f"/HairGroup/ModuleWhitelist/{usd_type}", "moduleFiles", module_files)
+        
+        return True
+    
+    def set_module_whitelist_by_type(self, module_type: str, module_files: List[str]):
+        """Set module whitelist for specific type (legacy method)"""
         if not self.stage:
             self.open_stage()
         

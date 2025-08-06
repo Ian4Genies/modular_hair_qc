@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/UI Mockup.md",
+                "file": "docs/USD_directory.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "UI Mockup"
+              "title": "USD_directory"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/UI Mockup.md",
+                "file": "docs/USD_directory.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for UI Mockup"
+              "title": "Backlinks for USD_directory"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/UI Mockup.md",
+                "file": "docs/USD_directory.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from UI Mockup"
+              "title": "Outgoing links from USD_directory"
             }
           },
           {
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/UI Mockup.md",
+                "file": "docs/USD_directory.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of UI Mockup"
+              "title": "Outline of USD_directory"
             }
           }
         ]
@@ -170,30 +170,29 @@
   },
   "active": "020bb5c44ab37f77",
   "lastOpenFiles": [
-    "test_fix.py",
-    "debug_group2.py",
-    "debug_group.py",
-    "hair_qc_tool/ui/__pycache__/main_window.cpython-312.pyc",
-    "hair_qc_tool/ui/__pycache__/__init__.cpython-312.pyc",
-    "hair_qc_tool/managers/__pycache__/data_manager.cpython-310.pyc",
-    "hair_qc_tool/utils/__pycache__/file_utils.cpython-310.pyc",
-    "hair_qc_tool/utils/__pycache__/rules_utils.cpython-310.pyc",
-    "hair_qc_tool/utils/__pycache__/usd_utils.cpython-310.pyc",
-    "debug_usd_utils.py",
-    "test_import.py",
-    "README.md",
-    "task_list.md",
-    "docs/Questions_Final.md",
-    "docs/Questions_Followup.md",
-    "docs/General Info.md",
-    "docs/Questions.md",
-    "docs/Terminology.md",
-    "docs/UI Mockup.md",
-    "docs/USD_features.md",
     "docs/USD_Summary.md",
     "docs/USD_reference.md",
     "docs/USD_paths.md",
     "docs/USD_directory.md",
+    "docs/Terminology.md",
+    "docs/Questions_Final.md",
+    "docs/UI Mockup.md",
+    "check_code_changes.py",
+    "test_ui_integration.py",
+    "test_create_module.py",
+    "debug_module_list_simple.py",
+    "hair_qc_tool/managers/__pycache__/module_manager.cpython-312.pyc",
+    "debug_module_list.py",
+    "test_module_fix.py",
+    "hair_qc_tool/managers/__pycache__/module_manager.cpython-310.pyc",
+    "test_module_management.py",
+    "hair_qc_tool/managers/module_manager.py",
+    "README.md",
+    "task_list.md",
+    "docs/Questions_Followup.md",
+    "docs/General Info.md",
+    "docs/Questions.md",
+    "docs/USD_features.md",
     "docs/USD.md",
     "docs/directory.md",
     "docs/Blendshape Rules.md"

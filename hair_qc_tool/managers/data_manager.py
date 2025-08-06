@@ -10,6 +10,7 @@ from pathlib import Path
 
 from ..config import config
 from .group_manager import GroupManager
+from .module_manager import ModuleManager
 
 
 class DataManager:
@@ -22,6 +23,7 @@ class DataManager:
     
     def __init__(self):
         self.group_manager = GroupManager()
+        self.module_manager = ModuleManager()
         self._change_tracking: Dict[str, bool] = {
             'group': False,
             'modules': False,
@@ -30,6 +32,7 @@ class DataManager:
         
         # Cache for UI data
         self._cached_groups: Optional[List[str]] = None
+        self._cached_modules: Optional[List[str]] = None
         self._cache_valid = False
     
     def refresh_all_data(self) -> Tuple[bool, str]:
@@ -42,6 +45,7 @@ class DataManager:
         try:
             # Clear caches
             self._cached_groups = None
+            self._cached_modules = None
             self._cache_valid = False
             
             # Reset change tracking
@@ -88,6 +92,12 @@ class DataManager:
         if success:
             # Reset change tracking for group
             self._change_tracking['group'] = False
+            
+            # Set current group context for module manager
+            self.module_manager.set_current_group(group_name)
+            
+            # Clear cached modules when group changes
+            self._cached_modules = None
         
         return success, message
     
@@ -124,6 +134,200 @@ class DataManager:
         if success:
             # Clear change tracking for group
             self._change_tracking['group'] = False
+        
+        return success, message
+    
+    # Module Management Methods
+    def get_modules(self, force_refresh: bool = False) -> List[str]:
+        """
+        Get list of available modules for current group with caching
+        
+        Args:
+            force_refresh: Force refresh from disk
+            
+        Returns:
+            List of module names
+        """
+        if force_refresh or self._cached_modules is None:
+            self._cached_modules = self.module_manager.get_available_modules()
+        
+        return self._cached_modules or []
+    
+    def load_module(self, module_name: str) -> Tuple[bool, str]:
+        """
+        Load a module and mark as current
+        
+        Args:
+            module_name: Name of module to load
+            
+        Returns:
+            Tuple of (success, message)
+        """
+        success, message = self.module_manager.load_module(module_name)
+        
+        if success:
+            # Reset change tracking for modules
+            self._change_tracking['modules'] = False
+        
+        return success, message
+    
+    def create_module(self, module_name: str, module_type: str) -> Tuple[bool, str]:
+        """
+        Create a new module
+        
+        Args:
+            module_name: Name for new module
+            module_type: Type of module (scalp, crown, tail, bang)
+            
+        Returns:
+            Tuple of (success, message)
+        """
+        success, message = self.module_manager.create_module(module_name, module_type)
+        
+        if success:
+            # Invalidate module cache
+            self._cached_modules = None
+            # Mark as having changes
+            self._change_tracking['modules'] = True
+        
+        return success, message
+    
+    def save_current_module(self) -> Tuple[bool, str]:
+        """
+        Save current module data
+        
+        Returns:
+            Tuple of (success, message)
+        """
+        success, message = self.module_manager.save_current_module()
+        
+        if success:
+            # Clear change tracking for modules
+            self._change_tracking['modules'] = False
+        
+        return success, message
+    
+    def get_current_module(self) -> Optional[str]:
+        """Get name of currently loaded module"""
+        return self.module_manager.current_module
+    
+    def get_module_blendshapes(self) -> Dict[str, float]:
+        """Get blendshapes for current module"""
+        if not self.module_manager.current_module:
+            return {}
+        
+        current_module = self.module_manager.current_module
+        if current_module in self.module_manager.modules:
+            return self.module_manager.modules[current_module].blendshapes.copy()
+        
+        return {}
+    
+    def get_module_exclusions(self) -> Dict[str, List[str]]:
+        """Get internal exclusions for current module"""
+        if not self.module_manager.current_module:
+            return {}
+        
+        current_module = self.module_manager.current_module
+        if current_module in self.module_manager.modules:
+            # Convert sets to lists for UI consumption
+            exclusions = self.module_manager.modules[current_module].exclusions
+            return {bs_name: list(excluded_set) for bs_name, excluded_set in exclusions.items()}
+        
+        return {}
+    
+    def import_geometry_from_scene(self, maya_object_name: str) -> Tuple[bool, str]:
+        """
+        Import geometry from Maya scene to current module
+        
+        Args:
+            maya_object_name: Name of Maya object to import
+            
+        Returns:
+            Tuple of (success, message)
+        """
+        success, message = self.module_manager.import_geometry_from_scene(maya_object_name)
+        
+        if success:
+            self._change_tracking['modules'] = True
+        
+        return success, message
+    
+    def load_geometry_to_scene(self, module_name: Optional[str] = None) -> Tuple[bool, str]:
+        """
+        Load module geometry into Maya scene
+        
+        Args:
+            module_name: Module to load (uses current module if None)
+            
+        Returns:
+            Tuple of (success, message)
+        """
+        return self.module_manager.load_geometry_to_scene(module_name)
+    
+    def add_blendshape_from_scene(self, maya_object_name: str, blendshape_name: Optional[str] = None) -> Tuple[bool, str]:
+        """
+        Add a blendshape from Maya scene to current module
+        
+        Args:
+            maya_object_name: Name of Maya object to use as blendshape
+            blendshape_name: Name for the blendshape (uses object name if None)
+            
+        Returns:
+            Tuple of (success, message)
+        """
+        success, message = self.module_manager.add_blendshape_from_scene(maya_object_name, blendshape_name)
+        
+        if success:
+            self._change_tracking['modules'] = True
+        
+        return success, message
+    
+    def remove_blendshape(self, blendshape_name: str) -> Tuple[bool, str]:
+        """
+        Remove a blendshape from current module
+        
+        Args:
+            blendshape_name: Name of blendshape to remove
+            
+        Returns:
+            Tuple of (success, message)
+        """
+        success, message = self.module_manager.remove_blendshape(blendshape_name)
+        
+        if success:
+            self._change_tracking['modules'] = True
+        
+        return success, message
+    
+    def set_blendshape_weight(self, blendshape_name: str, weight: float) -> Tuple[bool, str]:
+        """
+        Set blendshape weight for preview in Maya
+        
+        Args:
+            blendshape_name: Name of blendshape
+            weight: Weight value (0.0 to 1.0)
+            
+        Returns:
+            Tuple of (success, message)
+        """
+        return self.module_manager.set_blendshape_weight(blendshape_name, weight)
+    
+    def set_blendshape_exclusion(self, blendshape_name: str, excluded_blendshape: str, excluded: bool) -> Tuple[bool, str]:
+        """
+        Set internal exclusion between blendshapes
+        
+        Args:
+            blendshape_name: Name of primary blendshape
+            excluded_blendshape: Name of blendshape to exclude/include
+            excluded: Whether to exclude the blendshape
+            
+        Returns:
+            Tuple of (success, message)
+        """
+        success, message = self.module_manager.set_blendshape_exclusion(blendshape_name, excluded_blendshape, excluded)
+        
+        if success:
+            self._change_tracking['modules'] = True
         
         return success, message
     
@@ -224,7 +428,12 @@ class DataManager:
             is_valid, group_issues = self.group_manager.validate_current_group()
             all_issues.extend(group_issues)
         
-        # TODO: Add module and style validation when those managers are implemented
+        # Validate current module
+        if self.module_manager.current_module:
+            is_valid, module_issues = self.module_manager.validate_current_module()
+            all_issues.extend(module_issues)
+        
+        # TODO: Add style validation when style manager is implemented
         
         return len(all_issues) == 0, all_issues
     
@@ -237,7 +446,9 @@ class DataManager:
         """
         return {
             'current_group': self.get_current_group(),
+            'current_module': self.get_current_module(),
             'available_groups': len(self.get_groups()),
+            'available_modules': len(self.get_modules()),
             'unsaved_changes': self.get_unsaved_categories(),
             'usd_directory': str(config.usd_directory) if config.usd_directory else None,
             'has_changes': self.has_unsaved_changes()
