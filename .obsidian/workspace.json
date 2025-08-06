@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/General Info.md",
+                "file": "docs/UI Mockup.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "General Info"
+              "title": "UI Mockup"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/General Info.md",
+                "file": "docs/UI Mockup.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for General Info"
+              "title": "Backlinks for UI Mockup"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/General Info.md",
+                "file": "docs/UI Mockup.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from General Info"
+              "title": "Outgoing links from UI Mockup"
             }
           },
           {
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/General Info.md",
+                "file": "docs/UI Mockup.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of General Info"
+              "title": "Outline of UI Mockup"
             }
           }
         ]
@@ -170,9 +170,24 @@
   },
   "active": "020bb5c44ab37f77",
   "lastOpenFiles": [
+    "README.md",
+    "install_hair_qc_tool.py",
+    "hair_qc_tool/ui/main_window.py",
+    "hair_qc_tool/ui/__init__.py",
+    "hair_qc_tool/ui",
+    "hair_qc_tool/utils/maya_utils.py",
+    "hair_qc_tool/utils/__init__.py",
+    "hair_qc_tool/utils",
+    "hair_qc_tool/main.py",
+    "hair_qc_tool/config.py",
+    "hair_qc_tool/__init__.py",
+    "task_list.md",
+    "docs/Questions_Final.md",
+    "docs/Questions_Followup.md",
+    "docs/General Info.md",
+    "docs/Questions.md",
     "docs/Terminology.md",
     "docs/UI Mockup.md",
-    "docs/General Info.md",
     "docs/USD_features.md",
     "docs/USD_Summary.md",
     "docs/USD_reference.md",
