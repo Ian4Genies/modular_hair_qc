@@ -8,8 +8,19 @@ Supports group-based organization, cross-module blendshape rules, and automated 
 __version__ = "1.0.0"
 __author__ = "Hair QC Tool Development"
 
-# Import main components for easy access
-from .main import launch_hair_qc_tool
+# Import main components for easy access (only when Maya is available)
+try:
+    import maya.cmds
+    # Maya is available, import Maya-dependent components
+    from .main import launch_hair_qc_tool
+    MAYA_AVAILABLE = True
+except ImportError:
+    # Maya not available, define stub function
+    def launch_hair_qc_tool():
+        raise RuntimeError("Maya is required to launch the Hair QC Tool")
+    MAYA_AVAILABLE = False
+
+# Config is always available
 from .config import HairQCConfig
 
 # Maya plugin registration

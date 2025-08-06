@@ -9,6 +9,7 @@ import maya.cmds as cmds
 from pathlib import Path
 
 from ..config import config
+from ..managers import DataManager
 
 
 class HairQCMainWindow(QtWidgets.QMainWindow):
@@ -22,6 +23,9 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         # Make window stay on top but not always
         self.setWindowFlags(QtCore.Qt.Window)
+        
+        # Initialize data manager
+        self.data_manager = DataManager()
         
         self.setup_ui()
         self.setup_shortcuts()
@@ -62,7 +66,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         hotkey_layout = QtWidgets.QHBoxLayout(hotkey_frame)
         
-        hotkey_label = QtWidgets.QLabel("Shortcuts: Tab=Switch Tabs | F5=Refresh | Ctrl+R=Regen Timeline | Ctrl+S=Save | Ctrl+O=Change Directory")
+        hotkey_label = QtWidgets.QLabel("Shortcuts: Tab=Switch Tabs | F5=Refresh | Ctrl+R=Regen Timeline | Ctrl+S=Save Group | Ctrl+O=Change Directory")
         hotkey_label.setStyleSheet("font-size: 11px; color: #666;")
         
         hotkey_layout.addWidget(hotkey_label)
@@ -161,6 +165,15 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         self.alpha_list.setColumnCount(3)
         self.alpha_list.setHorizontalHeaderLabels(["Whitelisted", "Texture Path", ""])
         alpha_layout.addWidget(self.alpha_list)
+        
+        # Alpha controls
+        alpha_controls = QtWidgets.QHBoxLayout()
+        self.add_alpha_btn = QtWidgets.QPushButton("Add")
+        self.add_alpha_btn.clicked.connect(self.add_alpha_texture)
+        alpha_controls.addWidget(self.add_alpha_btn)
+        alpha_controls.addStretch()
+        
+        alpha_layout.addLayout(alpha_controls)
         
         group_layout.addWidget(self.alpha_expander)
         
@@ -356,9 +369,9 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         regen_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+R"), self)
         regen_shortcut.activated.connect(self.regenerate_timeline)
         
-        # Save
+        # Save current group
         save_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+S"), self)
-        save_shortcut.activated.connect(self.save_current)
+        save_shortcut.activated.connect(self.save_current_group)
     
     def switch_tab(self):
         """Switch between Module and Style tabs"""
@@ -370,34 +383,164 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         """Refresh all data from USD files"""
         self.statusBar().showMessage("Refreshing data...")
         
-        # TODO: Implement data refresh
-        self.load_groups()
+        # Refresh data using data manager
+        success, message = self.data_manager.refresh_all_data()
         
-        self.statusBar().showMessage("Data refreshed", 2000)
+        if success:
+            self.load_groups()
+            self.load_alpha_whitelist()
+            self.statusBar().showMessage("Data refreshed", 2000)
+        else:
+            self.statusBar().showMessage(f"Refresh failed: {message}", 5000)
+            QtWidgets.QMessageBox.warning(self, "Refresh Failed", message)
     
     def load_groups(self):
         """Load groups from USD directory"""
         self.group_list.clear()
         
-        if not config.usd_directory:
-            return
+        # Get groups from data manager
+        groups = self.data_manager.get_groups(force_refresh=True)
         
-        group_dir = config.usd_directory / "Group"
-        if not group_dir.exists():
-            return
-        
-        # Find all .usd files in Group directory
-        for usd_file in group_dir.glob("*.usd"):
-            group_name = usd_file.stem
+        for group_name in groups:
             self.group_list.addItem(group_name)
+        
+        # Restore selection if we had a current group
+        current_group = self.data_manager.get_current_group()
+        if current_group:
+            items = self.group_list.findItems(current_group, QtCore.Qt.MatchExactly)
+            if items:
+                self.group_list.setCurrentItem(items[0])
     
-    # Event handlers (placeholder implementations)
+    # Event handlers
     def on_group_selected(self, row):
         """Handle group selection change"""
         if row >= 0:
             group_name = self.group_list.item(row).text()
-            self.statusBar().showMessage(f"Selected group: {group_name}")
-            # TODO: Load modules and styles for this group
+            self.statusBar().showMessage(f"Loading group: {group_name}...")
+            
+            # Load group using data manager
+            success, message = self.data_manager.load_group(group_name)
+            
+            if success:
+                self.statusBar().showMessage(f"Loaded group: {group_name}", 3000)
+                # Update alpha whitelist UI
+                self.load_alpha_whitelist()
+                # TODO: Load modules and styles for this group
+            else:
+                self.statusBar().showMessage(f"Failed to load group: {message}", 5000)
+                QtWidgets.QMessageBox.warning(self, "Load Group Failed", f"Failed to load group '{group_name}':\n\n{message}")
+        else:
+            self.statusBar().showMessage("No group selected")
+    
+    def load_alpha_whitelist(self):
+        """Load alpha whitelist for current group"""
+        self.alpha_list.setRowCount(0)
+        
+        current_group = self.data_manager.get_current_group()
+        if not current_group:
+            return
+        
+        # Get alpha whitelist from data manager
+        alpha_whitelist = self.data_manager.get_group_alpha_whitelist()
+        available_textures = self.data_manager.get_available_alpha_textures()
+        
+        # Populate alpha list
+        row = 0
+        for texture_path, enabled in alpha_whitelist.items():
+            self.alpha_list.insertRow(row)
+            
+            # Checkbox for whitelisted status
+            checkbox = QtWidgets.QCheckBox()
+            checkbox.setChecked(enabled)
+            checkbox.stateChanged.connect(lambda state, path=texture_path: self.on_alpha_toggled(path, state == QtCore.Qt.Checked))
+            self.alpha_list.setCellWidget(row, 0, checkbox)
+            
+            # Texture path
+            path_item = QtWidgets.QTableWidgetItem(texture_path)
+            path_item.setFlags(path_item.flags() & ~QtCore.Qt.ItemIsEditable)  # Read-only
+            self.alpha_list.setItem(row, 1, path_item)
+            
+            # Remove button
+            remove_btn = QtWidgets.QPushButton("Remove")
+            remove_btn.clicked.connect(lambda checked, path=texture_path: self.remove_alpha_texture(path))
+            self.alpha_list.setCellWidget(row, 2, remove_btn)
+            
+            row += 1
+        
+        # Resize columns
+        self.alpha_list.resizeColumnsToContents()
+    
+    def on_alpha_toggled(self, texture_path: str, enabled: bool):
+        """Handle alpha texture toggle"""
+        self.data_manager.update_alpha_whitelist(texture_path, enabled)
+        
+        # Update status to show unsaved changes
+        if self.data_manager.has_unsaved_changes('group'):
+            self.statusBar().showMessage("Group has unsaved changes", 2000)
+    
+    def add_alpha_texture(self):
+        """Add new alpha texture path"""
+        # Get texture path from user
+        texture_path, ok = QtWidgets.QInputDialog.getText(
+            self,
+            "Add Alpha Texture",
+            "Enter texture path (relative to module directory):\nExample: scalp/alpha/fade/newTexture.png",
+            QtWidgets.QLineEdit.Normal,
+            ""
+        )
+        
+        if not ok or not texture_path.strip():
+            return
+        
+        texture_path = texture_path.strip()
+        
+        # Add texture path using data manager
+        success, message = self.data_manager.add_alpha_texture_path(texture_path, True)
+        
+        if success:
+            self.load_alpha_whitelist()  # Refresh the list
+            self.statusBar().showMessage(f"Added texture: {texture_path}", 3000)
+        else:
+            QtWidgets.QMessageBox.warning(self, "Add Texture Failed", message)
+    
+    def remove_alpha_texture(self, texture_path: str):
+        """Remove alpha texture path"""
+        # Confirm removal
+        result = QtWidgets.QMessageBox.question(
+            self,
+            "Remove Alpha Texture",
+            f"Remove texture path '{texture_path}' from whitelist?",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+            QtWidgets.QMessageBox.No
+        )
+        
+        if result == QtWidgets.QMessageBox.Yes:
+            success, message = self.data_manager.remove_alpha_texture_path(texture_path)
+            
+            if success:
+                self.load_alpha_whitelist()  # Refresh the list
+                self.statusBar().showMessage(f"Removed texture: {texture_path}", 3000)
+            else:
+                QtWidgets.QMessageBox.warning(self, "Remove Texture Failed", message)
+    
+    def save_current_group(self):
+        """Save current group data"""
+        if not self.data_manager.get_current_group():
+            self.statusBar().showMessage("No group selected to save", 3000)
+            return
+        
+        if not self.data_manager.has_unsaved_changes('group'):
+            self.statusBar().showMessage("No changes to save", 2000)
+            return
+        
+        self.statusBar().showMessage("Saving group...")
+        success, message = self.data_manager.save_current_group()
+        
+        if success:
+            self.statusBar().showMessage("Group saved successfully", 3000)
+        else:
+            self.statusBar().showMessage(f"Save failed: {message}", 5000)
+            QtWidgets.QMessageBox.warning(self, "Save Failed", f"Failed to save group:\n\n{message}")
     
     def on_module_selected(self, current_item, previous_item):
         """Handle module selection change"""
@@ -413,8 +556,34 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
     
     def add_group(self):
         """Add new group"""
-        # TODO: Implement group creation
-        pass
+        # Get group name from user
+        group_name, ok = QtWidgets.QInputDialog.getText(
+            self,
+            "Create New Group",
+            "Enter group name:",
+            QtWidgets.QLineEdit.Normal,
+            ""
+        )
+        
+        if not ok or not group_name.strip():
+            return
+        
+        group_name = group_name.strip()
+        
+        # Create group using data manager
+        self.statusBar().showMessage(f"Creating group: {group_name}...")
+        success, message = self.data_manager.create_group(group_name)
+        
+        if success:
+            self.statusBar().showMessage(f"Created group: {group_name}", 3000)
+            # Refresh groups list and select the new group
+            self.load_groups()
+            items = self.group_list.findItems(group_name, QtCore.Qt.MatchExactly)
+            if items:
+                self.group_list.setCurrentItem(items[0])
+        else:
+            self.statusBar().showMessage(f"Failed to create group: {message}", 5000)
+            QtWidgets.QMessageBox.warning(self, "Create Group Failed", f"Failed to create group '{group_name}':\n\n{message}")
     
     def add_module(self):
         """Add new module"""

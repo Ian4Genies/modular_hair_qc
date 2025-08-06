@@ -89,11 +89,19 @@ def install_hair_qc_tool():
             print("[INFO] Reloading existing modules to get latest changes...")
             import importlib
             
-            # Reload in dependency order
+            # Reload in dependency order (from leaf modules to root)
             modules_to_reload = [
                 'hair_qc_tool.config',
-                'hair_qc_tool.utils.maya_utils', 
+                'hair_qc_tool.utils.usd_utils',
+                'hair_qc_tool.utils.rules_utils',
+                'hair_qc_tool.utils.file_utils',
+                'hair_qc_tool.utils.maya_utils',
+                'hair_qc_tool.utils',
+                'hair_qc_tool.managers.group_manager',
+                'hair_qc_tool.managers.data_manager',
+                'hair_qc_tool.managers',
                 'hair_qc_tool.ui.main_window',
+                'hair_qc_tool.ui',
                 'hair_qc_tool.main',
                 'hair_qc_tool'
             ]
