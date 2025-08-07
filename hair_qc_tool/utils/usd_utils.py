@@ -47,15 +47,25 @@ class USDUtilsBase:
     
     def save_stage(self):
         """Save changes to USD file"""
-        if self.stage and self._is_dirty:
-            try:
-                self.stage.Save()
-                self._is_dirty = False
-                return True
-            except Exception as e:
-                print(f"[USD Utils] Error saving stage: {e}")
-                return False
-        return True
+        if not self.stage:
+            print(f"[USD Utils] Cannot save - no stage loaded")
+            return False
+        
+        if not self._is_dirty:
+            print(f"[USD Utils] Stage not dirty, skipping save")
+            return True
+        
+        try:
+            print(f"[USD Utils] Saving stage to: {self.file_path}")
+            self.stage.Save()
+            self._is_dirty = False
+            print(f"[USD Utils] Stage saved successfully")
+            return True
+        except Exception as e:
+            print(f"[USD Utils] Error saving stage: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
     
     def close_stage(self):
         """Close USD stage"""
@@ -312,6 +322,9 @@ class USDModuleUtils(USDUtilsBase):
             # Create root prim with variants
             root_prim = self.create_prim("/HairModule")
             if root_prim:
+                # Set as default prim for proper USD import
+                self.stage.SetDefaultPrim(root_prim)
+                
                 # Set module type variant
                 variant_set = root_prim.GetVariantSets().AddVariantSet("moduleType")
                 variant_set.AddVariant(module_type)
@@ -321,6 +334,14 @@ class USDModuleUtils(USDUtilsBase):
                 self.create_prim("/HairModule/BaseMesh", "Mesh")
                 self.create_prim("/HairModule/BlendShapes")
                 self.create_prim("/HairModule/BlendshapeExclusions")
+                
+                # Create UsdSkel animation structure for proper blendshape weight control
+                anim_prim = self.create_prim("/HairModule/Animation", "SkelAnimation")
+                
+                # Apply SkelBindingAPI to the root and bind the animation
+                from pxr import UsdSkel
+                binding_api = UsdSkel.BindingAPI.Apply(root_prim)
+                binding_api.CreateAnimationSourceRel().SetTargets(["/HairModule/Animation"])
                 
                 # Create texture assets structure (no materials for now)
                 self.create_prim("/HairModule/TextureAssets")
@@ -342,6 +363,581 @@ class USDModuleUtils(USDUtilsBase):
             print(f"[USD Module Utils] Error creating module structure: {e}")
             return False
     
+    def get_module_info(self) -> Dict[str, Any]:
+        """Get basic module information"""
+        if not self.stage:
+            self.open_stage()
+        
+        try:
+            # Get module type from variant
+            root_prim = self.stage.GetPrimAtPath("/HairModule")
+            if not root_prim or not root_prim.IsValid():
+                return {}
+            
+            module_type = "unknown"
+            variant_sets = root_prim.GetVariantSets()
+            if variant_sets.HasVariantSet("moduleType"):
+                variant_set = variant_sets.GetVariantSet("moduleType")
+                module_type = variant_set.GetVariantSelection()
+            
+            return {
+                "type": module_type,
+                "name": self.file_path.stem if self.file_path else "unknown",
+                "has_geometry": self.has_geometry_data(),
+                "blendshape_count": len(self.get_blendshape_names())
+            }
+            
+        except Exception as e:
+            print(f"[USD Module Utils] Error getting module info: {e}")
+            return {}
+    
+    def has_geometry_data(self) -> bool:
+        """Check if module has geometry data"""
+        if not self.stage:
+            self.open_stage()
+        
+        try:
+            from pxr import UsdGeom
+            base_mesh = self.stage.GetPrimAtPath("/HairModule/BaseMesh")
+            
+            if not base_mesh or not base_mesh.IsValid():
+                return False
+            
+            # Check if it's actually a mesh with geometry data
+            if not base_mesh.IsA(UsdGeom.Mesh):
+                return False
+            
+            mesh = UsdGeom.Mesh(base_mesh)
+            points_attr = mesh.GetPointsAttr()
+            
+            # Check if points attribute exists and has actual data
+            if not points_attr or not points_attr.HasValue():
+                return False
+            
+            # Get the points data and check if it's not empty
+            points = points_attr.Get()
+            return points is not None and len(points) > 0
+            
+        except Exception as e:
+            print(f"[USD Module Utils] Error checking geometry data: {e}")
+            return False
+    
+    def import_geometry_from_maya(self, maya_object_name: str) -> bool:
+        """Import geometry from Maya object to USD"""
+        if not self.stage:
+            self.open_stage()
+        
+        try:
+            from .maya_utils import MayaUtils
+            
+            # Check if the Maya object exists
+            import maya.cmds as cmds
+            if not cmds.objExists(maya_object_name):
+                print(f"[USD Module Utils] Maya object '{maya_object_name}' does not exist")
+                return False
+            
+            print(f"[USD Module Utils] Starting geometry import from '{maya_object_name}'")
+            
+            # Export the Maya mesh to a temporary USD file
+            temp_usd_path = self.file_path.parent / f"temp_{maya_object_name}.usd"
+            print(f"[USD Module Utils] Exporting to temp file: {temp_usd_path}")
+            
+            # Use Maya utils to export mesh to USD
+            success = MayaUtils.export_mesh_to_usd(maya_object_name, str(temp_usd_path), include_blendshapes=False)
+            
+            if not success:
+                print(f"[USD Module Utils] Failed to export Maya mesh to USD")
+                return False
+            
+            if not temp_usd_path.exists():
+                print(f"[USD Module Utils] Temp USD file was not created: {temp_usd_path}")
+                return False
+            
+            print(f"[USD Module Utils] Temp USD file created successfully")
+            
+            # Import the geometry from temp USD into our BaseMesh
+            from pxr import Usd, UsdGeom, Sdf
+            
+            temp_stage = Usd.Stage.Open(str(temp_usd_path))
+            if not temp_stage:
+                print(f"[USD Module Utils] Failed to open temp USD stage")
+                temp_usd_path.unlink(missing_ok=True)
+                return False
+            
+            print(f"[USD Module Utils] Opened temp USD stage")
+            
+            # Find and extract mesh data from temp stage
+            mesh_found = False
+            mesh_data = {}
+            
+            # Extract all mesh data while temp stage is still valid
+            for prim in temp_stage.Traverse():
+                if prim.IsA(UsdGeom.Mesh):
+                    print(f"[USD Module Utils] Found mesh prim: {prim.GetPath()}")
+                    
+                    source_mesh = UsdGeom.Mesh(prim)
+                    
+                    # Extract all mesh data
+                    if source_mesh.GetPointsAttr().HasValue():
+                        mesh_data['points'] = source_mesh.GetPointsAttr().Get()
+                        print(f"[USD Module Utils] Extracted {len(mesh_data['points'])} points")
+                    
+                    if source_mesh.GetFaceVertexIndicesAttr().HasValue():
+                        mesh_data['indices'] = source_mesh.GetFaceVertexIndicesAttr().Get()
+                        print(f"[USD Module Utils] Extracted {len(mesh_data['indices'])} face vertex indices")
+                    
+                    if source_mesh.GetFaceVertexCountsAttr().HasValue():
+                        mesh_data['counts'] = source_mesh.GetFaceVertexCountsAttr().Get()
+                        print(f"[USD Module Utils] Extracted {len(mesh_data['counts'])} face vertex counts")
+                    
+                    # Also extract normals if available
+                    try:
+                        if source_mesh.GetNormalsAttr().HasValue():
+                            mesh_data['normals'] = source_mesh.GetNormalsAttr().Get()
+                            print(f"[USD Module Utils] Extracted {len(mesh_data['normals'])} normals")
+                    except Exception as e:
+                        print(f"[USD Module Utils] Could not extract normals: {e}")
+                    
+                    # Extract UVs if available
+                    try:
+                        # Try to get UV primvar using correct USD API
+                        primvars_api = UsdGeom.PrimvarsAPI(prim)
+                        uv_primvar = primvars_api.GetPrimvar('st')
+                        if not uv_primvar:
+                            uv_primvar = primvars_api.GetPrimvar('uv')
+                        
+                        if uv_primvar and uv_primvar.HasValue():
+                            mesh_data['uvs'] = uv_primvar.Get()
+                            print(f"[USD Module Utils] Extracted {len(mesh_data['uvs'])} UV coordinates")
+                    except Exception as e:
+                        print(f"[USD Module Utils] Could not extract UVs (this is optional): {e}")
+                        # UVs are optional, continue without them
+                    
+                    mesh_found = True
+                    break
+            
+            # Release temp stage now that we have the data
+            temp_stage = None
+            
+            # Now apply the mesh data to our module
+            if mesh_found and mesh_data:
+                # Ensure BaseMesh is a proper mesh
+                base_mesh_prim = self.stage.GetPrimAtPath("/HairModule/BaseMesh")
+                if not base_mesh_prim or not base_mesh_prim.IsA(UsdGeom.Mesh):
+                    print(f"[USD Module Utils] Creating/redefining BaseMesh as UsdGeom.Mesh")
+                    if base_mesh_prim:
+                        self.stage.RemovePrim(base_mesh_prim.GetPath())
+                    base_mesh_prim = UsdGeom.Mesh.Define(self.stage, "/HairModule/BaseMesh").GetPrim()
+                
+                target_mesh = UsdGeom.Mesh(base_mesh_prim)
+                
+                # Apply mesh data
+                copied_data = False
+                if 'points' in mesh_data:
+                    target_mesh.GetPointsAttr().Set(mesh_data['points'])
+                    self._is_dirty = True
+                    copied_data = True
+                
+                if 'indices' in mesh_data:
+                    target_mesh.GetFaceVertexIndicesAttr().Set(mesh_data['indices'])
+                    self._is_dirty = True
+                    copied_data = True
+                
+                if 'counts' in mesh_data:
+                    target_mesh.GetFaceVertexCountsAttr().Set(mesh_data['counts'])
+                    self._is_dirty = True
+                    copied_data = True
+                
+                if 'normals' in mesh_data:
+                    try:
+                        target_mesh.GetNormalsAttr().Set(mesh_data['normals'])
+                        print(f"[USD Module Utils] Applied normals")
+                    except Exception as e:
+                        print(f"[USD Module Utils] Could not apply normals: {e}")
+                
+                if 'uvs' in mesh_data:
+                    # Create UV primvar using correct API
+                    try:
+                        primvars_api = UsdGeom.PrimvarsAPI(base_mesh_prim)
+                        uv_primvar = primvars_api.CreatePrimvar('st', Sdf.ValueTypeNames.TexCoord2fArray, UsdGeom.Tokens.faceVarying)
+                        uv_primvar.Set(mesh_data['uvs'])
+                        print(f"[USD Module Utils] Applied UV coordinates")
+                    except Exception as e:
+                        print(f"[USD Module Utils] Could not apply UVs: {e}")
+                        # UVs are optional, continue without them
+                
+                if copied_data:
+                    # Store metadata
+                    base_mesh_prim.SetCustomDataByKey("maya_source", maya_object_name)
+                    base_mesh_prim.SetCustomDataByKey("imported", True)
+                    
+                    # Mark stage as dirty and save
+                    self._is_dirty = True
+                    self.save_stage()
+                    
+                    print(f"[USD Module Utils] Successfully imported geometry from '{maya_object_name}'")
+                else:
+                    print(f"[USD Module Utils] No geometry data found in mesh")
+                    mesh_found = False
+            
+            # Clean up temp file
+            try:
+                temp_usd_path.unlink(missing_ok=True)
+                print(f"[USD Module Utils] Cleaned up temp file: {temp_usd_path}")
+            except PermissionError as e:
+                print(f"[USD Module Utils] Warning: Could not delete temp file (file may be in use): {e}")
+                # File will be cleaned up later or on next run
+            except Exception as e:
+                print(f"[USD Module Utils] Warning: Error cleaning up temp file: {e}")
+            
+            if not mesh_found:
+                print(f"[USD Module Utils] No mesh prim found in exported USD")
+                return False
+            
+            return True
+            
+        except Exception as e:
+            # Check if this is just a cleanup error after successful import
+            error_msg = str(e)
+            if "Access is denied" in error_msg and "temp_" in error_msg:
+                print(f"[USD Module Utils] Geometry import succeeded, but temp file cleanup failed: {e}")
+                print(f"[USD Module Utils] This is not a critical error - geometry was imported successfully")
+                return True
+            else:
+                print(f"[USD Module Utils] Error importing geometry: {e}")
+                import traceback
+                traceback.print_exc()
+                return False
+    
+    def export_geometry_to_maya(self, target_name: str) -> str:
+        """Export USD geometry to Maya"""
+        if not self.stage:
+            self.open_stage()
+        
+        try:
+            from .maya_utils import MayaUtils
+            
+            # Check if BaseMesh has geometry
+            base_mesh_prim = self.stage.GetPrimAtPath("/HairModule/BaseMesh")
+            if not base_mesh_prim or not base_mesh_prim.IsValid():
+                print("[USD Module Utils] No BaseMesh found in module")
+                return None
+            
+            from pxr import UsdGeom
+            if not base_mesh_prim.IsA(UsdGeom.Mesh):
+                print("[USD Module Utils] BaseMesh is not a valid mesh")
+                return None
+            
+            # Create temporary USD file with just the mesh
+            temp_usd_path = self.file_path.parent / f"temp_export_{target_name}.usd"
+            
+            from pxr import Usd
+            temp_stage = Usd.Stage.CreateNew(str(temp_usd_path))
+            
+            # Copy the mesh to temp stage
+            temp_mesh_prim = UsdGeom.Mesh.Define(temp_stage, f"/{target_name}").GetPrim()
+            source_mesh = UsdGeom.Mesh(base_mesh_prim)
+            target_mesh = UsdGeom.Mesh(temp_mesh_prim)
+            
+            # Set the mesh as the default prim
+            temp_stage.SetDefaultPrim(temp_mesh_prim)
+            
+            # Copy mesh data
+            if source_mesh.GetPointsAttr().HasValue():
+                points = source_mesh.GetPointsAttr().Get()
+                target_mesh.GetPointsAttr().Set(points)
+                print(f"[USD Module Utils] Copied {len(points)} points to temp USD")
+            
+            if source_mesh.GetFaceVertexIndicesAttr().HasValue():
+                indices = source_mesh.GetFaceVertexIndicesAttr().Get()
+                target_mesh.GetFaceVertexIndicesAttr().Set(indices)
+                print(f"[USD Module Utils] Copied {len(indices)} face indices to temp USD")
+            
+            if source_mesh.GetFaceVertexCountsAttr().HasValue():
+                counts = source_mesh.GetFaceVertexCountsAttr().Get()
+                target_mesh.GetFaceVertexCountsAttr().Set(counts)
+                print(f"[USD Module Utils] Copied {len(counts)} face counts to temp USD")
+            
+            print(f"[USD Module Utils] Saving temp USD with default prim: {temp_mesh_prim.GetPath()}")
+            temp_stage.Save()
+            
+            # Release temp stage before import
+            temp_stage = None
+            
+            # Import USD into Maya
+            imported_nodes = MayaUtils.import_usd_as_maya_geometry(str(temp_usd_path))
+            
+            # Clean up temp file
+            try:
+                temp_usd_path.unlink(missing_ok=True)
+                print(f"[USD Module Utils] Cleaned up temp export file: {temp_usd_path}")
+            except PermissionError as e:
+                print(f"[USD Module Utils] Warning: Could not delete temp export file (file may be in use): {e}")
+                # File will be cleaned up later
+            except Exception as e:
+                print(f"[USD Module Utils] Warning: Error cleaning up temp export file: {e}")
+            
+            if imported_nodes and len(imported_nodes) > 0:
+                # Get the first imported node (should be our mesh)
+                maya_node = imported_nodes[0]
+                print(f"[USD Module Utils] Imported node: {maya_node}")
+                
+                # Rename to target name if different
+                import maya.cmds as cmds
+                if cmds.objExists(maya_node) and maya_node != target_name:
+                    try:
+                        maya_node = cmds.rename(maya_node, target_name)
+                        print(f"[USD Module Utils] Renamed to: {maya_node}")
+                    except:
+                        print(f"[USD Module Utils] Could not rename, keeping original name: {maya_node}")
+                        pass  # Keep original name if rename fails
+                
+                return maya_node
+            
+            return None
+            
+        except Exception as e:
+            # Check if this is just a cleanup error after successful export
+            error_msg = str(e)
+            if "Access is denied" in error_msg and "temp_export_" in error_msg:
+                print(f"[USD Module Utils] Geometry export succeeded, but temp file cleanup failed: {e}")
+                print(f"[USD Module Utils] This is not a critical error - geometry was exported successfully")
+                # Return the maya_node if it was created successfully
+                if 'maya_node' in locals() and maya_node:
+                    return maya_node
+                elif 'imported_nodes' in locals() and imported_nodes and len(imported_nodes) > 0:
+                    return imported_nodes[0]
+            
+            print(f"[USD Module Utils] Error exporting geometry: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+    
+    def add_blendshape_from_maya(self, maya_object_name: str, blendshape_name: str) -> bool:
+        """Add a blendshape from Maya object with proper USD BlendShape schema"""
+        if not self.stage:
+            self.open_stage()
+        
+        try:
+            from pxr import UsdSkel, UsdGeom, Gf
+            import maya.cmds as cmds
+            
+            # Get base mesh for comparison
+            base_mesh_prim = self.get_prim("/HairModule/BaseMesh")
+            if not base_mesh_prim or not UsdGeom.Mesh(base_mesh_prim):
+                print(f"[USD Module Utils] No base mesh found for blendshape comparison")
+                return False
+            
+            base_mesh = UsdGeom.Mesh(base_mesh_prim)
+            base_points_attr = base_mesh.GetPointsAttr()
+            if not base_points_attr:
+                print(f"[USD Module Utils] Base mesh has no points")
+                return False
+                
+            base_points = base_points_attr.Get()
+            if not base_points:
+                print(f"[USD Module Utils] Could not read base mesh points")
+                return False
+            
+            # Get target mesh points from Maya
+            if not cmds.objExists(maya_object_name):
+                print(f"[USD Module Utils] Maya object '{maya_object_name}' not found")
+                return False
+            
+            # Get mesh points from Maya
+            target_points = []
+            try:
+                # Get vertex positions
+                vertex_count = cmds.polyEvaluate(maya_object_name, vertex=True)
+                for i in range(vertex_count):
+                    pos = cmds.pointPosition(f"{maya_object_name}.vtx[{i}]", world=True)
+                    target_points.append(Gf.Vec3f(pos[0], pos[1], pos[2]))
+            except Exception as maya_error:
+                print(f"[USD Module Utils] Error reading Maya mesh points: {maya_error}")
+                return False
+            
+            # Verify point counts match
+            if len(target_points) != len(base_points):
+                print(f"[USD Module Utils] Point count mismatch: base={len(base_points)}, target={len(target_points)}")
+                return False
+            
+            # Calculate offsets (target - base)
+            offsets = []
+            for i in range(len(base_points)):
+                offset = target_points[i] - base_points[i]
+                offsets.append(offset)
+            
+            # Create proper USD BlendShape prim
+            blendshape_path = f"/HairModule/BlendShapes/{blendshape_name}"
+            blendshape_prim = UsdSkel.BlendShape.Define(self.stage, blendshape_path)
+            
+            if blendshape_prim:
+                # Set the offsets attribute (this is what makes it a real blendshape)
+                offsets_attr = blendshape_prim.CreateOffsetsAttr()
+                offsets_attr.Set(offsets)
+                
+                # Create the weight attribute for interactive control
+                from pxr import Sdf
+                prim = blendshape_prim.GetPrim()
+                weight_attr = prim.CreateAttribute("weight", Sdf.ValueTypeNames.Float)
+                weight_attr.Set(0.0)  # Default weight
+                
+                # Store Maya source info as custom data
+                prim = blendshape_prim.GetPrim()
+                prim.SetCustomDataByKey("maya_source", maya_object_name)
+                prim.SetCustomDataByKey("default_weight", 0.0)
+                
+                # Update the SkelAnimation to include this blendshape
+                self._update_skel_animation_blendshapes()
+                
+                # Mark stage as dirty and save immediately
+                self._is_dirty = True
+                self.save_stage()
+                
+                print(f"[USD Module Utils] Created and saved BlendShape '{blendshape_name}' with {len(offsets)} offsets and weight attribute")
+                return True
+            else:
+                print(f"[USD Module Utils] Failed to create BlendShape prim")
+                return False
+                
+        except Exception as e:
+            print(f"[USD Module Utils] Error adding blendshape from Maya: {e}")
+            return False
+    
+    def _update_skel_animation_blendshapes(self):
+        """Update the UsdSkelAnimation with current blendshapes for proper Maya USD integration"""
+        if not self.stage:
+            return False
+        
+        try:
+            # Get or create the SkelAnimation prim
+            anim_path = "/HairModule/Animation"
+            anim_prim = self.stage.GetPrimAtPath(anim_path)
+            
+            if not anim_prim.IsValid():
+                anim_prim = UsdSkel.Animation.Define(self.stage, anim_path).GetPrim()
+            
+            # Get all blendshapes
+            blendshapes_prim = self.stage.GetPrimAtPath("/HairModule/BlendShapes")
+            if not blendshapes_prim.IsValid():
+                return False
+            
+            # Collect all blendshape names and weights
+            blendshape_names = []
+            blendshape_weights = []
+            
+            for child in blendshapes_prim.GetChildren():
+                if UsdSkel.BlendShape(child):
+                    blendshape_names.append(child.GetName())
+                    # Get current weight (default to 0.0)
+                    weight_attr = child.GetAttribute("weight")
+                    if weight_attr and weight_attr.IsValid():
+                        weight = weight_attr.Get()
+                        if weight is None:
+                            weight = 0.0
+                    else:
+                        weight = 0.0
+                    blendshape_weights.append(float(weight))
+            
+            if blendshape_names:
+                # Set up the SkelAnimation with blendshape data
+                skel_anim = UsdSkel.Animation(anim_prim)
+                
+                # Set blendShapes array (names of blendshapes)
+                blend_shapes_attr = skel_anim.CreateBlendShapesAttr()
+                blend_shapes_attr.Set(blendshape_names)
+                
+                # Set blendShapeWeights array (current weights)
+                blend_weights_attr = skel_anim.CreateBlendShapeWeightsAttr()
+                blend_weights_attr.Set(blendshape_weights)
+                
+                print(f"[USD Module Utils] Updated SkelAnimation with {len(blendshape_names)} blendshapes: {blendshape_names}")
+                return True
+            else:
+                print("[USD Module Utils] No blendshapes found to update SkelAnimation")
+                return False
+                
+        except Exception as e:
+            print(f"[USD Module Utils] Error updating SkelAnimation: {e}")
+            return False
+    
+    def set_blendshape_weight_via_animation(self, blendshape_name: str, weight: float) -> bool:
+        """Set blendshape weight using UsdSkelAnimation (proper Maya USD approach)"""
+        if not self.stage:
+            self.open_stage()
+        
+        try:
+            # Get the SkelAnimation prim
+            anim_path = "/HairModule/Animation"
+            anim_prim = self.stage.GetPrimAtPath(anim_path)
+            
+            if not anim_prim.IsValid():
+                print(f"[USD Module Utils] No SkelAnimation found at {anim_path}")
+                return False
+            
+            skel_anim = UsdSkel.Animation(anim_prim)
+            
+            # Get current blendshape names and weights
+            blend_shapes_attr = skel_anim.GetBlendShapesAttr()
+            blend_weights_attr = skel_anim.GetBlendShapeWeightsAttr()
+            
+            if not blend_shapes_attr or not blend_weights_attr:
+                print("[USD Module Utils] SkelAnimation missing blendShapes or blendShapeWeights attributes")
+                return False
+            
+            # Get current arrays
+            blendshape_names = blend_shapes_attr.Get()
+            blendshape_weights = blend_weights_attr.Get()
+            
+            if not blendshape_names or not blendshape_weights:
+                print("[USD Module Utils] Empty blendshape arrays in SkelAnimation")
+                return False
+            
+            # Debug output
+            print(f"[USD Module Utils] Found {len(blendshape_names)} blendshapes in SkelAnimation: {list(blendshape_names)}")
+            print(f"[USD Module Utils] Current weights: {list(blendshape_weights)}")
+            print(f"[USD Module Utils] Looking for blendshape: '{blendshape_name}'")
+            
+            # Find the index of our blendshape
+            try:
+                # Convert TokenArray to list to use index() method
+                blendshape_names_list = list(blendshape_names)
+                blend_index = blendshape_names_list.index(blendshape_name)
+            except (ValueError, AttributeError) as e:
+                print(f"[USD Module Utils] Blendshape '{blendshape_name}' not found in SkelAnimation or error accessing blendshape names: {e}")
+                return False
+            
+            # Update the weight at that index
+            blendshape_weights = list(blendshape_weights)  # Convert to mutable list
+            blendshape_weights[blend_index] = float(weight)
+            
+            # Set the updated weights back to the attribute
+            blend_weights_attr.Set(blendshape_weights)
+            
+            # Also update the individual blendshape prim weight for consistency
+            blendshape_prim_path = f"/HairModule/BlendShapes/{blendshape_name}"
+            blendshape_prim = self.stage.GetPrimAtPath(blendshape_prim_path)
+            if blendshape_prim.IsValid():
+                weight_attr = blendshape_prim.GetAttribute("weight")
+                if weight_attr:
+                    weight_attr.Set(float(weight))
+                    print(f"[USD Module Utils] Also updated individual blendshape prim weight")
+            
+            # Mark stage as dirty (but don't save immediately for interactive performance)
+            self._is_dirty = True
+            
+            # Verify the weight was set correctly
+            verification_weights = blend_weights_attr.Get()
+            if verification_weights and len(verification_weights) > blend_index:
+                actual_weight = verification_weights[blend_index]
+                print(f"[USD Module Utils] Set blendshape '{blendshape_name}' weight to {actual_weight} (in-memory)")
+            
+            return True
+            
+        except Exception as e:
+            print(f"[USD Module Utils] Error setting blendshape weight via animation: {e}")
+            return False
+    
     def get_blendshape_names(self) -> List[str]:
         """Get all blendshape names in this module"""
         if not self.stage:
@@ -354,6 +950,44 @@ class USDModuleUtils(USDUtilsBase):
                 blendshapes.append(child.GetName())
         return blendshapes
     
+    def get_blendshapes_with_weights(self) -> Dict[str, float]:
+        """Get blendshape data (names and weights) from USD BlendShape schema"""
+        if not self.stage:
+            self.open_stage()
+        
+        blendshapes = {}
+        blendshapes_prim = self.get_prim("/HairModule/BlendShapes")
+        if blendshapes_prim:
+            for child in blendshapes_prim.GetChildren():
+                name = child.GetName()
+                
+                # Try to get weight from USD BlendShape schema
+                weight = 0.0
+                try:
+                    from pxr import UsdSkel
+                    blendshape_schema = UsdSkel.BlendShape(child)
+                    if blendshape_schema:
+                        # Use the weight attribute on the prim
+                        weight_attr = child.GetAttribute("weight")
+                        if weight_attr:
+                            weight_value = weight_attr.Get()
+                            if weight_value is not None:
+                                weight = float(weight_value)
+                        else:
+                            # Fallback to custom data
+                            custom_weight = child.GetCustomDataByKey("default_weight")
+                            if custom_weight is not None:
+                                weight = float(custom_weight)
+                except Exception as e:
+                    print(f"[USD Module Utils] Warning: Error reading blendshape weight for {name}: {e}")
+                    # Fallback to custom data
+                    custom_weight = child.GetCustomDataByKey("default_weight")
+                    if custom_weight is not None:
+                        weight = float(custom_weight)
+                
+                blendshapes[name] = weight
+        return blendshapes
+    
     def add_blendshape(self, blendshape_name: str):
         """Add a blendshape to the module"""
         if not self.stage:
@@ -361,6 +995,45 @@ class USDModuleUtils(USDUtilsBase):
         
         blendshape_prim = self.create_prim(f"/HairModule/BlendShapes/{blendshape_name}")
         return blendshape_prim is not None
+    
+    def remove_blendshape(self, blendshape_name: str):
+        """Remove a blendshape from the module"""
+        if not self.stage:
+            self.open_stage()
+        
+        try:
+            blendshape_prim = self.stage.GetPrimAtPath(f"/HairModule/BlendShapes/{blendshape_name}")
+            if blendshape_prim and blendshape_prim.IsValid():
+                self.stage.RemovePrim(blendshape_prim.GetPath())
+                return True
+            return False
+        except Exception as e:
+            print(f"[USD Module Utils] Error removing blendshape: {e}")
+            return False
+    
+    def set_blendshapes(self, blendshape_data: Dict[str, float]):
+        """Set blendshape data (names and weights)"""
+        if not self.stage:
+            self.open_stage()
+        
+        try:
+            # Clear existing blendshapes
+            blendshapes_prim = self.get_prim("/HairModule/BlendShapes")
+            if blendshapes_prim:
+                for child in blendshapes_prim.GetChildren():
+                    self.stage.RemovePrim(child.GetPath())
+            
+            # Add new blendshapes
+            for blendshape_name, weight in blendshape_data.items():
+                blendshape_prim = self.create_prim(f"/HairModule/BlendShapes/{blendshape_name}")
+                if blendshape_prim:
+                    # Store weight as custom data
+                    blendshape_prim.SetCustomDataByKey("weight", weight)
+            
+            return True
+        except Exception as e:
+            print(f"[USD Module Utils] Error setting blendshapes: {e}")
+            return False
     
     def get_internal_exclusions(self) -> Dict[str, List[str]]:
         """Get internal blendshape exclusions"""

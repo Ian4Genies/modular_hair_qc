@@ -287,9 +287,19 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         module_select_layout = QtWidgets.QVBoxLayout(module_select_frame)
         
         self.module_list = QtWidgets.QTableWidget()
-        self.module_list.setColumnCount(4)
-        self.module_list.setHorizontalHeaderLabels(["Selection", "Type", "Name", ""])
+        self.module_list.setColumnCount(3)
+        self.module_list.setHorizontalHeaderLabels(["Type", "Name", "Status"])
+        self.module_list.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.module_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.module_list.currentItemChanged.connect(self.on_module_selected)
+        
+        # Store column widths for restoration
+        self.module_list_column_widths = [80, 150, 100]
+        
+        # Connect to save column widths when resized
+        header = self.module_list.horizontalHeader()
+        header.sectionResized.connect(self.save_module_list_column_widths)
+        
         module_select_layout.addWidget(self.module_list)
         
         # Module controls
@@ -297,6 +307,12 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         self.add_module_btn = QtWidgets.QPushButton("Add Module")
         self.add_module_btn.clicked.connect(self.add_module)
         module_controls.addWidget(self.add_module_btn)
+        
+        self.remove_module_btn = QtWidgets.QPushButton("Remove Module")
+        self.remove_module_btn.clicked.connect(self.remove_module)
+        self.remove_module_btn.setEnabled(False)  # Enabled when module selected
+        module_controls.addWidget(self.remove_module_btn)
+        
         module_controls.addStretch()
         
         module_select_layout.addLayout(module_controls)
@@ -313,8 +329,10 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         # Module properties
         props_layout = QtWidgets.QFormLayout()
         self.module_name_edit = QtWidgets.QLineEdit()
+        self.module_name_edit.editingFinished.connect(self.on_module_name_changed)
         self.module_type_combo = QtWidgets.QComboBox()
         self.module_type_combo.addItems(["scalp", "crown", "tail", "bang"])
+        self.module_type_combo.currentTextChanged.connect(self.on_module_type_changed)
         
         props_layout.addRow("Name:", self.module_name_edit)
         props_layout.addRow("Type:", self.module_type_combo)
@@ -330,17 +348,26 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         mesh_layout.addWidget(QtWidgets.QLabel("Base Mesh:"))
         mesh_layout.addWidget(self.base_mesh_label)
         mesh_layout.addWidget(self.replace_mesh_btn)
+        
+        self.load_viewport_btn = QtWidgets.QPushButton("Load in Viewport")
+        self.load_viewport_btn.clicked.connect(self.load_module_in_viewport)
+        self.load_viewport_btn.setEnabled(False)  # Enabled when module is loaded
+        mesh_layout.addWidget(self.load_viewport_btn)
+        
         mesh_layout.addStretch()
         
         module_edit_layout.addLayout(mesh_layout)
         
         # Blendshapes
-        blend_frame = QtWidgets.QGroupBox("Blendshapes")
+        blend_frame = QtWidgets.QGroupBox("Blendshapes (Weights = Viewport Preview Only)")
         blend_layout = QtWidgets.QVBoxLayout(blend_frame)
         
         self.blendshape_list = QtWidgets.QTableWidget()
-        self.blendshape_list.setColumnCount(5)
-        self.blendshape_list.setHorizontalHeaderLabels(["Selection", "Name", "Weight", "Excluded", ""])
+        self.blendshape_list.setColumnCount(4)
+        self.blendshape_list.setHorizontalHeaderLabels(["Name", "Weight", "Exclusions", ""])
+        self.blendshape_list.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.blendshape_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.blendshape_list.currentItemChanged.connect(self.on_blendshape_selected)
         blend_layout.addWidget(self.blendshape_list)
         
         # Blendshape controls
@@ -542,6 +569,8 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         success, message = self.data_manager.refresh_all_data()
         
         if success:
+            # Clear USD stages when refreshing data (full cleanup)
+            self.data_manager.clear_usd_stages()
             self.load_groups()
             self.load_alpha_whitelist()
             self.load_modules()
@@ -579,6 +608,8 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             
             if success:
                 self.statusBar().showMessage(f"Loaded group: {group_name}", 3000)
+                # Clear USD stages when switching groups (full cleanup)
+                self.data_manager.clear_usd_stages()
                 # Update alpha whitelist UI
                 self.load_alpha_whitelist()
                 # Load modules for this group
@@ -724,6 +755,24 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             else:
                 QtWidgets.QMessageBox.warning(self, "Remove Texture Failed", message)
     
+    def restore_module_list_column_widths(self):
+        """Restore column widths for module list"""
+        try:
+            for col, width in enumerate(self.module_list_column_widths):
+                self.module_list.setColumnWidth(col, width)
+        except:
+            # If restoration fails, use default sizing
+            self.module_list.resizeColumnsToContents()
+    
+    def save_module_list_column_widths(self):
+        """Save current column widths"""
+        try:
+            self.module_list_column_widths = []
+            for col in range(self.module_list.columnCount()):
+                self.module_list_column_widths.append(self.module_list.columnWidth(col))
+        except:
+            pass
+    
     def load_modules(self):
         """Load modules for current group"""
         self.module_list.setRowCount(0)
@@ -757,39 +806,39 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         for module_name in modules:
             self.module_list.insertRow(row)
             
-            # Selection checkbox
-            checkbox = QtWidgets.QCheckBox()
-            self.module_list.setCellWidget(row, 0, checkbox)
-            
             # Type - get from group whitelist or unknown
             module_type = module_types.get(module_name, "unknown")
             type_item = QtWidgets.QTableWidgetItem(module_type)
             type_item.setFlags(type_item.flags() & ~QtCore.Qt.ItemIsEditable)
-            self.module_list.setItem(row, 1, type_item)
+            self.module_list.setItem(row, 0, type_item)
             
             # Name
             name_item = QtWidgets.QTableWidgetItem(module_name)
             name_item.setFlags(name_item.flags() & ~QtCore.Qt.ItemIsEditable)
-            self.module_list.setItem(row, 2, name_item)
+            self.module_list.setItem(row, 1, name_item)
             
-            # Empty column for future actions
-            empty_item = QtWidgets.QTableWidgetItem("")
-            empty_item.setFlags(empty_item.flags() & ~QtCore.Qt.ItemIsEditable)
-            self.module_list.setItem(row, 3, empty_item)
+            # Status (will be updated when module is loaded)
+            status_item = QtWidgets.QTableWidgetItem("Not loaded")
+            status_item.setFlags(status_item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.module_list.setItem(row, 2, status_item)
             
             row += 1
         
-        # Resize columns
-        self.module_list.resizeColumnsToContents()
+        # Restore column widths
+        self.restore_module_list_column_widths()
         
         # Restore selection if we had a current module
         current_module = self.data_manager.get_current_module()
         if current_module:
             # Find the row with this module name
             for row in range(self.module_list.rowCount()):
-                name_item = self.module_list.item(row, 2)
+                name_item = self.module_list.item(row, 1)  # Name is now in column 1
                 if name_item and name_item.text() == current_module:
                     self.module_list.selectRow(row)
+                    # Update status to show it's loaded
+                    status_item = self.module_list.item(row, 2)
+                    if status_item:
+                        status_item.setText("Loaded")
                     break
     
     def save_current_group(self):
@@ -844,7 +893,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         if current_item:
             # Get module name from the selected row
             row = current_item.row()
-            name_item = self.module_list.item(row, 2)
+            name_item = self.module_list.item(row, 1)  # Name is now in column 1
             
             if name_item:
                 module_name = name_item.text()
@@ -857,15 +906,43 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
                     self.statusBar().showMessage(f"Loaded module: {module_name}", 3000)
                     # Enable edit frame and load module data
                     self.module_edit_frame.setEnabled(True)
+                    self.remove_module_btn.setEnabled(True)
                     self.load_module_edit_data()
+                    
+                    # Load geometry into Maya viewport if module has geometry
+                    module_info = self.data_manager.get_current_module_info()
+                    if module_info and module_info.get('has_geometry', False):
+                        self.statusBar().showMessage(f"Loading geometry for {module_name} into viewport...")
+                        geo_success, geo_message = self.data_manager.load_geometry_to_scene()
+                        
+                        if geo_success:
+                            self.statusBar().showMessage(f"Loaded module and geometry: {module_name}", 3000)
+                        else:
+                            self.statusBar().showMessage(f"Loaded module but failed to load geometry: {geo_message}", 5000)
+                            # Still consider the module load successful
+                    
+                    # Update status in the list
+                    status_item = self.module_list.item(row, 2)
+                    if status_item:
+                        status_item.setText("Loaded")
                 else:
                     self.statusBar().showMessage(f"Failed to load module: {message}", 5000)
                     QtWidgets.QMessageBox.warning(self, "Load Module Failed", f"Failed to load module '{module_name}':\n\n{message}")
                     self.module_edit_frame.setEnabled(False)
+                    self.remove_module_btn.setEnabled(False)
+                    
+                    # Update status to show error
+                    status_item = self.module_list.item(row, 2)
+                    if status_item:
+                        status_item.setText("Error")
             else:
                 self.module_edit_frame.setEnabled(False)
+                self.remove_module_btn.setEnabled(False)
         else:
+            # No module selected - clear proxy shapes and disable edit frame
+            self.data_manager.clear_module_proxy_shapes()
             self.module_edit_frame.setEnabled(False)
+            self.remove_module_btn.setEnabled(False)
     
     def load_module_edit_data(self):
         """Load current module data into edit form"""
@@ -886,11 +963,16 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             if type_index >= 0:
                 self.module_type_combo.setCurrentIndex(type_index)
             
-            # Update base mesh status
+            # Update base mesh status and enable viewport loading
             if module_info.geometry_loaded:
                 self.base_mesh_label.setText("Geometry loaded")
+                self.load_viewport_btn.setEnabled(True)
+                # Automatically load in viewport when module is selected
+                self.load_module_in_viewport()
             else:
                 self.base_mesh_label.setText("No geometry loaded")
+                self.load_viewport_btn.setEnabled(False)
+                # No additional button to disable
         
         # Load blendshapes
         self.load_module_blendshapes()
@@ -912,31 +994,33 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         for bs_name, weight in blendshapes.items():
             self.blendshape_list.insertRow(row)
             
-            # Selection checkbox
-            checkbox = QtWidgets.QCheckBox()
-            self.blendshape_list.setCellWidget(row, 0, checkbox)
-            
-            # Name (editable)
+            # Name (non-editable for now)
             name_item = QtWidgets.QTableWidgetItem(bs_name)
-            self.blendshape_list.setItem(row, 1, name_item)
+            name_item.setFlags(name_item.flags() & ~QtCore.Qt.ItemIsEditable)
+            self.blendshape_list.setItem(row, 0, name_item)
             
             # Weight slider
             weight_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
             weight_slider.setRange(0, 100)
             weight_slider.setValue(int(weight * 100))
             weight_slider.valueChanged.connect(lambda val, name=bs_name: self.on_blendshape_weight_changed(name, val / 100.0))
-            self.blendshape_list.setCellWidget(row, 2, weight_slider)
+            self.blendshape_list.setCellWidget(row, 1, weight_slider)
             
-            # Exclusions indicator
-            excluded_count = len(exclusions.get(bs_name, []))
-            excluded_item = QtWidgets.QTableWidgetItem(f"{excluded_count} excluded")
-            excluded_item.setFlags(excluded_item.flags() & ~QtCore.Qt.ItemIsEditable)
-            self.blendshape_list.setItem(row, 3, excluded_item)
+            # Exclusions - show as clickable list
+            excluded_list = exclusions.get(bs_name, [])
+            if excluded_list:
+                exclusion_text = ", ".join(excluded_list)
+            else:
+                exclusion_text = "None"
+            exclusion_item = QtWidgets.QTableWidgetItem(exclusion_text)
+            exclusion_item.setFlags(exclusion_item.flags() & ~QtCore.Qt.ItemIsEditable)
+            exclusion_item.setToolTip(f"Click to edit exclusions for {bs_name}")
+            self.blendshape_list.setItem(row, 2, exclusion_item)
             
             # Remove button
             remove_btn = QtWidgets.QPushButton("Remove")
             remove_btn.clicked.connect(lambda checked, name=bs_name: self.remove_module_blendshape(name))
-            self.blendshape_list.setCellWidget(row, 4, remove_btn)
+            self.blendshape_list.setCellWidget(row, 3, remove_btn)
             
             row += 1
         
@@ -944,11 +1028,78 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         self.blendshape_list.resizeColumnsToContents()
     
     def on_blendshape_weight_changed(self, blendshape_name: str, weight: float):
-        """Handle blendshape weight change"""
+        """Handle blendshape weight change (viewport preview only - not saved)"""
         success, message = self.data_manager.set_blendshape_weight(blendshape_name, weight)
         
-        if not success:
+        if success:
+            # Show that this is viewport preview only
+            self.statusBar().showMessage(f"Preview: {blendshape_name} = {weight:.2f} (not saved)", 2000)
+        else:
             self.statusBar().showMessage(f"Failed to set weight: {message}", 3000)
+    
+    def on_blendshape_selected(self, current_item, previous_item):
+        """Handle blendshape selection - show exclusion editing for selected blendshape"""
+        if not current_item:
+            return
+            
+        row = current_item.row()
+        name_item = self.blendshape_list.item(row, 0)
+        if not name_item:
+            return
+            
+        selected_blendshape = name_item.text()
+        
+        # Get all blendshapes and current exclusions
+        blendshapes = self.data_manager.get_module_blendshapes()
+        exclusions = self.data_manager.get_module_exclusions()
+        
+        current_exclusions = exclusions.get(selected_blendshape, [])
+        
+        # Update exclusion column for all rows to show checkboxes relative to selected blendshape
+        for check_row in range(self.blendshape_list.rowCount()):
+            check_name_item = self.blendshape_list.item(check_row, 0)
+            if not check_name_item:
+                continue
+                
+            check_blendshape = check_name_item.text()
+            
+            if check_blendshape == selected_blendshape:
+                # Selected blendshape - show as "SELECTED"
+                selected_item = QtWidgets.QTableWidgetItem("SELECTED")
+                selected_item.setFlags(selected_item.flags() & ~QtCore.Qt.ItemIsEditable)
+                selected_item.setBackground(QtCore.Qt.yellow)
+                self.blendshape_list.setItem(check_row, 2, selected_item)
+            else:
+                # Other blendshapes - show checkbox for exclusion
+                checkbox = QtWidgets.QCheckBox()
+                checkbox.setChecked(check_blendshape in current_exclusions)
+                checkbox.stateChanged.connect(
+                    lambda state, selected=selected_blendshape, target=check_blendshape: 
+                    self.on_exclusion_changed(selected, target, state == QtCore.Qt.Checked)
+                )
+                
+                # Create a widget to center the checkbox
+                checkbox_widget = QtWidgets.QWidget()
+                checkbox_layout = QtWidgets.QHBoxLayout(checkbox_widget)
+                checkbox_layout.addWidget(checkbox)
+                checkbox_layout.setAlignment(QtCore.Qt.AlignCenter)
+                checkbox_layout.setContentsMargins(0, 0, 0, 0)
+                
+                self.blendshape_list.setCellWidget(check_row, 2, checkbox_widget)
+        
+        self.statusBar().showMessage(f"Editing exclusions for: {selected_blendshape}", 3000)
+    
+    def on_exclusion_changed(self, selected_blendshape: str, target_blendshape: str, is_excluded: bool):
+        """Handle exclusion checkbox change"""
+        success, message = self.data_manager.set_blendshape_exclusion(selected_blendshape, target_blendshape, is_excluded)
+        
+        if success:
+            if is_excluded:
+                self.statusBar().showMessage(f"Added exclusion: {selected_blendshape} excludes {target_blendshape}", 2000)
+            else:
+                self.statusBar().showMessage(f"Removed exclusion: {selected_blendshape} no longer excludes {target_blendshape}", 2000)
+        else:
+            self.statusBar().showMessage(f"Failed to update exclusion: {message}", 5000)
     
     def remove_module_blendshape(self, blendshape_name: str):
         """Remove blendshape from current module"""
@@ -969,6 +1120,83 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
                 self.statusBar().showMessage(f"Removed blendshape: {blendshape_name}", 3000)
             else:
                 QtWidgets.QMessageBox.warning(self, "Remove Blendshape Failed", message)
+    
+    def load_module_in_viewport(self):
+        """Load current module as USD proxy shape in viewport"""
+        current_module = self.data_manager.get_current_module()
+        if not current_module:
+            self.statusBar().showMessage("No module selected to load", 3000)
+            return
+        
+        self.statusBar().showMessage(f"Loading {current_module} in viewport...")
+        success, message = self.data_manager.load_geometry_to_scene(current_module)
+        
+        if success:
+            self.statusBar().showMessage(f"Loaded {current_module} in viewport", 3000)
+        else:
+            self.statusBar().showMessage(f"Failed to load in viewport: {message}", 5000)
+            QtWidgets.QMessageBox.warning(self, "Viewport Load Failed", f"Failed to load module in viewport:\n\n{message}")
+    
+    def on_module_name_changed(self):
+        """Handle module name change"""
+        if not self.data_manager.get_current_module():
+            return
+            
+        new_name = self.module_name_edit.text().strip()
+        if not new_name:
+            return
+        
+        # Convert spaces to underscores for file naming
+        new_name = new_name.replace(' ', '_')
+        
+        current_module = self.data_manager.get_current_module()
+        if new_name == current_module:
+            return  # No change
+        
+        # TODO: Implement module renaming
+        # This would involve:
+        # 1. Renaming the USD file
+        # 2. Updating group whitelists 
+        # 3. Moving file if type changed
+        # 4. Updating internal references
+        
+        self.statusBar().showMessage("Module renaming not yet implemented", 3000)
+        
+        # Reset to current name for now
+        self.module_name_edit.setText(current_module)
+    
+    def on_module_type_changed(self, new_type: str):
+        """Handle module type change"""
+        if not self.data_manager.get_current_module():
+            return
+            
+        current_module = self.data_manager.get_current_module()
+        
+        # Get current module info
+        try:
+            module_info = self.data_manager.module_manager.modules.get(current_module)
+            if not module_info:
+                return
+            
+            current_type = module_info.module_type
+            if new_type == current_type:
+                return  # No change
+            
+            # TODO: Implement module type change
+            # This would involve:
+            # 1. Moving USD file to new type directory
+            # 2. Updating module structure in USD
+            # 3. Handling alpha blacklist changes
+            
+            self.statusBar().showMessage("Module type changing not yet implemented", 3000)
+            
+            # Reset to current type for now
+            type_index = self.module_type_combo.findText(current_type)
+            if type_index >= 0:
+                self.module_type_combo.setCurrentIndex(type_index)
+                
+        except Exception as e:
+            self.statusBar().showMessage(f"Error handling type change: {e}", 5000)
     
     def on_style_selected(self, current_item, previous_item):
         """Handle style selection change"""
@@ -1072,13 +1300,43 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
                 
                 # Find and select the new module
                 for row in range(self.module_list.rowCount()):
-                    name_item = self.module_list.item(row, 2)
+                    name_item = self.module_list.item(row, 1)  # Name is now in column 1
                     if name_item and name_item.text() == module_name:
                         self.module_list.selectRow(row)
                         break
             else:
                 self.statusBar().showMessage(f"Failed to create module: {message}", 5000)
                 QtWidgets.QMessageBox.warning(self, "Create Module Failed", f"Failed to create module '{module_name}':\n\n{message}")
+    
+    def remove_module(self):
+        """Remove the currently selected module"""
+        current_module = self.data_manager.get_current_module()
+        if not current_module:
+            return
+        
+        # Confirm deletion
+        reply = QtWidgets.QMessageBox.question(
+            self,
+            "Remove Module",
+            f"Remove module '{current_module}' permanently?\n\nThis will:\n- Delete the USD file\n- Remove from group whitelist\n- Remove all references\n\nThis action cannot be undone.",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+            QtWidgets.QMessageBox.No
+        )
+        
+        if reply == QtWidgets.QMessageBox.Yes:
+            # TODO: Implement module deletion
+            # This would involve:
+            # 1. Removing USD file from disk
+            # 2. Removing from group whitelist
+            # 3. Cleaning up any references
+            # 4. Refreshing UI
+            
+            self.statusBar().showMessage("Module deletion not yet implemented", 3000)
+            QtWidgets.QMessageBox.information(
+                self,
+                "Not Implemented",
+                "Module deletion functionality will be implemented in a future update."
+            )
     
     def add_blendshape(self):
         """Add blendshape to current module"""
@@ -1174,11 +1432,15 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             
             if success:
                 self.statusBar().showMessage(f"Imported geometry: {maya_object}", 3000)
-                # Update UI to show geometry is loaded
-                self.base_mesh_label.setText("Geometry loaded")
+                # Refresh module data to update geometry status
+                self.load_module_edit_data()
             else:
                 self.statusBar().showMessage(f"Failed to import geometry: {message}", 5000)
                 QtWidgets.QMessageBox.warning(self, "Import Geometry Failed", f"Failed to import geometry from '{maya_object}':\n\n{message}")
+    
+    def load_geometry_to_scene(self):
+        """Load current module's geometry into Maya viewport (legacy method - redirects to viewport loading)"""
+        self.load_module_in_viewport()
     
     def save_module(self):
         """Save current module to USD"""

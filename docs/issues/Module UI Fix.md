@@ -1,0 +1,12 @@
+In the current state of the Module UI there are a handfull of issues
+- Module geometry node does not seem to contain geometry after geometry is added using the {replace button}
+	- because of this I cannot tell if module is visible or not in the viewport
+	- because of this i can not tell if the weight slider is working
+	- because of this I cannot tell if the blendshapes are properly added, but I assume they also are not
+	- on loading the usd manually into the scene, there is a mesh node but no mesh to show. 
+- Type dropdown menu does not seem to change the type in the usd file, it should also change the directory the file is in when the module type is changed
+- The Remove Button in the blendshapes list does not seem to do anything
+- In the module selection section there should also be a remove button that fully deletes the module and any references to it
+- The name change in the module edit section does not seem to do anything
+- We should get rid of the selection checkbox and handle selection with clicks in the same way it is handled in the module selection menu
+- The exclude column in module belndshapes just shows how many things are excluded. This is not correct. the exclude column, should show checkboxes per blendshape, other than the actively selected blendshape. When the checkbox on a blendshape not actively selected is checked, that should create an exclusion between the checked blendshape and the selected blendshape. 

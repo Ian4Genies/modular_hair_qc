@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/USD_directory.md",
+                "file": "docs/LazyLoadingViewport.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "USD_directory"
+              "title": "LazyLoadingViewport"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/USD_directory.md",
+                "file": "docs/LazyLoadingViewport.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for USD_directory"
+              "title": "Backlinks for LazyLoadingViewport"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/USD_directory.md",
+                "file": "docs/LazyLoadingViewport.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from USD_directory"
+              "title": "Outgoing links from LazyLoadingViewport"
             }
           },
           {
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/USD_directory.md",
+                "file": "docs/LazyLoadingViewport.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of USD_directory"
+              "title": "Outline of LazyLoadingViewport"
             }
           }
         ]
@@ -170,31 +170,41 @@
   },
   "active": "020bb5c44ab37f77",
   "lastOpenFiles": [
+    "simple_reload_test.py",
+    "docs/TestDirectory/module/crown/temp_midAfro_base.usd",
+    "docs/TestDirectory/module/crown/midAfro.usd",
+    "docs/TestDirectory/module/crown/temp_sideSpiky_base.usd",
+    "docs/TestDirectory/module/crown/sideSpikey.usd",
+    "force_reload_and_test.py",
+    "dev_tools/test_dev_setup.py",
+    "dev_tools/README.md",
+    "dev_tools/debugging/check_code_changes.py",
+    "dev_tools/debugging/force_reload_modules.py",
+    "dev_tools/debugging/cleanup_temp_files.py",
+    "dev_tools/debugging/verify_methods.py",
+    "DISPLAY_GEOMETRY_SYSTEM.md",
+    "PERFORMANCE_FIX_SUMMARY.md",
+    "VIEWPORT_REFRESH_FIX_SUMMARY.md",
+    "BLENDSHAPE_FIX_SUMMARY.md",
+    "docs/issues/USDBlendshapeUpdate.md",
+    "LAZY_LOADING_UPDATE.md",
+    "docs/General Info.md",
+    "docs/LazyLoadingViewport.md",
+    "docs/issues/Module UI Fix.md",
+    "docs/TestDirectory/README.md",
+    "docs/USD_directory.md",
     "docs/USD_Summary.md",
     "docs/USD_reference.md",
     "docs/USD_paths.md",
-    "docs/USD_directory.md",
     "docs/Terminology.md",
     "docs/Questions_Final.md",
     "docs/UI Mockup.md",
-    "check_code_changes.py",
-    "test_ui_integration.py",
-    "test_create_module.py",
-    "debug_module_list_simple.py",
-    "hair_qc_tool/managers/__pycache__/module_manager.cpython-312.pyc",
-    "debug_module_list.py",
-    "test_module_fix.py",
-    "hair_qc_tool/managers/__pycache__/module_manager.cpython-310.pyc",
-    "test_module_management.py",
-    "hair_qc_tool/managers/module_manager.py",
     "README.md",
     "task_list.md",
     "docs/Questions_Followup.md",
-    "docs/General Info.md",
     "docs/Questions.md",
     "docs/USD_features.md",
     "docs/USD.md",
-    "docs/directory.md",
-    "docs/Blendshape Rules.md"
+    "docs/directory.md"
   ]
 }

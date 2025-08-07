@@ -252,6 +252,28 @@ class DataManager:
         
         return success, message
     
+    def get_current_module_info(self) -> Optional[Dict[str, Any]]:
+        """Get info for the currently loaded module"""
+        current_module = self.module_manager.current_module
+        if not current_module:
+            return None
+        
+        try:
+            module_info = self.module_manager.modules.get(current_module)
+            if not module_info:
+                return None
+            
+            # Get USD module info
+            from hair_qc_tool.utils.usd_utils import USDModuleUtils
+            module_utils = USDModuleUtils(module_info.file_path)
+            usd_info = module_utils.get_module_info()
+            
+            return usd_info
+            
+        except Exception as e:
+            print(f"[Data Manager] Error getting current module info: {e}")
+            return None
+    
     def load_geometry_to_scene(self, module_name: Optional[str] = None) -> Tuple[bool, str]:
         """
         Load module geometry into Maya scene
@@ -263,6 +285,32 @@ class DataManager:
             Tuple of (success, message)
         """
         return self.module_manager.load_geometry_to_scene(module_name)
+    
+    def clear_module_display_geometry(self) -> Tuple[bool, str]:
+        """
+        Clear all module display geometry from Maya scene (keep USD stages for rapid swapping)
+        
+        Returns:
+            Tuple of (success, message)
+        """
+        try:
+            self.module_manager.clear_all_display_geometry()
+            return True, "Cleared all module display geometry"
+        except Exception as e:
+            return False, f"Error clearing display geometry: {str(e)}"
+    
+    def clear_usd_stages(self) -> Tuple[bool, str]:
+        """
+        Clear USD stages when switching groups (full cleanup)
+        
+        Returns:
+            Tuple of (success, message)
+        """
+        try:
+            self.module_manager.clear_usd_stages()
+            return True, "Cleared USD stages"
+        except Exception as e:
+            return False, f"Error clearing USD stages: {str(e)}"
     
     def add_blendshape_from_scene(self, maya_object_name: str, blendshape_name: Optional[str] = None) -> Tuple[bool, str]:
         """

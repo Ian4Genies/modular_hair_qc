@@ -1,0 +1,25 @@
+{
+    "python.defaultInterpreterPath": "./venv_dev/Scripts/python.exe",
+    "python.analysis.extraPaths": [
+        "./hair_qc_tool",
+        "./dev_tools"
+    ],
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "files.associations": {
+        "*.usd": "plaintext",
+        "*.usda": "plaintext"
+    },
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=120",
+        "--ignore=E203,W503"
+    ],
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/venv_dev": true
+    }
+}

@@ -38,13 +38,16 @@ Creating a Maya tool for modular hair quality control using USD-based data manag
 - [x] Implement module whitelist management per group
 
 ### 4. Module Management System  
-**Status**: ✅ **COMPLETED**
+**Status**: ✅ **COMPLETED** *(Updated for Lazy Loading)*
 - [x] Implement module USD file creation and loading
 - [x] Create geometry import from Maya scene to USD
 - [x] Implement blendshape import and management
 - [x] Create internal module exclusions system
 - [x] Implement alpha texture blacklist functionality
 - [x] Add module validation (geometry, blendshapes exist)
+- [x] **USD Proxy Shape Integration** - Lazy loading with viewport display
+- [x] **Blendshape Weight Control** - UI sliders control proxy shape (not saved)
+- [x] **Native USD Import Support** - Proper blendshape structure for manual import
 
 ### 5. Style Management System
 **Status**: Pending

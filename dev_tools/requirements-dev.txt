@@ -1,0 +1,17 @@
+# Development dependencies for Maya Hair QC Tool
+# These provide type hints and IDE support but don't affect Maya runtime
+
+# Maya type stubs for VSCode intellisense and type checking
+types-maya>=2024.0.0
+
+# USD Python bindings type hints (if available)
+# pxr-usd-stubs  # Uncomment if you find USD type stubs
+
+# Development tools
+debugpy>=1.6.0  # For remote debugging from VSCode to Maya
+
+# Optional: Static type checking
+# mypy>=1.0.0  # Uncomment if you want static type checking
+
+# Note: Install these in a separate Python environment for development
+# Do NOT install these in Maya's Python environment

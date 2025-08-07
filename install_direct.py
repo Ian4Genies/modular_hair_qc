@@ -98,6 +98,7 @@ def install_hair_qc_tool():
                 'hair_qc_tool.utils.maya_utils',
                 'hair_qc_tool.utils',
                 'hair_qc_tool.managers.group_manager',
+                'hair_qc_tool.managers.module_manager',
                 'hair_qc_tool.managers.data_manager',
                 'hair_qc_tool.managers',
                 'hair_qc_tool.ui.main_window',
