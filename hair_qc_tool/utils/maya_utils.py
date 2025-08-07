@@ -86,6 +86,125 @@ class MayaUtils:
             return None
     
     @staticmethod
+    def create_blendshapes_from_usd_data(base_mesh, usd_file_path, blendshape_names):
+        """Create Maya blendshapes from USD blendshape data"""
+        try:
+            from pxr import Usd, UsdSkel, UsdGeom, Gf
+            
+            print(f"[Maya Utils] Creating blendshapes from USD: {usd_file_path}")
+            print(f"[Maya Utils] Target blendshapes: {blendshape_names}")
+            
+            # Open USD stage
+            stage = Usd.Stage.Open(str(usd_file_path))
+            if not stage:
+                print(f"[Maya Utils] Could not open USD stage: {usd_file_path}")
+                return []
+            
+            # Find the base mesh
+            base_mesh_prim = stage.GetPrimAtPath("/HairModule/BaseMesh")
+            if not base_mesh_prim or not base_mesh_prim.IsA(UsdGeom.Mesh):
+                print(f"[Maya Utils] Base mesh not found in USD")
+                return []
+            
+            base_mesh_usd = UsdGeom.Mesh(base_mesh_prim)
+            base_points = base_mesh_usd.GetPointsAttr().Get()
+            
+            if not base_points:
+                print(f"[Maya Utils] No base points found in USD mesh")
+                return []
+            
+            print(f"[Maya Utils] Found {len(base_points)} base points in USD mesh")
+            
+            # Get Maya base mesh points for validation
+            if not cmds.objExists(base_mesh):
+                print(f"[Maya Utils] Maya base mesh not found: {base_mesh}")
+                return []
+            
+            # Create blendshapes from USD data
+            created_blendshapes = []
+            
+            for blendshape_name in blendshape_names:
+                try:
+                    # Get USD blendshape data
+                    blendshape_prim_path = f"/HairModule/BlendShapes/{blendshape_name}"
+                    blendshape_prim = stage.GetPrimAtPath(blendshape_prim_path)
+                    
+                    if not blendshape_prim or not blendshape_prim.IsA(UsdSkel.BlendShape):
+                        print(f"[Maya Utils] USD blendshape not found: {blendshape_name}")
+                        continue
+                    
+                    blendshape_usd = UsdSkel.BlendShape(blendshape_prim)
+                    offsets_attr = blendshape_usd.GetOffsetsAttr()
+                    
+                    if not offsets_attr or not offsets_attr.HasValue():
+                        print(f"[Maya Utils] No offsets found for blendshape: {blendshape_name}")
+                        continue
+                    
+                    offsets = offsets_attr.Get()
+                    print(f"[Maya Utils] Found {len(offsets)} offsets for {blendshape_name}")
+                    
+                    # Create target mesh by applying offsets to base points
+                    target_points = []
+                    for i, base_point in enumerate(base_points):
+                        if i < len(offsets):
+                            # Apply offset
+                            target_point = (
+                                base_point[0] + offsets[i][0],
+                                base_point[1] + offsets[i][1], 
+                                base_point[2] + offsets[i][2]
+                            )
+                        else:
+                            # No offset for this point
+                            target_point = base_point
+                        target_points.append(target_point)
+                    
+                    # Create temporary Maya mesh with target points
+                    temp_mesh_name = f"temp_{blendshape_name}_target"
+                    
+                    # Duplicate base mesh
+                    duplicated = cmds.duplicate(base_mesh, name=temp_mesh_name)
+                    if not duplicated:
+                        print(f"[Maya Utils] Could not duplicate base mesh for {blendshape_name}")
+                        continue
+                    
+                    temp_mesh = duplicated[0]
+                    
+                    # Set the target points on the duplicated mesh
+                    for i, target_point in enumerate(target_points):
+                        try:
+                            cmds.move(target_point[0], target_point[1], target_point[2], 
+                                    f"{temp_mesh}.vtx[{i}]", absolute=True)
+                        except:
+                            # Skip vertices that don't exist
+                            pass
+                    
+                    # Create blendshape from temp mesh
+                    blend_node = MayaUtils.create_blendshape_from_mesh(base_mesh, temp_mesh, blendshape_name)
+                    
+                    if blend_node:
+                        created_blendshapes.append((blendshape_name, f"{blend_node}.{blendshape_name}"))
+                        print(f"[Maya Utils] Created Maya blendshape: {blendshape_name}")
+                    
+                    # Clean up temp mesh
+                    try:
+                        cmds.delete(temp_mesh)
+                    except:
+                        pass
+                        
+                except Exception as bs_error:
+                    print(f"[Maya Utils] Error creating blendshape {blendshape_name}: {bs_error}")
+                    continue
+            
+            print(f"[Maya Utils] Successfully created {len(created_blendshapes)} Maya blendshapes")
+            return created_blendshapes
+            
+        except Exception as e:
+            print(f"[Maya Utils] Error creating blendshapes from USD: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
+    
+    @staticmethod
     def import_usd_as_maya_geometry(usd_file_path: str, import_blendshapes: bool = True, import_skeletons: bool = False) -> List[str]:
         """
         Import USD file as native Maya DAG nodes for interactive editing
