@@ -55,8 +55,8 @@ Creating a Maya tool for modular hair quality control using USD-based data manag
 - [ ] Implement cross-module rule inheritance from group level
 
 ### 6. Main UI Framework
-**Status**: Pending
-- [ ] Create main window with scrollable sections
+**Status**: In Progress
+- [x] Create main window with scrollable sections
 - [ ] Implement group selection UI with alpha whitelist expansion
 - [ ] Create module/style tab switching system
 - [ ] Implement module selection and editing UI

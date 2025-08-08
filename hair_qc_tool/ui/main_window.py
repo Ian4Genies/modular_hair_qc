@@ -18,7 +18,9 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("Hair QC Tool v1.0")
         self.setMinimumSize(800, 600)
-        self.resize(1000, 800)
+        self.resize(1400, 1000)
+        # Start maximized by default for more vertical space
+        self.setWindowState(self.windowState() | QtCore.Qt.WindowMaximized)
         
         # Make window stay on top but not always
         self.setWindowFlags(QtCore.Qt.Window)
@@ -37,19 +39,42 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         central_widget = QtWidgets.QWidget()
         self.setCentralWidget(central_widget)
         
-        # Main layout
-        main_layout = QtWidgets.QVBoxLayout(central_widget)
-        main_layout.setSpacing(10)
-        main_layout.setContentsMargins(10, 10, 10, 10)
+        # Root layout
+        root_layout = QtWidgets.QVBoxLayout(central_widget)
+        root_layout.setSpacing(10)
+        root_layout.setContentsMargins(10, 10, 10, 10)
+        
+        # Scroll area wrapping the entire interface content
+        scroll_area = QtWidgets.QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_content = QtWidgets.QWidget()
+        scroll_layout = QtWidgets.QVBoxLayout(scroll_content)
+        scroll_layout.setSpacing(10)
+        scroll_layout.setContentsMargins(0, 0, 0, 0)
         
         # Hotkey reference widget at top
-        self.create_hotkey_widget(main_layout)
+        self.create_hotkey_widget(scroll_layout)
         
-        # Group selection section
-        self.create_group_section(main_layout)
+        # Use a vertical splitter so sections are independently resizable
+        self.main_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         
-        # Module/Style tab section
-        self.create_tab_section(main_layout)
+        # Group selection section (top of splitter)
+        group_frame = self.create_group_section()
+        self.main_splitter.addWidget(group_frame)
+        
+        # Module/Style tab section (bottom of splitter)
+        tab_widget = self.create_tab_section()
+        self.main_splitter.addWidget(tab_widget)
+        
+        # Prefer more space to the tab section by default
+        self.main_splitter.setStretchFactor(0, 1)
+        self.main_splitter.setStretchFactor(1, 3)
+        # Give an initial generous size allocation to improve vertical real estate
+        self.main_splitter.setSizes([400, 900])
+        
+        scroll_layout.addWidget(self.main_splitter)
+        scroll_area.setWidget(scroll_content)
+        root_layout.addWidget(scroll_area)
         
         # Status bar
         self.statusBar().showMessage("Ready")
@@ -130,7 +155,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
     
-    def create_group_section(self, parent_layout):
+    def create_group_section(self):
         """Create group selection section"""
         # Group section frame
         group_frame = QtWidgets.QGroupBox("Select Group")
@@ -138,7 +163,9 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         # Group list
         self.group_list = QtWidgets.QListWidget()
-        self.group_list.setMaximumHeight(120)
+        # Allow splitter-driven resizing instead of a fixed max height
+        self.group_list.setMinimumHeight(120)
+        self.group_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.group_list.currentRowChanged.connect(self.on_group_selected)
         group_layout.addWidget(self.group_list)
         
@@ -159,14 +186,17 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         self.alpha_list = QtWidgets.QTableWidget()
         self.alpha_list.setColumnCount(3)
-        self.alpha_list.setHorizontalHeaderLabels(["Whitelisted", "Texture Path", ""])
+        self.alpha_list.setHorizontalHeaderLabels(["Whitelisted", "Texture Path", ""]) 
+        self.alpha_list.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.alpha_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.alpha_list.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         alpha_layout.addWidget(self.alpha_list)
         
         group_layout.addWidget(self.alpha_expander)
         
-        parent_layout.addWidget(group_frame)
+        return group_frame
     
-    def create_tab_section(self, parent_layout):
+    def create_tab_section(self):
         """Create module/style tab section"""
         # Tab widget
         self.tab_widget = QtWidgets.QTabWidget()
@@ -181,7 +211,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         self.setup_style_tab()
         self.tab_widget.addTab(self.style_tab, "Style")
         
-        parent_layout.addWidget(self.tab_widget)
+        return self.tab_widget
     
     def setup_module_tab(self):
         """Set up the module management tab"""
@@ -192,8 +222,12 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         module_select_layout = QtWidgets.QVBoxLayout(module_select_frame)
         
         self.module_list = QtWidgets.QTableWidget()
-        self.module_list.setColumnCount(4)
-        self.module_list.setHorizontalHeaderLabels(["Selection", "Type", "Name", ""])
+        self.module_list.setColumnCount(2)
+        self.module_list.setHorizontalHeaderLabels(["Type", "Name"]) 
+        self.module_list.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.module_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.module_list.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.module_list.cellClicked.connect(self.on_module_row_clicked)
         self.module_list.currentItemChanged.connect(self.on_module_selected)
         module_select_layout.addWidget(self.module_list)
         
@@ -205,7 +239,6 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         module_controls.addStretch()
         
         module_select_layout.addLayout(module_controls)
-        layout.addWidget(module_select_frame)
         
         # Edit Module (expandable)
         self.module_edit_frame = QtWidgets.QGroupBox("Edit Module")
@@ -244,8 +277,11 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         blend_layout = QtWidgets.QVBoxLayout(blend_frame)
         
         self.blendshape_list = QtWidgets.QTableWidget()
-        self.blendshape_list.setColumnCount(5)
-        self.blendshape_list.setHorizontalHeaderLabels(["Selection", "Name", "Weight", "Excluded", ""])
+        self.blendshape_list.setColumnCount(3)
+        self.blendshape_list.setHorizontalHeaderLabels(["Name", "Weight", "Excluded"]) 
+        self.blendshape_list.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.blendshape_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.blendshape_list.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         blend_layout.addWidget(self.blendshape_list)
         
         # Blendshape controls
@@ -266,7 +302,16 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         save_layout.addWidget(self.save_module_btn)
         
         module_edit_layout.addLayout(save_layout)
-        layout.addWidget(self.module_edit_frame)
+        
+        # Use a vertical splitter so the module list and edit area are resizable
+        self.module_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        self.module_splitter.addWidget(module_select_frame)
+        self.module_splitter.addWidget(self.module_edit_frame)
+        self.module_splitter.setStretchFactor(0, 3)
+        self.module_splitter.setStretchFactor(1, 2)
+        # Initial sizes for better visibility
+        self.module_splitter.setSizes([500, 700])
+        layout.addWidget(self.module_splitter)
     
     def setup_style_tab(self):
         """Set up the style management tab"""
@@ -295,12 +340,14 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         # Style list
         self.style_list = QtWidgets.QTableWidget()
-        self.style_list.setColumnCount(6)
-        self.style_list.setHorizontalHeaderLabels(["Selection", "Status", "Crown", "Tail", "Bang", ""])
+        self.style_list.setColumnCount(4)
+        self.style_list.setHorizontalHeaderLabels(["Status", "Crown", "Tail", "Bang"]) 
+        self.style_list.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.style_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.style_list.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.style_list.cellClicked.connect(self.on_style_row_clicked)
         self.style_list.currentItemChanged.connect(self.on_style_selected)
         style_select_layout.addWidget(self.style_list)
-        
-        layout.addWidget(style_select_frame)
         
         # Edit Style (expandable)
         self.style_edit_frame = QtWidgets.QGroupBox("Edit Style")
@@ -324,10 +371,13 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         rules_layout = QtWidgets.QVBoxLayout(rules_frame)
         
         self.rules_list = QtWidgets.QTableWidget()
-        self.rules_list.setColumnCount(8)
+        self.rules_list.setColumnCount(7)
         self.rules_list.setHorizontalHeaderLabels([
-            "Active", "Selection", "Type", "Name", "Blendshape", "Weight", "Max", "Exclude"
+            "Active","Type", "Name", "Blendshape", "Weight", "Max", "Exclude"
         ])
+        self.rules_list.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.rules_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.rules_list.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         rules_layout.addWidget(self.rules_list)
         
         style_edit_layout.addWidget(rules_frame)
@@ -340,7 +390,16 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         save_timeline_layout.addWidget(self.save_timeline_btn)
         
         style_edit_layout.addLayout(save_timeline_layout)
-        layout.addWidget(self.style_edit_frame)
+        
+        # Use a vertical splitter so the style list and edit area are resizable
+        self.style_splitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+        self.style_splitter.addWidget(style_select_frame)
+        self.style_splitter.addWidget(self.style_edit_frame)
+        self.style_splitter.setStretchFactor(0, 3)
+        self.style_splitter.setStretchFactor(1, 2)
+        # Initial sizes for better visibility
+        self.style_splitter.setSizes([500, 700])
+        layout.addWidget(self.style_splitter)
     
     def setup_shortcuts(self):
         """Set up keyboard shortcuts"""
@@ -405,11 +464,21 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             self.module_edit_frame.setEnabled(True)
             # TODO: Load module data into edit form
     
+    def on_module_row_clicked(self, row, column):
+        """Handle module row click selection"""
+        self.module_list.selectRow(row)
+        self.module_edit_frame.setEnabled(True)
+    
     def on_style_selected(self, current_item, previous_item):
         """Handle style selection change"""
         if current_item:
             self.style_edit_frame.setEnabled(True)
             # TODO: Load style data and timeline
+    
+    def on_style_row_clicked(self, row, column):
+        """Handle style row click selection"""
+        self.style_list.selectRow(row)
+        self.style_edit_frame.setEnabled(True)
     
     def add_group(self):
         """Add new group"""
