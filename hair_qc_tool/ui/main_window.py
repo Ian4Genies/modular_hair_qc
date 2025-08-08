@@ -1059,6 +1059,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             weight_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
             weight_slider.setRange(0, 100)
             weight_slider.setValue(int(weight * 100))
+            # Always normalize slider value (0..100) to weight (0.0..1.0)
             weight_slider.valueChanged.connect(lambda val, name=bs_name: self.on_blendshape_weight_changed(name, val / 100.0))
             self.blendshape_list.setCellWidget(row, 1, weight_slider)
             
@@ -1075,6 +1076,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             
             # Remove button
             remove_btn = QtWidgets.QPushButton("Remove")
+            # QPushButton.clicked(bool) emits a 'checked' arg even if not checkable
             remove_btn.clicked.connect(lambda checked, name=bs_name: self.remove_module_blendshape(name))
             self.blendshape_list.setCellWidget(row, 3, remove_btn)
             
@@ -1085,7 +1087,10 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
     
     def on_blendshape_weight_changed(self, blendshape_name: str, weight: float):
         """Handle blendshape weight change (viewport preview only - not saved)"""
-        success, message = self.data_manager.set_blendshape_weight(blendshape_name, weight)
+        # Accept either normalized float or raw slider int
+        if isinstance(weight, (int, float)) and weight > 1:
+            weight = float(weight) / 100.0
+        success, message = self.data_manager.set_blendshape_weight(blendshape_name, float(weight))
         
         if success:
             # Show that this is viewport preview only

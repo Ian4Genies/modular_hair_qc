@@ -379,17 +379,9 @@ class ModuleManager:
             self.display_geometry.clear()
             self.maya_blendshapes.clear()
             
-            # Also delete any stray imported HairModule transforms
-            try:
-                top_nodes = cmds.ls(assemblies=True) or []
-                for n in top_nodes:
-                    if n.startswith("HairModule") or ":HairModule" in n:
-                        try:
-                            cmds.delete(n)
-                        except Exception:
-                            pass
-            except Exception as _:
-                pass
+            # Note: Do not delete top-level nodes outside our tracked display groups.
+            # Users may keep source meshes in the scene for authoring; only remove our own groups
+            # and imported namespaces to prevent accidental data loss.
 
             # Force viewport refresh
             try:
