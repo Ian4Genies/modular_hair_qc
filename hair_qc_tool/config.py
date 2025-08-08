@@ -125,7 +125,9 @@ class HairQCConfig:
             required_structure = {
                 "Group": [],
                 "module": ["scalp", "crown", "tail", "bang"],
-                "style": []
+                "style": [],
+                # Ensure logs path exists inside the USD directory for per-user session logs
+                "logs": ["hair_qc_tool"],
             }
             
             for main_dir, subdirs in required_structure.items():

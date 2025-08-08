@@ -6,6 +6,7 @@ Provides the primary user interface with group/module/style management tabs.
 
 from PySide2 import QtWidgets, QtCore, QtGui
 import maya.cmds as cmds
+import os
 from pathlib import Path
 
 from ..config import config
@@ -94,6 +95,48 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         # Initial content size update
         QtCore.QTimer.singleShot(100, self.update_content_size)
+
+    def reload_code_and_relaunch(self):
+        """Reload Hair QC modules and relaunch the tool UI"""
+        try:
+            from ..utils.reloader import reload_hair_qc_modules
+            result = reload_hair_qc_modules()
+            print(f"[Hair QC Tool] Reload summary: {result.summary}")
+            for err in getattr(result, 'errors', []) or []:
+                print(f"[Hair QC Tool] Reload error: {err}")
+        except Exception as e:
+            print(f"[Hair QC Tool] Reload failed: {e}")
+
+        try:
+            # Close current window before relaunch
+            self.close()
+        except Exception:
+            pass
+
+        try:
+            from ..main import launch_hair_qc_tool
+            launch_hair_qc_tool()
+        except Exception as e:
+            print(f"[Hair QC Tool] Relaunch failed: {e}")
+
+    def open_logs_folder(self):
+        """Open the logs folder inside the current USD directory"""
+        try:
+            if not config.usd_directory:
+                cmds.warning("No USD directory set. Please set it first.")
+                return
+            log_dir = config.usd_directory / 'logs' / 'hair_qc_tool'
+            try:
+                log_dir.mkdir(parents=True, exist_ok=True)
+            except Exception:
+                pass
+            # Cross-platform open
+            url = QtCore.QUrl.fromLocalFile(str(log_dir))
+            opened = QtGui.QDesktopServices.openUrl(url)
+            if not opened and hasattr(os, "startfile"):
+                os.startfile(str(log_dir))
+        except Exception as e:
+            print(f"[Hair QC Tool] Could not open logs folder: {e}")
     
     def create_hotkey_widget(self, parent_layout):
         """Create hotkey reference widget at top"""
@@ -170,6 +213,19 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         about_action = QtWidgets.QAction('About Hair QC Tool', self)
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
+
+        # Developer menu (manual reload and logs folder)
+        dev_menu = menubar.addMenu('Developer')
+
+        reload_action = QtWidgets.QAction('Reload Code and Relaunch', self)
+        reload_action.setStatusTip('Reload Hair QC modules and relaunch the UI')
+        reload_action.triggered.connect(self.reload_code_and_relaunch)
+        dev_menu.addAction(reload_action)
+
+        open_logs_action = QtWidgets.QAction('Open Logs Folder', self)
+        open_logs_action.setStatusTip('Open the logs folder under the selected USD directory')
+        open_logs_action.triggered.connect(self.open_logs_folder)
+        dev_menu.addAction(open_logs_action)
     
     def create_group_section_splitter(self, parent_splitter):
         """Create group selection section with splitter support"""

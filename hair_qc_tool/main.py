@@ -6,13 +6,16 @@ Handles Maya integration, UI launching, and tool lifecycle management.
 
 import maya.cmds as cmds
 import maya.mel as mel
-from PySide2 import QtWidgets
+from PySide2 import QtWidgets, QtCore, QtGui
 import sys
 import traceback
+import os
 
 from .ui.main_window import HairQCMainWindow
 from .config import config
 from .utils.maya_utils import MayaUtils
+from .utils.logging_utils import install_all_logging, get_default_log_dir
+from .utils.reloader import reload_hair_qc_modules
 
 
 class HairQCTool:
@@ -25,6 +28,13 @@ class HairQCTool:
     def launch(self):
         """Launch the Hair QC Tool UI"""
         try:
+            # Ensure logging is installed to <USD_DIR>/logs/hair_qc_tool/
+            try:
+                log_dir = get_default_log_dir()
+                install_all_logging(log_dir=log_dir)
+            except Exception:
+                pass
+
             # Check if tool is already open
             if self.main_window and self.main_window.isVisible():
                 self.main_window.raise_()
@@ -184,6 +194,25 @@ def install_maya_menu():
             annotation="Open Hair QC Tool settings",
             parent=main_menu
         )
+
+        cmds.menuItem(divider=True, parent=main_menu)
+
+        # Developer submenu
+        dev_menu = cmds.menuItem(label="Developer", subMenu=True, tearOff=True, parent=main_menu)
+
+        cmds.menuItem(
+            label="Reload Code",
+            command=lambda x: developer_reload_code(),
+            annotation="Reload Hair QC modules and relaunch UI",
+            parent=dev_menu
+        )
+
+        cmds.menuItem(
+            label="Open Logs Folder",
+            command=lambda x: developer_open_logs_folder(),
+            annotation="Open the logs directory in Explorer",
+            parent=dev_menu
+        )
         
         print("[Hair QC Tool] Menu installed successfully")
         
@@ -230,3 +259,50 @@ def show_settings_dialog():
         message="Settings dialog not yet implemented",
         button=["OK"]
     )
+
+
+def developer_reload_code():
+    """Reload Hair QC modules and relaunch the UI"""
+    global _hair_qc_tool
+
+    try:
+        result = reload_hair_qc_modules()
+        print(f"[Hair QC Tool] Reload summary: {result.summary}")
+        if result.errors:
+            for err in result.errors:
+                print(f"[Hair QC Tool] Reload error: {err}")
+    except Exception as e:
+        print(f"[Hair QC Tool] Reload failed: {e}")
+
+    try:
+        if _hair_qc_tool and _hair_qc_tool.main_window:
+            _hair_qc_tool.main_window.close()
+    except Exception:
+        pass
+
+    launch_hair_qc_tool()
+
+
+def developer_open_logs_folder():
+    """Open the current USD directory logs folder in Explorer"""
+    try:
+        log_dir = get_default_log_dir()
+        if not log_dir:
+            cmds.warning("No USD directory set. Please set it first.")
+            return
+        # Ensure directory exists
+        try:
+            log_dir.mkdir(parents=True, exist_ok=True)
+        except Exception:
+            pass
+        # Open in OS file browser (cross-platform)
+        try:
+            url = QtCore.QUrl.fromLocalFile(str(log_dir))
+            opened = QtGui.QDesktopServices.openUrl(url)
+            if not opened and hasattr(os, "startfile"):
+                os.startfile(str(log_dir))
+        except Exception:
+            if hasattr(os, "startfile"):
+                os.startfile(str(log_dir))
+    except Exception as e:
+        print(f"[Hair QC Tool] Could not open logs folder: {e}")
