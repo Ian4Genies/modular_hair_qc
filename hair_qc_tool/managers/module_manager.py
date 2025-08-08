@@ -44,6 +44,8 @@ class ModuleManager:
         self.display_geometry: Dict[str, str] = {}  # module_name -> maya_group_name
         self.maya_blendshapes: Dict[str, Dict[str, str]] = {}  # module_name -> {blendshape_name -> maya_attribute}
         self.stage_references: Dict[str, Any] = {}  # module_name -> USD stage reference
+        self._module_root_group: str = "module"  # Persistent container group
+        self._current_display_module: Optional[str] = None
         
         # Initialize directory manager if USD directory is set
         if config.usd_directory:
@@ -364,32 +366,27 @@ class ModuleManager:
             return False, f"Error importing geometry: {str(e)}"
     
     def clear_all_display_geometry(self) -> None:
-        """Clear display geometry from viewport (keep USD stages loaded for rapid swapping)"""
+        """Clear ONLY the contents under the persistent module root group.
+
+        This is non-destructive to the rest of the scene. The root group itself persists.
+        USD stages remain loaded for rapid swapping.
+        """
         try:
-            # Remove display geometry groups but keep USD stages for rapid swapping
-            for module_name, group_name in list(self.display_geometry.items()):
-                if cmds.objExists(group_name):
-                    try:
-                        cmds.delete(group_name)
-                        print(f"[Module Manager] Cleared display geometry for module: {module_name}")
-                    except Exception as node_error:
-                        print(f"Warning: Error clearing display geometry {group_name}: {node_error}")
-            
-            # Clear display geometry tracking (but keep USD stage references for reuse)
+            # Ensure root exists
+            self._ensure_module_root_group()
+
+            # Delete all children under the root container only
+            children = cmds.listRelatives(self._module_root_group, children=True, fullPath=False) or []
+            for child in children:
+                try:
+                    cmds.delete(child)
+                except Exception as node_error:
+                    print(f"Warning: Error clearing child '{child}' of module root: {node_error}")
+
+            # Clear display geometry tracking and current display module
             self.display_geometry.clear()
             self.maya_blendshapes.clear()
-            
-            # Also delete any stray imported HairModule transforms
-            try:
-                top_nodes = cmds.ls(assemblies=True) or []
-                for n in top_nodes:
-                    if n.startswith("HairModule") or ":HairModule" in n:
-                        try:
-                            cmds.delete(n)
-                        except Exception:
-                            pass
-            except Exception as _:
-                pass
+            self._current_display_module = None
 
             # Force viewport refresh
             try:
@@ -451,30 +448,37 @@ class ModuleManager:
         module_info = self.modules[target_module]
         
         try:
-            # FIRST: Clear all existing display geometry (exclusive loading)
-            self.clear_all_display_geometry()
-            
-            # SECOND: Clear any existing imported namespaces to prevent accumulation
-            self._clear_imported_namespaces()
-            
+            # Prepare persistent module root
+            self._ensure_module_root_group()
+
+            # Remove only previous module contents (non-destructive to rest of scene)
+            self._clear_previous_module_group()
+
             # Import USD as Maya DAG nodes for interactive editing
             success, maya_nodes = self._import_usd_as_maya_geometry(module_info)
             if not success:
                 return False, f"Failed to import USD as Maya geometry: {maya_nodes}"
             
-            # Create organized group structure
-            module_group_name = f"{target_module}_DisplayGeo"
-            module_group = cmds.group(empty=True, name=module_group_name)
-            
-            # Parent imported geometry to the module group
+            # Create organized group structure under persistent root
+            module_group_name = f"{target_module}_Module"
+            if cmds.objExists(f"{self._module_root_group}|{module_group_name}"):
+                try:
+                    cmds.delete(f"{self._module_root_group}|{module_group_name}")
+                except Exception:
+                    pass
+            module_group = cmds.group(empty=True, name=module_group_name, parent=self._module_root_group)
+
+            # Parent imported geometry under this module subgroup
             if maya_nodes:
                 try:
+                    # Reparent all to subgroup
                     cmds.parent(maya_nodes, module_group)
                 except Exception as parent_error:
                     print(f"Warning: Could not parent some nodes to group: {parent_error}")
             
             # Store display geometry reference
             self.display_geometry[target_module] = module_group
+            self._current_display_module = target_module
             
             # Set up blendshape controls for interactive editing
             self._setup_maya_blendshape_controls(target_module, maya_nodes)
@@ -488,7 +492,7 @@ class ModuleManager:
             except ImportError:
                 print("Warning: USD Python API not available for stage control")
             
-            return True, f"Successfully loaded module as display geometry '{module_group_name}' (cleared others)"
+            return True, f"Loaded module into '{self._module_root_group}|{module_group_name}'"
             
         except Exception as e:
             return False, f"Error loading display geometry: {str(e)}"
@@ -954,24 +958,28 @@ class ModuleManager:
                 print(f"[Module Manager] No display geometry to refresh for {module_name}")
                 return
             
-            # Clear current display geometry
+            # Remove only the current module subgroup
             current_group = self.display_geometry[module_name]
             if cmds.objExists(current_group):
-                cmds.delete(current_group)
-            
-            # Clear imported namespaces
-            self._clear_imported_namespaces()
+                try:
+                    cmds.delete(current_group)
+                except Exception as e:
+                    print(f"[Module Manager] Warning: could not delete group {current_group}: {e}")
             
             # Reload from USD
             module_info = self.modules[module_name]
             success, maya_nodes = self._import_usd_as_maya_geometry(module_info)
             if success:
                 # Recreate group and setup
-                module_group_name = f"{module_name}_DisplayGeo"
-                module_group = cmds.group(empty=True, name=module_group_name)
+                self._ensure_module_root_group()
+                module_group_name = f"{module_name}_Module"
+                module_group = cmds.group(empty=True, name=module_group_name, parent=self._module_root_group)
                 
                 if maya_nodes:
-                    cmds.parent(maya_nodes, module_group)
+                    try:
+                        cmds.parent(maya_nodes, module_group)
+                    except Exception:
+                        pass
                 
                 self.display_geometry[module_name] = module_group
                 self._setup_maya_blendshape_controls(module_name, maya_nodes)
@@ -1006,3 +1014,31 @@ class ModuleManager:
             
         except Exception as e:
             print(f"Warning: Failed to add module to group whitelist: {e}")
+
+    # ---------------------------
+    # Internal helpers (scene)
+    # ---------------------------
+    def _ensure_module_root_group(self) -> None:
+        """Ensure the persistent module root group exists."""
+        try:
+            if not cmds.objExists(self._module_root_group):
+                cmds.group(empty=True, name=self._module_root_group)
+        except Exception as e:
+            print(f"[Module Manager] Warning: could not ensure module root group '{self._module_root_group}': {e}")
+
+    def _clear_previous_module_group(self) -> None:
+        """Delete the previous module subgroup under the root, if any."""
+        try:
+            if self._current_display_module:
+                prev_group = self.display_geometry.get(self._current_display_module)
+                if prev_group and cmds.objExists(prev_group):
+                    try:
+                        cmds.delete(prev_group)
+                    except Exception as e:
+                        print(f"[Module Manager] Warning: could not delete previous module group '{prev_group}': {e}")
+                # Clear tracking of previous
+                if self._current_display_module in self.display_geometry:
+                    del self.display_geometry[self._current_display_module]
+                self._current_display_module = None
+        except Exception as e:
+            print(f"[Module Manager] Warning: error clearing previous module: {e}")
