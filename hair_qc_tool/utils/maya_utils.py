@@ -9,11 +9,14 @@ import maya.cmds as cmds
 import maya.api.OpenMaya as om
 from pathlib import Path
 import traceback
+from .logging_utils import get_logger
 
 
 class MayaUtils:
     """Utility class for Maya operations"""
     
+    _log = get_logger(__name__)
+
     @staticmethod
     def get_selected_mesh():
         """Get the currently selected mesh object"""
@@ -81,7 +84,7 @@ class MayaUtils:
             return blend_node
             
         except Exception as e:
-            print(f"[Maya Utils] Error creating blendshape: {e}")
+            MayaUtils._log.error(f"Error creating blendshape: {e}")
             return None
     
     @staticmethod
@@ -95,7 +98,7 @@ class MayaUtils:
                     return True
             return False
         except Exception as e:
-            print(f"[Maya Utils] Error setting blendshape weight: {e}")
+            MayaUtils._log.error(f"Error setting blendshape weight: {e}")
             return False
     
     @staticmethod
@@ -108,7 +111,7 @@ class MayaUtils:
                     return cmds.getAttr(f"{blend_node}.{blendshape_name}")
             return 0.0
         except Exception as e:
-            print(f"[Maya Utils] Error getting blendshape weight: {e}")
+            MayaUtils._log.error(f"Error getting blendshape weight: {e}")
             return 0.0
     
     @staticmethod
@@ -123,7 +126,7 @@ class MayaUtils:
                     return True
             return False
         except Exception as e:
-            print(f"[Maya Utils] Error keyframing blendshape: {e}")
+            MayaUtils._log.error(f"Error keyframing blendshape: {e}")
             return False
     
     @staticmethod
@@ -136,7 +139,7 @@ class MayaUtils:
                 cmds.cutKey(all_keys, time=(start_frame, end_frame), clear=True)
             return True
         except Exception as e:
-            print(f"[Maya Utils] Error clearing timeline: {e}")
+            MayaUtils._log.error(f"Error clearing timeline: {e}")
             return False
     
     @staticmethod
@@ -146,7 +149,7 @@ class MayaUtils:
             cmds.playbackOptions(minTime=start_frame, maxTime=end_frame)
             return True
         except Exception as e:
-            print(f"[Maya Utils] Error setting timeline range: {e}")
+            MayaUtils._log.error(f"Error setting timeline range: {e}")
             return False
     
     @staticmethod
@@ -161,8 +164,7 @@ class MayaUtils:
             return imported_nodes
             
         except Exception as e:
-            print(f"[Maya Utils] Error importing USD: {e}")
-            traceback.print_exc()
+            MayaUtils._log.exception(f"Error importing USD: {e}")
             return []
     
     @staticmethod
@@ -185,6 +187,5 @@ class MayaUtils:
             return True
             
         except Exception as e:
-            print(f"[Maya Utils] Error exporting to USD: {e}")
-            traceback.print_exc()
+            MayaUtils._log.exception(f"Error exporting to USD: {e}")
             return False

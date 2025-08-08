@@ -11,6 +11,7 @@ __author__ = "Hair QC Tool Development"
 # Import main components for easy access
 from .main import launch_hair_qc_tool
 from .config import HairQCConfig
+from .utils.logging_utils import get_logger, set_global_level
 
 # Maya plugin registration
 def maya_useNewAPI():
@@ -19,10 +20,10 @@ def maya_useNewAPI():
 
 def initializePlugin(plugin):
     """Initialize the Hair QC Tool plugin"""
-    print("[Hair QC Tool] Plugin initialized successfully")
+    get_logger(__name__).info("Plugin initialized successfully")
     return True
 
 def uninitializePlugin(plugin):
     """Cleanup when plugin is unloaded"""
-    print("[Hair QC Tool] Plugin unloaded")
+    get_logger(__name__).info("Plugin unloaded")
     return True

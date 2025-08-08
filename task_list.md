@@ -13,12 +13,12 @@ Creating a Maya tool for modular hair quality control using USD-based data manag
 ## Task Breakdown
 
 ### 1. Project Setup & Foundation
-**Status**: Pending
-- [ ] Set up Python package structure with utils folder
-- [ ] Create Maya shelf tool entry point
-- [ ] Set up USD Python API integration
-- [ ] Create base configuration system for USD directory paths
-- [ ] Set up logging and error handling framework
+**Status**: In Progress
+- [x] Set up Python package structure with utils folder
+- [x] Create Maya shelf tool entry point
+- [x] Set up USD Python API integration
+- [x] Create base configuration system for USD directory paths
+- [x] Set up logging and error handling framework
 
 ### 2. USD Utility System
 **Status**: Pending  

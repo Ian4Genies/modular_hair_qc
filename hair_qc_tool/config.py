@@ -6,6 +6,7 @@ Manages USD directory paths, tool settings, and user preferences.
 
 import os
 import json
+from .utils.logging_utils import get_logger
 from pathlib import Path
 
 
@@ -24,6 +25,7 @@ class HairQCConfig:
     }
     
     def __init__(self):
+        self._log = get_logger(__name__)
         self.config_file = Path.home() / ".hair_qc_tool_config.json"
         self._config = self.DEFAULT_CONFIG.copy()
         self.load_config()
@@ -35,18 +37,18 @@ class HairQCConfig:
                 with open(self.config_file, 'r') as f:
                     saved_config = json.load(f)
                     self._config.update(saved_config)
-                    print(f"[Hair QC Tool] Config loaded from {self.config_file}")
+                    self._log.info(f"Config loaded from {self.config_file}")
         except Exception as e:
-            print(f"[Hair QC Tool] Warning: Could not load config: {e}")
+            self._log.warning(f"Could not load config: {e}")
     
     def save_config(self):
         """Save current configuration to file"""
         try:
             with open(self.config_file, 'w') as f:
                 json.dump(self._config, f, indent=2)
-                print(f"[Hair QC Tool] Config saved to {self.config_file}")
+                self._log.info(f"Config saved to {self.config_file}")
         except Exception as e:
-            print(f"[Hair QC Tool] Error: Could not save config: {e}")
+            self._log.error(f"Could not save config: {e}")
     
     @property
     def usd_directory(self):
@@ -158,7 +160,7 @@ class HairQCConfig:
             # Create README file
             self._create_readme_file()
             
-            print(f"[Hair QC Tool] Initialized USD directory structure at: {self.usd_directory}")
+            self._log.info(f"Initialized USD directory structure at: {self.usd_directory}")
             return True, "USD directory initialized successfully"
             
         except Exception as e:

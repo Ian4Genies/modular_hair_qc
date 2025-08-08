@@ -9,6 +9,7 @@ import maya.mel as mel
 from PySide2 import QtWidgets
 import sys
 import traceback
+from .utils.logging_utils import get_logger
 
 from .ui.main_window import HairQCMainWindow
 from .config import config
@@ -21,6 +22,7 @@ class HairQCTool:
     def __init__(self):
         self.main_window = None
         self.maya_utils = MayaUtils()
+        self._log = get_logger(__name__)
     
     def launch(self):
         """Launch the Hair QC Tool UI"""
@@ -44,12 +46,11 @@ class HairQCTool:
             self.main_window = HairQCMainWindow()
             self.main_window.show()
             
-            print("[Hair QC Tool] Tool launched successfully")
+            self._log.info("Tool launched successfully")
             
         except Exception as e:
             error_msg = f"Failed to launch Hair QC Tool: {str(e)}"
-            print(f"[Hair QC Tool] Error: {error_msg}")
-            traceback.print_exc()
+            self._log.exception(error_msg)
             
             # Show error dialog
             cmds.confirmDialog(
@@ -185,10 +186,10 @@ def install_maya_menu():
             parent=main_menu
         )
         
-        print("[Hair QC Tool] Menu installed successfully")
+        get_logger(__name__).info("Menu installed successfully")
         
     except Exception as e:
-        print(f"[Hair QC Tool] Error installing menu: {e}")
+        get_logger(__name__).error(f"Error installing menu: {e}")
 
 
 def create_shelf_button():
@@ -207,10 +208,10 @@ def create_shelf_button():
             parent=current_shelf
         )
         
-        print("[Hair QC Tool] Shelf button created successfully")
+        get_logger(__name__).info("Shelf button created successfully")
         
     except Exception as e:
-        print(f"[Hair QC Tool] Error creating shelf button: {e}")
+        get_logger(__name__).error(f"Error creating shelf button: {e}")
 
 
 def refresh_tool_data():
@@ -219,7 +220,7 @@ def refresh_tool_data():
     if _hair_qc_tool and _hair_qc_tool.main_window:
         _hair_qc_tool.main_window.refresh_data()
     else:
-        print("[Hair QC Tool] No active tool window to refresh")
+        get_logger(__name__).warning("No active tool window to refresh")
 
 
 def show_settings_dialog():

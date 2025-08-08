@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "docs/General Info.md",
+                "file": "docs/Questions.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "General Info"
+              "title": "Questions"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "docs/General Info.md",
+                "file": "docs/Questions.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for General Info"
+              "title": "Backlinks for Questions"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "docs/General Info.md",
+                "file": "docs/Questions.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from General Info"
+              "title": "Outgoing links from Questions"
             }
           },
           {
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "docs/General Info.md",
+                "file": "docs/Questions.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of General Info"
+              "title": "Outline of Questions"
             }
           }
         ]
@@ -168,21 +168,23 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "020bb5c44ab37f77",
+  "active": "941e9f6410dc4ced",
   "lastOpenFiles": [
+    "hair_qc_tool/utils/logging_utils.py",
+    "docs/log_rules.md",
+    "docs/General Info.md",
+    "hair_qc_tool/utils/usd_utils.py",
+    "docs/specs.md",
     "hair_qc_tool/ui/__pycache__/ui_defaults.cpython-310.pyc",
     "hair_qc_tool/ui/ui_defaults.py",
     "docs/usd_rules.md",
     "docs/usd_rules.mdc",
-    "docs/General Info.md",
     "hair_qc_tool/utils/__pycache__/maya_utils.cpython-310.pyc",
     "hair_qc_tool/utils/__pycache__/__init__.cpython-310.pyc",
     "hair_qc_tool/__pycache__/config.cpython-310.pyc",
     "hair_qc_tool/ui/__pycache__/main_window.cpython-310.pyc",
     "hair_qc_tool/ui/__pycache__/__init__.cpython-310.pyc",
     "hair_qc_tool/__pycache__/main.cpython-310.pyc",
-    "hair_qc_tool/__pycache__/__init__.cpython-310.pyc",
-    "test_ui_integration.py",
     "Obsolete.md",
     "Project_Summary.md",
     "PERFORMANCE_FIX_SUMMARY.md",
@@ -203,8 +205,6 @@
     "docs/Terminology.md",
     "docs/Questions_Final.md",
     "docs/UI Mockup.md",
-    "README.md",
-    "task_list.md",
-    "docs/Questions_Followup.md"
+    "README.md"
   ]
 }

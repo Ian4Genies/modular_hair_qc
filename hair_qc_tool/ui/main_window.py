@@ -249,6 +249,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         module_edit_layout = QtWidgets.QVBoxLayout(self.module_edit_frame)
         
         # Module properties
+        # MODULE LIST 
         props_layout = QtWidgets.QFormLayout()
         self.module_name_edit = QtWidgets.QLineEdit()
         self.module_type_combo = QtWidgets.QComboBox()
@@ -259,7 +260,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         module_edit_layout.addLayout(props_layout)
         
-        # Base mesh
+        # Base mesh LOADING 
         mesh_layout = QtWidgets.QHBoxLayout()
         self.base_mesh_label = QtWidgets.QLabel("No mesh loaded")
         self.replace_mesh_btn = QtWidgets.QPushButton("Replace")
@@ -275,7 +276,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         # Blendshapes
         blend_frame = QtWidgets.QGroupBox("Blendshapes")
         blend_layout = QtWidgets.QVBoxLayout(blend_frame)
-        
+        #BLENDSHAPE LIST ======================================================
         self.blendshape_list = QtWidgets.QTableWidget()
         self.blendshape_list.setColumnCount(3)
         self.blendshape_list.setHorizontalHeaderLabels(["Name", "Weight", "Excluded"]) 
@@ -283,7 +284,7 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         self.blendshape_list.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.blendshape_list.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         blend_layout.addWidget(self.blendshape_list)
-        
+        #======================================================================
         # Blendshape controls
         blend_controls = QtWidgets.QHBoxLayout()
         self.add_blendshape_btn = QtWidgets.QPushButton("Add Blendshape")
