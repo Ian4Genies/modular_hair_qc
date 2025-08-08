@@ -170,6 +170,10 @@
   },
   "active": "941e9f6410dc4ced",
   "lastOpenFiles": [
+    "chats/cursor_proceeding_with_step_2_tasks.md",
+    "chats",
+    "hair_qc_tool/utils/chats",
+    "docs/task_step2.md",
     "hair_qc_tool/utils/logging_utils.py",
     "docs/log_rules.md",
     "docs/General Info.md",
@@ -182,9 +186,6 @@
     "hair_qc_tool/utils/__pycache__/maya_utils.cpython-310.pyc",
     "hair_qc_tool/utils/__pycache__/__init__.cpython-310.pyc",
     "hair_qc_tool/__pycache__/config.cpython-310.pyc",
-    "hair_qc_tool/ui/__pycache__/main_window.cpython-310.pyc",
-    "hair_qc_tool/ui/__pycache__/__init__.cpython-310.pyc",
-    "hair_qc_tool/__pycache__/main.cpython-310.pyc",
     "Obsolete.md",
     "Project_Summary.md",
     "PERFORMANCE_FIX_SUMMARY.md",
@@ -204,7 +205,6 @@
     "docs/USD_paths.md",
     "docs/Terminology.md",
     "docs/Questions_Final.md",
-    "docs/UI Mockup.md",
-    "README.md"
+    "docs/UI Mockup.md"
   ]
 }

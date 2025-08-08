@@ -21,13 +21,13 @@ Creating a Maya tool for modular hair quality control using USD-based data manag
 - [x] Set up logging and error handling framework
 
 ### 2. USD Utility System
-**Status**: Pending  
-- [ ] Create `USDGroupUtils` class for Group USD operations
-- [ ] Create `USDModuleUtils` class for Module USD operations  
-- [ ] Create `USDStyleUtils` class for Style USD operations
+**Status**: In Progress  
+- [x] Create `USDGroupUtils` class for Group USD operations
+- [x] Create `USDModuleUtils` class for Module USD operations  
+- [x] Create `USDStyleUtils` class for Style USD operations
 - [ ] Implement custom data serialization for BlendshapeRules
-- [ ] Implement custom data serialization for CrossModuleExclusions
-- [ ] Create USD stage management utilities
+- [x] Implement custom data serialization for CrossModuleExclusions
+- [x] Create USD stage management utilities
 
 ### 3. Group Management System
 **Status**: Pending
