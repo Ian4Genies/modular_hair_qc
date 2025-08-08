@@ -814,7 +814,8 @@ class ModuleManager:
                             base_mesh_transform = cmds.listRelatives(mesh_shapes[0], parent=True, type='transform')[0]
 
                         # Create Maya blendshapes from USD targets
-                        bs_names = list((module_info.blendshapes or {}).keys())
+                        # Use only proper USD names (filter out accidental single-char keys)
+                        bs_names = [n for n in (module_info.blendshapes or {}).keys() if isinstance(n, str) and len(n) > 1]
                         if base_mesh_transform and bs_names:
                             MayaUtils.create_blendshapes_from_usd_data(
                                 base_mesh_transform,
@@ -838,10 +839,15 @@ class ModuleManager:
                     # Get the actual target name (Maya uses aliases)
                     alias = cmds.aliasAttr(f"{blend_node}.{target}", query=True)
                     if alias:
-                        blendshape_name = alias[0]  # First alias is the name
-                        attr_name = f"{blend_node}.{blendshape_name}"
-                        module_blendshapes[blendshape_name] = attr_name
-                        print(f"[Module Manager] Found blendshape control: {blendshape_name} -> {attr_name}")
+                        maya_alias = alias[0]  # First alias is the name
+                        # Normalize alias to proper USD name when possible
+                        normalized_name = self._normalize_blendshape_name(
+                            module_name,
+                            maya_alias,
+                        )
+                        attr_name = f"{blend_node}.{maya_alias}"
+                        module_blendshapes[normalized_name] = attr_name
+                        print(f"[Module Manager] Found blendshape control: {maya_alias} (as {normalized_name}) -> {attr_name}")
             
             # Store blendshape mappings for this module
             self.maya_blendshapes[module_name] = module_blendshapes
@@ -849,12 +855,24 @@ class ModuleManager:
             # Update module info with current blendshape weights
             if module_name in self.modules:
                 module_info = self.modules[module_name]
+                # Only keep weights for normalized USD names we know about
+                known_usd_names = set([n for n in module_info.blendshapes.keys() if isinstance(n, str) and len(n) > 1])
+                new_weights: Dict[str, float] = {}
                 for bs_name, attr_name in module_blendshapes.items():
+                    if bs_name not in known_usd_names:
+                        # Skip unknown or short aliases
+                        continue
                     try:
                         current_weight = cmds.getAttr(attr_name)
-                        module_info.blendshapes[bs_name] = current_weight
-                    except:
-                        module_info.blendshapes[bs_name] = 0.0
+                        new_weights[bs_name] = current_weight
+                    except Exception:
+                        new_weights[bs_name] = 0.0
+                # Merge with existing known keys to avoid adding stray one-letter entries
+                for k in list(module_info.blendshapes.keys()):
+                    if isinstance(k, str) and len(k) == 1:
+                        # Drop stray single-letter entries
+                        del module_info.blendshapes[k]
+                module_info.blendshapes.update(new_weights)
             
             print(f"[Module Manager] Set up {len(module_blendshapes)} blendshape controls for module {module_name}")
             
@@ -1014,6 +1032,33 @@ class ModuleManager:
             
         except Exception as e:
             print(f"Warning: Failed to add module to group whitelist: {e}")
+
+    def _normalize_blendshape_name(self, module_name: str, maya_alias: str) -> str:
+        """Normalize a Maya blendshape alias to a canonical USD blendshape name.
+        
+        - Prefer full USD target names from the module's USD relationship
+        - If alias is single-character and a full match exists starting with that letter, pick the full name
+        - Otherwise return the alias unchanged
+        """
+        try:
+            if module_name not in self.modules:
+                return maya_alias
+            module_info = self.modules[module_name]
+            # Gather USD names from module_info
+            usd_names = [n for n in module_info.blendshapes.keys() if isinstance(n, str) and len(n) > 1]
+            if not usd_names:
+                return maya_alias
+            if isinstance(maya_alias, str) and len(maya_alias) == 1:
+                # Try to find a unique USD name that starts with this letter
+                candidates = [n for n in usd_names if n.startswith(maya_alias)]
+                if len(candidates) == 1:
+                    return candidates[0]
+            # If alias matches a USD name exactly, keep it
+            if maya_alias in usd_names:
+                return maya_alias
+            return maya_alias
+        except Exception:
+            return maya_alias
 
     # ---------------------------
     # Internal helpers (scene)
