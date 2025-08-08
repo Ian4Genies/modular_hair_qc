@@ -1,0 +1,72 @@
+2025-08-08 15:49:20 [INFO] hair_qc_tool.utils.logging_utils: File logging installed at C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\logs\hair_qc_tool\43884_Log_20250808_154920.txt
+2025-08-08 15:49:20 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 15:49:20 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 15:49:27 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 15:49:28 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 15:49:28 [INFO] STDOUT: [Maya Utils] mayaUSDImport failed: Invalid flag 'importDisplayColor'
+2025-08-08 15:49:28 [INFO] STDOUT: [Maya Utils] Trying file import with USD Import type
+2025-08-08 15:49:28 [INFO] STDOUT: [Maya Utils] File import successful: ['|HairModule|AlphaBlacklist|Scalp|sideburn', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|AlphaBlacklist|Scalp|fade', '|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|AlphaBlacklist|Scalp', '|HairModule|BlendShapes', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendshapeExclusions', '|HairModule|BaseMesh', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|BlendShapes|shorter', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|TextureAssets', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|AlphaBlacklist|Scalp|hairline', '|HairModule|AlphaBlacklist']
+2025-08-08 15:49:28 [INFO] STDOUT: [Maya Utils] Raw imported nodes: ['|HairModule|AlphaBlacklist|Scalp|sideburn', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|AlphaBlacklist|Scalp|fade', '|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|AlphaBlacklist|Scalp', '|HairModule|BlendShapes', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendshapeExclusions', '|HairModule|BaseMesh', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|BlendShapes|shorter', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|TextureAssets', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|AlphaBlacklist|Scalp|hairline', '|HairModule|AlphaBlacklist']
+2025-08-08 15:49:28 [INFO] STDOUT: [Maya Utils] Removing unwanted container: |HairModule
+2025-08-08 15:49:28 [INFO] STDOUT: [Maya Utils] Imported 0 geometry nodes from USD: []
+2025-08-08 15:57:03 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 15:57:03 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 15:57:03 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 15:57:03 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 15:57:06 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Importing BaseMesh prim
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] BaseMesh import failed: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Fallback: importing entire file
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Fallback import also failed: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Found 4 blendshape targets
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/hairline
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/hairline: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/tilt
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/tilt: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/shorter
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/shorter: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/longer
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/longer: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:07 [INFO] STDOUT: [Maya Utils] Successfully imported 0 geometry nodes: []
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Importing BaseMesh prim
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] BaseMesh import failed: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Fallback: importing entire file
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Fallback import also failed: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Found 4 blendshape targets
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/hairline
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/hairline: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/tilt
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/tilt: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/shorter
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/shorter: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/longer
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/longer: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:09 [INFO] STDOUT: [Maya Utils] Successfully imported 0 geometry nodes: []
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing BaseMesh prim
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] BaseMesh import failed: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Fallback: importing entire file
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Fallback import also failed: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Found 4 blendshape targets
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/hairline
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/hairline: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/tilt
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/tilt: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/shorter
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/shorter: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/longer
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/longer: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Successfully imported 0 geometry nodes: []
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing BaseMesh prim
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] BaseMesh import failed: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Fallback: importing entire file
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Fallback import also failed: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Found 4 blendshape targets
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/hairline
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/hairline: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/tilt
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/tilt: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/shorter
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/shorter: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Importing blendshape: /HairModule/BlendShapes/longer
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Failed to import blendshape /HairModule/BlendShapes/longer: Invalid flag 'importDisplayColor'
+2025-08-08 15:57:11 [INFO] STDOUT: [Maya Utils] Successfully imported 0 geometry nodes: []

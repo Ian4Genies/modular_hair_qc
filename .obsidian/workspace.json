@@ -170,6 +170,10 @@
   },
   "active": "020bb5c44ab37f77",
   "lastOpenFiles": [
+    "dev_tools/debugging/test_direct_prim_import.py",
+    "docs/TestDirectory/logs/hair_qc_tool/43884_Log_20250808_154920.txt",
+    "dev_tools/debugging/test_clean_import.py",
+    "dev_tools/debugging/test_minimal_import.py",
     "Obsolete.md",
     "Project_Summary.md",
     "dev_tools/debugging/check_code_changes.py",
@@ -183,9 +187,6 @@
     "dev_tools/debugging/verify_methods.py",
     "dev_tools/debugging/inspect_test_geo.py",
     "dev_tools/debugging/inspect_proxy_attributes.py",
-    "dev_tools/debugging/force_reload_modules.py",
-    "dev_tools/debugging/debug_module_list.py",
-    "dev_tools/debugging/debug_module_list_simple.py",
     "dev_tools/maya_integration_taskList.md",
     "docs/issues/USDBlendshapeUpdate.md",
     "docs/issues/Module UI Fix.md",
@@ -204,7 +205,6 @@
     "README.md",
     "task_list.md",
     "docs/Questions_Followup.md",
-    "docs/Questions.md",
-    "docs/USD_features.md"
+    "docs/Questions.md"
   ]
 }

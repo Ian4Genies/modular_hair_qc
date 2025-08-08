@@ -202,116 +202,145 @@ class MayaUtils:
     @staticmethod
     def import_usd_as_maya_geometry(usd_file_path: str, import_blendshapes: bool = True, import_skeletons: bool = False) -> List[str]:
         """
-        Import USD file as native Maya DAG nodes for interactive editing
+        Import specific USD prims as Maya DAG nodes for interactive editing
+        
+        Imports only BaseMesh and blendshape targets directly by prim path.
         
         Args:
             usd_file_path: Path to USD file
             import_blendshapes: Whether to import blendshapes
-            import_skeletons: Whether to import skeletons
+            import_skeletons: Whether to import skeletons (unused)
             
         Returns:
-            List of imported Maya node names
+            List of imported Maya geometry node names
         """
         try:
-            # Use Maya's USD import command
             imported_nodes = []
             
-            # Maya USD import options
-            import_options = {
-                'importUSDZTextures': True,
-                'importBlendShapes': import_blendshapes,
-                'importSkeletons': import_skeletons,
-                'importInstances': False,  # Import as DAG nodes, not instances
-                'importDisplayColor': True,
-                'importPrimvars': True
-            }
-            
-            # Try different USD import methods
-            imported_nodes = []
-            
-            # Helper to diff scene nodes
-            def _diff_new_nodes(before: set) -> List[str]:
-                after = set(cmds.ls(long=True))
-                new_nodes = list(after - before)
-                return new_nodes
-
-            # Method 1: Try mayaUSDImport command
+            # Method 1: Import BaseMesh directly
             try:
-                print("[Maya Utils] Trying mayaUSDImport command")
-                # Clear selection first
+                print("[Maya Utils] Importing BaseMesh prim")
                 cmds.select(clear=True)
                 nodes_before = set(cmds.ls(long=True))
                 
-                # Import USD file
                 cmds.mayaUSDImport(
                     file=usd_file_path,
-                    readAnimData=import_blendshapes,
-                    importInstances=False
+                    primPath="/HairModule/BaseMesh",
+                    importInstances=False,
+                    importUSDZTextures=False,
+                    importDisplayColor=False
                 )
                 
-                # Use selection if available, otherwise diff the scene
-                imported_nodes = cmds.ls(selection=True) or []
-                if not imported_nodes:
-                    imported_nodes = _diff_new_nodes(nodes_before)
+                new_nodes = list(set(cmds.ls(long=True)) - nodes_before)
+                base_mesh_nodes = [n for n in new_nodes if cmds.objExists(n) and cmds.nodeType(n) == 'transform']
                 
-                if imported_nodes:
-                    print(f"[Maya Utils] mayaUSDImport successful: {imported_nodes}")
-                else:
-                    print("[Maya Utils] mayaUSDImport completed but no nodes selected")
-                    
+                if base_mesh_nodes:
+                    print(f"[Maya Utils] Imported BaseMesh: {base_mesh_nodes}")
+                    imported_nodes.extend(base_mesh_nodes)
+                
             except Exception as e:
-                print(f"[Maya Utils] mayaUSDImport failed: {e}")
-            
-            # Method 2: Try file import if mayaUSDImport didn't work
-            if not imported_nodes:
+                print(f"[Maya Utils] BaseMesh import failed: {e}")
+                
+                # Fallback: Try importing the entire file and filter
                 try:
-                    print("[Maya Utils] Trying file import with USD Import type")
+                    print("[Maya Utils] Fallback: importing entire file")
                     cmds.select(clear=True)
                     nodes_before = set(cmds.ls(long=True))
                     
-                    # Use file import with USD type
-                    cmds.file(usd_file_path, i=True, type="USD Import", 
-                             importTimeRange="combine", namespace="imported")
+                    cmds.mayaUSDImport(
+                        file=usd_file_path,
+                        importInstances=False,
+                        importUSDZTextures=False,
+                        importDisplayColor=False
+                    )
                     
-                    imported_nodes = cmds.ls(selection=True) or _diff_new_nodes(nodes_before)
+                    new_nodes = list(set(cmds.ls(long=True)) - nodes_before)
+                    # Filter for BaseMesh only
+                    base_mesh_nodes = [n for n in new_nodes if cmds.objExists(n) and 
+                                     cmds.nodeType(n) == 'transform' and 'BaseMesh' in n]
                     
-                    if imported_nodes:
-                        print(f"[Maya Utils] File import successful: {imported_nodes}")
-                    else:
-                        print("[Maya Utils] File import completed but no nodes selected")
+                    if base_mesh_nodes:
+                        print(f"[Maya Utils] Fallback BaseMesh import: {base_mesh_nodes}")
+                        imported_nodes.extend(base_mesh_nodes)
                         
-                except Exception as e:
-                    print(f"[Maya Utils] File import failed: {e}")
+                        # Clean up unwanted nodes
+                        unwanted = [n for n in new_nodes if cmds.objExists(n) and 
+                                  cmds.nodeType(n) == 'transform' and 
+                                  any(bad in n.lower() for bad in ['hairmodule', 'exclusions', 'assets', 'blacklist'])]
+                        for node in unwanted:
+                            try:
+                                cmds.delete(node)
+                                print(f"[Maya Utils] Deleted unwanted node: {node}")
+                            except:
+                                pass
+                                
+                except Exception as fallback_e:
+                    print(f"[Maya Utils] Fallback import also failed: {fallback_e}")
             
-            # Method 3: Try basic file import without USD type
-            if not imported_nodes:
+            # Method 2: Import individual blendshape targets if requested
+            if import_blendshapes:
                 try:
-                    print("[Maya Utils] Trying basic file import")
-                    cmds.select(clear=True)
-                    
-                    # Get nodes before import
-                    nodes_before = set(cmds.ls(long=True))
-                    
-                    # Basic file import
-                    cmds.file(usd_file_path, i=True, namespace="imported")
-                    
-                    # Get nodes after import
-                    new_nodes = _diff_new_nodes(nodes_before)
-                    imported_nodes = [node for node in new_nodes if not node.startswith("|imported:")]
-                    
-                    if imported_nodes:
-                        print(f"[Maya Utils] Basic import successful: {imported_nodes}")
-                    else:
-                        print("[Maya Utils] Basic import completed but no new nodes found")
-                        
+                    # Get blendshape target paths from USD
+                    from pxr import Usd, UsdGeom
+                    stage = Usd.Stage.Open(str(usd_file_path))
+                    if stage:
+                        base_mesh_prim = stage.GetPrimAtPath("/HairModule/BaseMesh")
+                        if base_mesh_prim and base_mesh_prim.IsValid():
+                            # Get blendshape targets from relationship
+                            rel = base_mesh_prim.GetRelationship("skel:blendShapeTargets")
+                            if rel:
+                                target_paths = rel.GetTargets()
+                                print(f"[Maya Utils] Found {len(target_paths)} blendshape targets")
+                                
+                                for target_path in target_paths:
+                                    try:
+                                        print(f"[Maya Utils] Importing blendshape: {target_path}")
+                                        cmds.select(clear=True)
+                                        nodes_before = set(cmds.ls(long=True))
+                                        
+                                        cmds.mayaUSDImport(
+                                            file=usd_file_path,
+                                            primPath=str(target_path),
+                                            importInstances=False,
+                                            importUSDZTextures=False,
+                                            importDisplayColor=False
+                                        )
+                                        
+                                        new_nodes = list(set(cmds.ls(long=True)) - nodes_before)
+                                        blend_nodes = [n for n in new_nodes if cmds.objExists(n) and cmds.nodeType(n) == 'transform']
+                                        
+                                        if blend_nodes:
+                                            print(f"[Maya Utils] Imported blendshape {target_path}: {blend_nodes}")
+                                            imported_nodes.extend(blend_nodes)
+                                        
+                                    except Exception as e:
+                                        print(f"[Maya Utils] Failed to import blendshape {target_path}: {e}")
+                
                 except Exception as e:
-                    print(f"[Maya Utils] Basic file import failed: {e}")
+                    print(f"[Maya Utils] Error reading blendshape targets: {e}")
             
-            print(f"[Maya Utils] Imported {len(imported_nodes)} nodes from USD: {imported_nodes}")
-            return imported_nodes
+            # Clean up node names (remove namespaces if any)
+            clean_nodes = []
+            for node in imported_nodes:
+                if cmds.objExists(node):
+                    if ':' in node:
+                        try:
+                            short_name = node.split(':')[-1]
+                            new_name = cmds.rename(node, short_name)
+                            clean_nodes.append(new_name)
+                            print(f"[Maya Utils] Renamed {node} -> {new_name}")
+                        except Exception:
+                            clean_nodes.append(node)
+                    else:
+                        clean_nodes.append(node)
+            
+            print(f"[Maya Utils] Successfully imported {len(clean_nodes)} geometry nodes: {clean_nodes}")
+            return clean_nodes
             
         except Exception as e:
-            print(f"[Maya Utils] Error importing USD as Maya geometry: {e}")
+            print(f"[Maya Utils] Error importing USD geometry: {e}")
+            import traceback
+            traceback.print_exc()
             return []
     
     @staticmethod
