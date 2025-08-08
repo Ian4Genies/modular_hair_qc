@@ -379,6 +379,18 @@ class ModuleManager:
             self.display_geometry.clear()
             self.maya_blendshapes.clear()
             
+            # Also delete any stray imported HairModule transforms
+            try:
+                top_nodes = cmds.ls(assemblies=True) or []
+                for n in top_nodes:
+                    if n.startswith("HairModule") or ":HairModule" in n:
+                        try:
+                            cmds.delete(n)
+                        except Exception:
+                            pass
+            except Exception as _:
+                pass
+
             # Force viewport refresh
             try:
                 cmds.refresh(currentView=True, force=True)
@@ -751,6 +763,11 @@ class ModuleManager:
                 return False, "No geometry imported from USD"
             
             print(f"[Module Manager] Imported {len(imported_nodes)} nodes from USD: {imported_nodes}")
+
+            # Keep only transforms for grouping
+            transform_nodes = [n for n in imported_nodes if cmds.objExists(n) and cmds.nodeType(n) == 'transform']
+            if transform_nodes:
+                imported_nodes = transform_nodes
             return True, imported_nodes
             
         except Exception as e:
@@ -774,9 +791,39 @@ class ModuleManager:
                     print(f"[Module Manager] Warning: Could not check history for {node}: {e}")
                     continue
             
+            # If no blendShape nodes were imported, create them from USD targets (Skel standard)
             if not blendshape_nodes:
-                print(f"[Module Manager] No blendShape nodes found for module {module_name}")
-                return
+                try:
+                    from ..utils.maya_utils import MayaUtils
+                    module_info = self.modules.get(module_name)
+                    if module_info and module_name in self.display_geometry:
+                        group_name = self.display_geometry[module_name]
+                        # Find BaseMesh transform under the group
+                        mesh_shapes = cmds.listRelatives(group_name, allDescendents=True, type='mesh') or []
+                        base_mesh_transform = None
+                        for shape in mesh_shapes:
+                            parent = cmds.listRelatives(shape, parent=True, type='transform')
+                            if parent and (shape.endswith('BaseMeshShape') or parent[0].endswith('BaseMesh')):
+                                base_mesh_transform = parent[0]
+                                break
+                        if not base_mesh_transform and mesh_shapes:
+                            base_mesh_transform = cmds.listRelatives(mesh_shapes[0], parent=True, type='transform')[0]
+
+                        # Create Maya blendshapes from USD targets
+                        bs_names = list((module_info.blendshapes or {}).keys())
+                        if base_mesh_transform and bs_names:
+                            MayaUtils.create_blendshapes_from_usd_data(
+                                base_mesh_transform,
+                                str(module_info.file_path),
+                                bs_names,
+                            )
+                            # Re-scan for blendShape nodes after creation
+                            history2 = cmds.listHistory(base_mesh_transform, pruneDagObjects=True) or []
+                            for hist_node in history2:
+                                if cmds.nodeType(hist_node) == "blendShape":
+                                    blendshape_nodes.append(hist_node)
+                except Exception as create_bs_err:
+                    print(f"[Module Manager] Warning: Could not create Maya blendshapes from USD: {create_bs_err}")
             
             # Set up control attributes for each blendshape
             module_blendshapes = {}

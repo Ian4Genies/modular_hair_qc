@@ -41,10 +41,13 @@ class MayaUtils:
             return []
         
         # Find blendShape nodes connected to this mesh
-        history = cmds.listHistory(mesh_name, type="blendShape")
+        # Avoid using unsupported flags on some Maya versions
+        history = cmds.listHistory(mesh_name, pruneDagObjects=True) or []
         blendshapes = []
         
         for blend_node in history:
+            if cmds.nodeType(blend_node) != "blendShape":
+                continue
             # Get all targets for this blendShape node
             targets = cmds.listAttr(f"{blend_node}.weight", multi=True) or []
             for target in targets:
@@ -64,7 +67,7 @@ class MayaUtils:
                 raise ValueError("Base mesh or target mesh does not exist")
             
             # Check if blendShape node already exists
-            existing_blend_nodes = cmds.listHistory(base_mesh, type="blendShape")
+            existing_blend_nodes = [n for n in (cmds.listHistory(base_mesh, pruneDagObjects=True) or []) if cmds.nodeType(n) == "blendShape"]
             
             if existing_blend_nodes:
                 # Add to existing blendShape node
@@ -87,9 +90,13 @@ class MayaUtils:
     
     @staticmethod
     def create_blendshapes_from_usd_data(base_mesh, usd_file_path, blendshape_names):
-        """Create Maya blendshapes from USD blendshape data"""
+        """Create Maya blendshapes from USD Skel-standard blendshape data
+
+        Expects BaseMesh with rel skel:blendShapeTargets to Mesh targets
+        and primvars:skel:blendShapeWeights.
+        """
         try:
-            from pxr import Usd, UsdSkel, UsdGeom, Gf
+            from pxr import Usd, UsdGeom, Sdf
             
             print(f"[Maya Utils] Creating blendshapes from USD: {usd_file_path}")
             print(f"[Maya Utils] Target blendshapes: {blendshape_names}")
@@ -107,12 +114,7 @@ class MayaUtils:
                 return []
             
             base_mesh_usd = UsdGeom.Mesh(base_mesh_prim)
-            base_points = base_mesh_usd.GetPointsAttr().Get()
-            
-            if not base_points:
-                print(f"[Maya Utils] No base points found in USD mesh")
-                return []
-            
+            base_points = base_mesh_usd.GetPointsAttr().Get() or []
             print(f"[Maya Utils] Found {len(base_points)} base points in USD mesh")
             
             # Get Maya base mesh points for validation
@@ -123,40 +125,33 @@ class MayaUtils:
             # Create blendshapes from USD data
             created_blendshapes = []
             
+            # Map requested names to target paths from relationship
+            rel = base_mesh_prim.GetRelationship("skel:blendShapeTargets")
+            target_paths = rel.GetTargets() if rel else []
+            name_to_path = {}
+            for p in target_paths:
+                try:
+                    name = Sdf.Path(p).name
+                except Exception:
+                    name = str(p).split('/')[-1]
+                name_to_path[name] = p
+
             for blendshape_name in blendshape_names:
                 try:
-                    # Get USD blendshape data
-                    blendshape_prim_path = f"/HairModule/BlendShapes/{blendshape_name}"
-                    blendshape_prim = stage.GetPrimAtPath(blendshape_prim_path)
-                    
-                    if not blendshape_prim or not blendshape_prim.IsA(UsdSkel.BlendShape):
-                        print(f"[Maya Utils] USD blendshape not found: {blendshape_name}")
+                    # Resolve target mesh path
+                    bs_path = name_to_path.get(blendshape_name)
+                    if not bs_path:
+                        print(f"[Maya Utils] USD blendshape target not found: {blendshape_name}")
                         continue
-                    
-                    blendshape_usd = UsdSkel.BlendShape(blendshape_prim)
-                    offsets_attr = blendshape_usd.GetOffsetsAttr()
-                    
-                    if not offsets_attr or not offsets_attr.HasValue():
-                        print(f"[Maya Utils] No offsets found for blendshape: {blendshape_name}")
+                    target_prim = stage.GetPrimAtPath(bs_path)
+                    if not target_prim or not target_prim.IsA(UsdGeom.Mesh):
+                        print(f"[Maya Utils] Blendshape target is not a mesh: {blendshape_name}")
                         continue
-                    
-                    offsets = offsets_attr.Get()
-                    print(f"[Maya Utils] Found {len(offsets)} offsets for {blendshape_name}")
-                    
-                    # Create target mesh by applying offsets to base points
-                    target_points = []
-                    for i, base_point in enumerate(base_points):
-                        if i < len(offsets):
-                            # Apply offset
-                            target_point = (
-                                base_point[0] + offsets[i][0],
-                                base_point[1] + offsets[i][1], 
-                                base_point[2] + offsets[i][2]
-                            )
-                        else:
-                            # No offset for this point
-                            target_point = base_point
-                        target_points.append(target_point)
+                    target_mesh_usd = UsdGeom.Mesh(target_prim)
+                    target_points = target_mesh_usd.GetPointsAttr().Get() or []
+                    if len(target_points) != len(base_points):
+                        print(f"[Maya Utils] Point mismatch for {blendshape_name}: base {len(base_points)} vs target {len(target_points)}")
+                        continue
                     
                     # Create temporary Maya mesh with target points
                     temp_mesh_name = f"temp_{blendshape_name}_target"
@@ -234,11 +229,18 @@ class MayaUtils:
             # Try different USD import methods
             imported_nodes = []
             
+            # Helper to diff scene nodes
+            def _diff_new_nodes(before: set) -> List[str]:
+                after = set(cmds.ls(long=True))
+                new_nodes = list(after - before)
+                return new_nodes
+
             # Method 1: Try mayaUSDImport command
             try:
                 print("[Maya Utils] Trying mayaUSDImport command")
                 # Clear selection first
                 cmds.select(clear=True)
+                nodes_before = set(cmds.ls(long=True))
                 
                 # Import USD file
                 cmds.mayaUSDImport(
@@ -247,8 +249,10 @@ class MayaUtils:
                     importInstances=False
                 )
                 
-                # Get what was imported (should be selected)
+                # Use selection if available, otherwise diff the scene
                 imported_nodes = cmds.ls(selection=True) or []
+                if not imported_nodes:
+                    imported_nodes = _diff_new_nodes(nodes_before)
                 
                 if imported_nodes:
                     print(f"[Maya Utils] mayaUSDImport successful: {imported_nodes}")
@@ -263,12 +267,13 @@ class MayaUtils:
                 try:
                     print("[Maya Utils] Trying file import with USD Import type")
                     cmds.select(clear=True)
+                    nodes_before = set(cmds.ls(long=True))
                     
                     # Use file import with USD type
                     cmds.file(usd_file_path, i=True, type="USD Import", 
                              importTimeRange="combine", namespace="imported")
                     
-                    imported_nodes = cmds.ls(selection=True) or []
+                    imported_nodes = cmds.ls(selection=True) or _diff_new_nodes(nodes_before)
                     
                     if imported_nodes:
                         print(f"[Maya Utils] File import successful: {imported_nodes}")
@@ -291,10 +296,7 @@ class MayaUtils:
                     cmds.file(usd_file_path, i=True, namespace="imported")
                     
                     # Get nodes after import
-                    nodes_after = set(cmds.ls(long=True))
-                    
-                    # Find new nodes
-                    new_nodes = list(nodes_after - nodes_before)
+                    new_nodes = _diff_new_nodes(nodes_before)
                     imported_nodes = [node for node in new_nodes if not node.startswith("|imported:")]
                     
                     if imported_nodes:

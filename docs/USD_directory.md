@@ -1,10 +1,6 @@
-# Directory Structure Documentation
+# USD Directory
 
-This document demonstrates best practices for representing directory structures in markdown format.
-
-## Basic Tree Structure
-
-The most common way to represent a directory structure uses tree-like ASCII characters:
+Thi
 
 ```
 modular_hair/
@@ -16,7 +12,11 @@ modular_hair/
 │   │   │   │   ├── lineUp.png
 │   │   │   │   ├── midFade.png
 │   │   │   ├── hairline/
+│   │   │   │   ├── balding.png
+│   │   │   │   ├── bell.png
 │   │   │   ├── sideburn/
+│   │   │   │   ├── outward.png
+│   │   │   │   ├── pointMid.png
 │   │   ├── normnal/
 │   │   │   ├── ripple.png
 │   │   │   ├── wavy.png
@@ -28,14 +28,19 @@ modular_hair/
 │   │   ├── Long_crown_simple.usd
 │   │   ├── Long_crown_braided.usd
 │   │   ├── Long_crown_fancy.usd
+│   │   ├── normnal/
+│   │   │   ├── straight.png
+│   │   │   ├── textured.png
 │   └── tail/
 │   │   ├── long_tail_braided.usd
 │   │   ├── long_tail_pony.usd
 │   │   ├── long_tail_beaded.usd
+│   │   ├── normnal/
 │   └── bang/
 │   │   ├── long_bang_straightCut.usd
 │   │   ├── long_bang_messy.usd
 │   │   ├── long_bang_parted.usd
+│   │   ├── normnal/
 ├── style/
 │   ├── short_medAfro.usd
 │   ├── long_braided_beaded_messy.usd
@@ -52,7 +57,7 @@ modular_hair/
 ## File Naming Conventions
 
 ### module
-`<group>_<module>_<name>.usd
+`<group>_<module>_<name>.usd`
 ### style
 `<group>_<crown_name>_<tail_name>_<bang_name>.usd`
 

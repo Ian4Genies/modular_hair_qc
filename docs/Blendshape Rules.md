@@ -4,10 +4,13 @@ Below is an example of one of our more complex asset combinations. It consists o
 
 ## Blendshape sample
 - scalp
+    -hairline_fix
 - crown
 	- lengthen
 	- curly
-	- volume up
+	- volumeOut
+    - volumeIn
+    - hairline
 - Tail
 	- lengthen
 	- wavy
@@ -16,7 +19,7 @@ Below is an example of one of our more complex asset combinations. It consists o
 	- lengthen
 	- frizzle
 	- spread
-	- volume up
+
 
 ## Where are rules stored?
 Rules will be stored inside of the style USD for the current style. 

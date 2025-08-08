@@ -314,13 +314,13 @@ class USDModuleUtils(USDUtilsBase):
     """Utility class for Module USD operations"""
     
     def create_module_structure(self, module_name: str, module_type: str):
-        """Create basic module USD structure"""
+        """Create basic module USD structure following USD Skel blendshape standard"""
         if not self.open_stage(create_if_missing=True):
             return False
         
         try:
-            # Create root prim with variants
-            root_prim = self.create_prim("/HairModule")
+            # Create root prim with variants (SkelRoot)
+            root_prim = self.create_prim("/HairModule", "SkelRoot")
             if root_prim:
                 # Set as default prim for proper USD import
                 self.stage.SetDefaultPrim(root_prim)
@@ -331,17 +331,31 @@ class USDModuleUtils(USDUtilsBase):
                 variant_set.SetVariantSelection(module_type)
                 
                 # Create basic structure
-                self.create_prim("/HairModule/BaseMesh", "Mesh")
+                base_mesh_prim = self.create_prim("/HairModule/BaseMesh", "Mesh")
                 self.create_prim("/HairModule/BlendShapes")
                 self.create_prim("/HairModule/BlendshapeExclusions")
                 
-                # Create UsdSkel animation structure for proper blendshape weight control
-                anim_prim = self.create_prim("/HairModule/Animation", "SkelAnimation")
-                
-                # Apply SkelBindingAPI to the root and bind the animation
-                from pxr import UsdSkel
-                binding_api = UsdSkel.BindingAPI.Apply(root_prim)
-                binding_api.CreateAnimationSourceRel().SetTargets(["/HairModule/Animation"])
+                # Apply SkelBindingAPI to the BaseMesh and initialize blendshape bindings
+                try:
+                    from pxr import UsdSkel, UsdGeom, Sdf
+                    if base_mesh_prim and base_mesh_prim.IsValid():
+                        # Ensure BindingAPI on base mesh
+                        UsdSkel.BindingAPI.Apply(base_mesh_prim)
+                        # Relationship for blendshape targets
+                        rel = base_mesh_prim.CreateRelationship("skel:blendShapeTargets", False)
+                        if not rel.HasAuthoredTargets():
+                            rel.SetTargets([])
+                        # Primvar for weights (uniform)
+                        primvars_api = UsdGeom.PrimvarsAPI(base_mesh_prim)
+                        if not primvars_api.HasPrimvar("skel:blendShapeWeights"):
+                            pv = primvars_api.CreatePrimvar(
+                                "skel:blendShapeWeights",
+                                Sdf.ValueTypeNames.FloatArray,
+                                UsdGeom.Tokens.uniform,
+                            )
+                            pv.Set([])
+                except Exception as _:
+                    pass
                 
                 # Create texture assets structure (no materials for now)
                 self.create_prim("/HairModule/TextureAssets")
@@ -714,17 +728,17 @@ class USDModuleUtils(USDUtilsBase):
             return None
     
     def add_blendshape_from_maya(self, maya_object_name: str, blendshape_name: str) -> bool:
-        """Add a blendshape from Maya object with proper USD BlendShape schema"""
+        """Add a blendshape from Maya object following USD Skel blendshape standard"""
         if not self.stage:
             self.open_stage()
         
         try:
-            from pxr import UsdSkel, UsdGeom, Gf
+            from pxr import UsdGeom, Gf, Sdf
             import maya.cmds as cmds
             
             # Get base mesh for comparison
             base_mesh_prim = self.get_prim("/HairModule/BaseMesh")
-            if not base_mesh_prim or not UsdGeom.Mesh(base_mesh_prim):
+            if not base_mesh_prim or not base_mesh_prim.IsA(UsdGeom.Mesh):
                 print(f"[USD Module Utils] No base mesh found for blendshape comparison")
                 return False
             
@@ -761,177 +775,187 @@ class USDModuleUtils(USDUtilsBase):
                 print(f"[USD Module Utils] Point count mismatch: base={len(base_points)}, target={len(target_points)}")
                 return False
             
-            # Calculate offsets (target - base)
-            offsets = []
-            for i in range(len(base_points)):
-                offset = target_points[i] - base_points[i]
-                offsets.append(offset)
-            
-            # Create proper USD BlendShape prim
+            # Create target mesh prim and set data
             blendshape_path = f"/HairModule/BlendShapes/{blendshape_name}"
-            blendshape_prim = UsdSkel.BlendShape.Define(self.stage, blendshape_path)
-            
-            if blendshape_prim:
-                # Set the offsets attribute (this is what makes it a real blendshape)
-                offsets_attr = blendshape_prim.CreateOffsetsAttr()
-                offsets_attr.Set(offsets)
-                
-                # Create the weight attribute for interactive control
-                from pxr import Sdf
-                prim = blendshape_prim.GetPrim()
-                weight_attr = prim.CreateAttribute("weight", Sdf.ValueTypeNames.Float)
-                weight_attr.Set(0.0)  # Default weight
-                
-                # Store Maya source info as custom data
-                prim = blendshape_prim.GetPrim()
-                prim.SetCustomDataByKey("maya_source", maya_object_name)
-                prim.SetCustomDataByKey("default_weight", 0.0)
-                
-                # Update the SkelAnimation to include this blendshape
-                self._update_skel_animation_blendshapes()
-                
-                # Mark stage as dirty and save immediately
-                self._is_dirty = True
-                self.save_stage()
-                
-                print(f"[USD Module Utils] Created and saved BlendShape '{blendshape_name}' with {len(offsets)} offsets and weight attribute")
-                return True
-            else:
-                print(f"[USD Module Utils] Failed to create BlendShape prim")
+            target_mesh_prim = self.create_prim(blendshape_path, "Mesh")
+            if not target_mesh_prim or not target_mesh_prim.IsValid():
+                print(f"[USD Module Utils] Failed to create blendshape target mesh prim")
                 return False
+
+            target_mesh = UsdGeom.Mesh(target_mesh_prim)
+            # Copy topology from base mesh
+            try:
+                target_mesh.GetFaceVertexCountsAttr().Set(base_mesh.GetFaceVertexCountsAttr().Get())
+                target_mesh.GetFaceVertexIndicesAttr().Set(base_mesh.GetFaceVertexIndicesAttr().Get())
+            except Exception:
+                pass
+            # Set target points from Maya
+            target_mesh.GetPointsAttr().Set(target_points)
+
+            # Append target to BaseMesh relationship
+            rel = base_mesh_prim.GetRelationship("skel:blendShapeTargets")
+            if not rel:
+                rel = base_mesh_prim.CreateRelationship("skel:blendShapeTargets", False)
+            current_targets = [t for t in (rel.GetTargets() or [])]
+            current_targets.append(Sdf.Path(blendshape_path))
+            rel.SetTargets(current_targets)
+
+            # Append 0.0 to weights primvar
+            primvars_api = UsdGeom.PrimvarsAPI(base_mesh_prim)
+            pv = primvars_api.GetPrimvar("skel:blendShapeWeights") if primvars_api.HasPrimvar("skel:blendShapeWeights") else None
+            if not pv:
+                pv = primvars_api.CreatePrimvar("skel:blendShapeWeights", Sdf.ValueTypeNames.FloatArray, UsdGeom.Tokens.uniform)
+                pv.Set([])
+            weights = list(pv.Get() or [])
+            weights.append(0.0)
+            pv.Set(weights)
+
+            self._is_dirty = True
+            self.save_stage()
+            print(f"[USD Module Utils] Created blendshape target '{blendshape_name}' and updated bindings")
+            return True
                 
         except Exception as e:
             print(f"[USD Module Utils] Error adding blendshape from Maya: {e}")
             return False
+
+    def migrate_blendshapes_to_skel_standard(self) -> bool:
+        """Migrate old UsdSkel.BlendShape-offset authoring to Skel-standard mesh targets
+
+        For each child under `/HairModule/BlendShapes`:
+          - If it's a UsdSkel.BlendShape with offsets, bake a mesh target at the same path
+            with points = base_points + offsets and copy topology from BaseMesh
+          - Ensure BaseMesh has `rel skel:blendShapeTargets` pointing to each target mesh
+          - Ensure `primvars:skel:blendShapeWeights` exists and matches target count
+        """
+        if not self.stage:
+            self.open_stage()
+
+        try:
+            from pxr import UsdGeom, UsdSkel, Sdf
+
+            base_mesh_prim = self.get_prim("/HairModule/BaseMesh")
+            if not base_mesh_prim or not base_mesh_prim.IsA(UsdGeom.Mesh):
+                print("[USD Module Utils] Migration aborted: BaseMesh not found")
+                return False
+            base_mesh = UsdGeom.Mesh(base_mesh_prim)
+            base_points = base_mesh.GetPointsAttr().Get() or []
+
+            blend_root = self.get_prim("/HairModule/BlendShapes")
+            if not blend_root or not blend_root.IsValid():
+                print("[USD Module Utils] Migration: no BlendShapes prim")
+                return True
+
+            # Prepare relationship and primvar on BaseMesh
+            rel = base_mesh_prim.GetRelationship("skel:blendShapeTargets")
+            if not rel:
+                rel = base_mesh_prim.CreateRelationship("skel:blendShapeTargets", False)
+            targets = [t for t in (rel.GetTargets() or [])]
+
+            primvars_api = UsdGeom.PrimvarsAPI(base_mesh_prim)
+            pv = primvars_api.GetPrimvar("skel:blendShapeWeights") if primvars_api.HasPrimvar("skel:blendShapeWeights") else None
+            if not pv:
+                pv = primvars_api.CreatePrimvar("skel:blendShapeWeights", Sdf.ValueTypeNames.FloatArray, UsdGeom.Tokens.uniform)
+                pv.Set([])
+            weights = list(pv.Get() or [])
+
+            # Iterate children and convert if needed
+            new_targets = []
+            for child in blend_root.GetChildren():
+                name = child.GetName()
+                if child.IsA(UsdGeom.Mesh):
+                    new_targets.append(child.GetPath())
+                    continue
+                # Convert UsdSkel.BlendShape to Mesh target
+                try:
+                    if UsdSkel.BlendShape(child):
+                        bs = UsdSkel.BlendShape(child)
+                        offsets = bs.GetOffsetsAttr().Get() or []
+                        # Remove old prim and create Mesh at same path
+                        path = child.GetPath()
+                        self.stage.RemovePrim(path)
+                        mesh_prim = self.create_prim(str(path), "Mesh")
+                        mesh = UsdGeom.Mesh(mesh_prim)
+                        # Copy topology from base
+                        try:
+                            mesh.GetFaceVertexCountsAttr().Set(base_mesh.GetFaceVertexCountsAttr().Get())
+                            mesh.GetFaceVertexIndicesAttr().Set(base_mesh.GetFaceVertexIndicesAttr().Get())
+                        except Exception:
+                            pass
+                        # Compute target points = base + offsets (sparse-safe)
+                        target_points = []
+                        for i, bp in enumerate(base_points):
+                            if i < len(offsets):
+                                off = offsets[i]
+                                target_points.append((bp[0]+off[0], bp[1]+off[1], bp[2]+off[2]))
+                            else:
+                                target_points.append((bp[0], bp[1], bp[2]))
+                        mesh.GetPointsAttr().Set(target_points)
+                        new_targets.append(mesh_prim.GetPath())
+                except Exception as conv_err:
+                    print(f"[USD Module Utils] Migration warning for '{name}': {conv_err}")
+                    continue
+
+            # Update relationship and weights
+            if new_targets:
+                rel.SetTargets(new_targets)
+                while len(weights) < len(new_targets):
+                    weights.append(0.0)
+                pv.Set(weights[:len(new_targets)])
+
+            self._is_dirty = True
+            self.save_stage()
+            print(f"[USD Module Utils] Migration complete. Targets: {len(new_targets)}")
+            return True
+
+        except Exception as e:
+            print(f"[USD Module Utils] Error during migration: {e}")
+            return False
     
     def _update_skel_animation_blendshapes(self):
-        """Update the UsdSkelAnimation with current blendshapes for proper Maya USD integration"""
-        if not self.stage:
-            return False
-        
-        try:
-            # Get or create the SkelAnimation prim
-            anim_path = "/HairModule/Animation"
-            anim_prim = self.stage.GetPrimAtPath(anim_path)
-            
-            if not anim_prim.IsValid():
-                anim_prim = UsdSkel.Animation.Define(self.stage, anim_path).GetPrim()
-            
-            # Get all blendshapes
-            blendshapes_prim = self.stage.GetPrimAtPath("/HairModule/BlendShapes")
-            if not blendshapes_prim.IsValid():
-                return False
-            
-            # Collect all blendshape names and weights
-            blendshape_names = []
-            blendshape_weights = []
-            
-            for child in blendshapes_prim.GetChildren():
-                if UsdSkel.BlendShape(child):
-                    blendshape_names.append(child.GetName())
-                    # Get current weight (default to 0.0)
-                    weight_attr = child.GetAttribute("weight")
-                    if weight_attr and weight_attr.IsValid():
-                        weight = weight_attr.Get()
-                        if weight is None:
-                            weight = 0.0
-                    else:
-                        weight = 0.0
-                    blendshape_weights.append(float(weight))
-            
-            if blendshape_names:
-                # Set up the SkelAnimation with blendshape data
-                skel_anim = UsdSkel.Animation(anim_prim)
-                
-                # Set blendShapes array (names of blendshapes)
-                blend_shapes_attr = skel_anim.CreateBlendShapesAttr()
-                blend_shapes_attr.Set(blendshape_names)
-                
-                # Set blendShapeWeights array (current weights)
-                blend_weights_attr = skel_anim.CreateBlendShapeWeightsAttr()
-                blend_weights_attr.Set(blendshape_weights)
-                
-                print(f"[USD Module Utils] Updated SkelAnimation with {len(blendshape_names)} blendshapes: {blendshape_names}")
-                return True
-            else:
-                print("[USD Module Utils] No blendshapes found to update SkelAnimation")
-                return False
-                
-        except Exception as e:
-            print(f"[USD Module Utils] Error updating SkelAnimation: {e}")
-            return False
+        """Deprecated: SkelAnimation is not used for blendshape bindings in our pipeline."""
+        return True
     
     def set_blendshape_weight_via_animation(self, blendshape_name: str, weight: float) -> bool:
-        """Set blendshape weight using UsdSkelAnimation (proper Maya USD approach)"""
+        """Set blendshape weight by updating primvars:skel:blendShapeWeights on BaseMesh"""
         if not self.stage:
             self.open_stage()
         
         try:
-            # Get the SkelAnimation prim
-            anim_path = "/HairModule/Animation"
-            anim_prim = self.stage.GetPrimAtPath(anim_path)
-            
-            if not anim_prim.IsValid():
-                print(f"[USD Module Utils] No SkelAnimation found at {anim_path}")
+            from pxr import UsdGeom, Sdf
+            base_mesh_prim = self.get_prim("/HairModule/BaseMesh")
+            if not base_mesh_prim:
+                print("[USD Module Utils] BaseMesh not found")
                 return False
-            
-            skel_anim = UsdSkel.Animation(anim_prim)
-            
-            # Get current blendshape names and weights
-            blend_shapes_attr = skel_anim.GetBlendShapesAttr()
-            blend_weights_attr = skel_anim.GetBlendShapeWeightsAttr()
-            
-            if not blend_shapes_attr or not blend_weights_attr:
-                print("[USD Module Utils] SkelAnimation missing blendShapes or blendShapeWeights attributes")
+
+            rel = base_mesh_prim.GetRelationship("skel:blendShapeTargets")
+            targets = rel.GetTargets() if rel else []
+            # Find by name
+            index = None
+            for i, p in enumerate(targets):
+                try:
+                    name = Sdf.Path(p).name
+                except Exception:
+                    name = str(p).split('/')[-1]
+                if name == blendshape_name:
+                    index = i
+                    break
+            if index is None:
+                print(f"[USD Module Utils] Blendshape '{blendshape_name}' not found in targets")
                 return False
-            
-            # Get current arrays
-            blendshape_names = blend_shapes_attr.Get()
-            blendshape_weights = blend_weights_attr.Get()
-            
-            if not blendshape_names or not blendshape_weights:
-                print("[USD Module Utils] Empty blendshape arrays in SkelAnimation")
+
+            primvars_api = UsdGeom.PrimvarsAPI(base_mesh_prim)
+            if not primvars_api.HasPrimvar("skel:blendShapeWeights"):
+                print("[USD Module Utils] Missing primvar skel:blendShapeWeights")
                 return False
-            
-            # Debug output
-            print(f"[USD Module Utils] Found {len(blendshape_names)} blendshapes in SkelAnimation: {list(blendshape_names)}")
-            print(f"[USD Module Utils] Current weights: {list(blendshape_weights)}")
-            print(f"[USD Module Utils] Looking for blendshape: '{blendshape_name}'")
-            
-            # Find the index of our blendshape
-            try:
-                # Convert TokenArray to list to use index() method
-                blendshape_names_list = list(blendshape_names)
-                blend_index = blendshape_names_list.index(blendshape_name)
-            except (ValueError, AttributeError) as e:
-                print(f"[USD Module Utils] Blendshape '{blendshape_name}' not found in SkelAnimation or error accessing blendshape names: {e}")
-                return False
-            
-            # Update the weight at that index
-            blendshape_weights = list(blendshape_weights)  # Convert to mutable list
-            blendshape_weights[blend_index] = float(weight)
-            
-            # Set the updated weights back to the attribute
-            blend_weights_attr.Set(blendshape_weights)
-            
-            # Also update the individual blendshape prim weight for consistency
-            blendshape_prim_path = f"/HairModule/BlendShapes/{blendshape_name}"
-            blendshape_prim = self.stage.GetPrimAtPath(blendshape_prim_path)
-            if blendshape_prim.IsValid():
-                weight_attr = blendshape_prim.GetAttribute("weight")
-                if weight_attr:
-                    weight_attr.Set(float(weight))
-                    print(f"[USD Module Utils] Also updated individual blendshape prim weight")
-            
-            # Mark stage as dirty (but don't save immediately for interactive performance)
+            pv = primvars_api.GetPrimvar("skel:blendShapeWeights")
+            weights = list(pv.Get() or [])
+            while len(weights) < len(targets):
+                weights.append(0.0)
+            weights[index] = float(weight)
+            pv.Set(weights)
+
             self._is_dirty = True
-            
-            # Verify the weight was set correctly
-            verification_weights = blend_weights_attr.Get()
-            if verification_weights and len(verification_weights) > blend_index:
-                actual_weight = verification_weights[blend_index]
-                print(f"[USD Module Utils] Set blendshape '{blendshape_name}' weight to {actual_weight} (in-memory)")
-            
             return True
             
         except Exception as e:
@@ -951,42 +975,27 @@ class USDModuleUtils(USDUtilsBase):
         return blendshapes
     
     def get_blendshapes_with_weights(self) -> Dict[str, float]:
-        """Get blendshape data (names and weights) from USD BlendShape schema"""
+        """Get blendshape names and weights from BaseMesh relationship and primvar"""
         if not self.stage:
             self.open_stage()
         
-        blendshapes = {}
-        blendshapes_prim = self.get_prim("/HairModule/BlendShapes")
-        if blendshapes_prim:
-            for child in blendshapes_prim.GetChildren():
-                name = child.GetName()
-                
-                # Try to get weight from USD BlendShape schema
-                weight = 0.0
-                try:
-                    from pxr import UsdSkel
-                    blendshape_schema = UsdSkel.BlendShape(child)
-                    if blendshape_schema:
-                        # Use the weight attribute on the prim
-                        weight_attr = child.GetAttribute("weight")
-                        if weight_attr:
-                            weight_value = weight_attr.Get()
-                            if weight_value is not None:
-                                weight = float(weight_value)
-                        else:
-                            # Fallback to custom data
-                            custom_weight = child.GetCustomDataByKey("default_weight")
-                            if custom_weight is not None:
-                                weight = float(custom_weight)
-                except Exception as e:
-                    print(f"[USD Module Utils] Warning: Error reading blendshape weight for {name}: {e}")
-                    # Fallback to custom data
-                    custom_weight = child.GetCustomDataByKey("default_weight")
-                    if custom_weight is not None:
-                        weight = float(custom_weight)
-                
-                blendshapes[name] = weight
-        return blendshapes
+        from pxr import UsdGeom, Sdf
+        result: Dict[str, float] = {}
+        base_mesh_prim = self.get_prim("/HairModule/BaseMesh")
+        if not base_mesh_prim:
+            return result
+        rel = base_mesh_prim.GetRelationship("skel:blendShapeTargets")
+        targets = rel.GetTargets() if rel else []
+        primvars_api = UsdGeom.PrimvarsAPI(base_mesh_prim)
+        pv = primvars_api.GetPrimvar("skel:blendShapeWeights") if primvars_api.HasPrimvar("skel:blendShapeWeights") else None
+        weights = list(pv.Get() or []) if pv else []
+        for i, p in enumerate(targets):
+            try:
+                name = Sdf.Path(p).name
+            except Exception:
+                name = str(p).split('/')[-1]
+            result[name] = float(weights[i]) if i < len(weights) else 0.0
+        return result
     
     def add_blendshape(self, blendshape_name: str):
         """Add a blendshape to the module"""
