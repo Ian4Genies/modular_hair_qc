@@ -1023,8 +1023,6 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             if module_info.geometry_loaded:
                 self.base_mesh_label.setText("Geometry loaded")
                 self.load_viewport_btn.setEnabled(True)
-                # Automatically load in viewport when module is selected
-                self.load_module_in_viewport()
             else:
                 self.base_mesh_label.setText("No geometry loaded")
                 self.load_viewport_btn.setEnabled(False)

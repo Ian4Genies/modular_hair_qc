@@ -448,13 +448,21 @@ class ModuleManager:
         module_info = self.modules[target_module]
         
         try:
+            # If the requested module is already displayed and its group exists, skip reloading
+            if (
+                self._current_display_module == target_module
+                and target_module in self.display_geometry
+                and cmds.objExists(self.display_geometry[target_module])
+            ):
+                return True, f"Module '{target_module}' already loaded in viewport"
+
             # Prepare persistent module root
             self._ensure_module_root_group()
 
             # Remove only previous module contents (non-destructive to rest of scene)
             self._clear_previous_module_group()
 
-            # Import USD as Maya DAG nodes for interactive editing
+            # Import USD as Maya DAG nodes for interactive editing (exactly once per load)
             success, maya_nodes = self._import_usd_as_maya_geometry(module_info)
             if not success:
                 return False, f"Failed to import USD as Maya geometry: {maya_nodes}"
@@ -480,7 +488,7 @@ class ModuleManager:
             self.display_geometry[target_module] = module_group
             self._current_display_module = target_module
             
-            # Set up blendshape controls for interactive editing
+            # Set up blendshape controls for interactive editing (do not re-import USD here)
             self._setup_maya_blendshape_controls(target_module, maya_nodes)
             
             # Store USD stage reference for data synchronization (reuse if already loaded)
@@ -1000,6 +1008,7 @@ class ModuleManager:
                         pass
                 
                 self.display_geometry[module_name] = module_group
+                # Set up blendshape controls for interactive editing (single pass)
                 self._setup_maya_blendshape_controls(module_name, maya_nodes)
                 
                 print(f"[Module Manager] Refreshed display geometry for {module_name}")

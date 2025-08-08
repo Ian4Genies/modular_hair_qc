@@ -478,3 +478,714 @@
 2025-08-08 13:56:16 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
 2025-08-08 13:56:16 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
 2025-08-08 13:56:16 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:18 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:19 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 13:58:30 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 13:58:30 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 13:58:30 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1: No object matches name: |HairModule|AlphaBlacklist|Scalp1
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp1|hairline
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp1|sideburn
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 13:58:30 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp1|fade
+2025-08-08 13:58:30 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 13:58:30 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 13:58:30 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 13:58:30 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 13:58:31 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 13:58:31 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 13:58:32 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 13:58:32 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 13:58:32 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 13:58:32 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 13:58:32 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1: No object matches name: |HairModule|AlphaBlacklist|Scalp1
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp1|hairline
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp1|sideburn
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 13:58:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp1|fade
+2025-08-08 13:58:32 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 13:58:32 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 13:58:32 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 13:58:32 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 13:58:33 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 13:58:33 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 13:58:33 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 13:58:33 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 13:58:33 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 13:58:33 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 13:58:33 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 13:58:33 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 13:58:33 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:08:06 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 14:08:06 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 14:08:06 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:08:06 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 14:08:12 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:08:14 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:08:14 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp2|fade', '|HairModule|AlphaBlacklist|Scalp2|hairline', '|HairModule|AlphaBlacklist|Scalp2', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp2|sideburn', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:08:14 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp2|fade', '|HairModule|AlphaBlacklist|Scalp2|hairline', '|HairModule|AlphaBlacklist|Scalp2', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp2|sideburn', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp2|fade', '|HairModule|AlphaBlacklist|Scalp2|hairline', '|HairModule|AlphaBlacklist|Scalp2', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp2|sideburn', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp2|fade
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp2|hairline
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2: No object matches name: |HairModule|AlphaBlacklist|Scalp2
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp2|sideburn
+2025-08-08 14:08:14 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:08:14 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:08:14 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:08:14 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:08:14 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:08:14 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:08:15 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:08:15 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:08:15 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:08:15 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:08:15 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:08:15 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:08:15 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:08:15 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:08:47 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:08:47 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:08:47 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1: No object matches name: |HairModule|AlphaBlacklist|Scalp1
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp1|hairline
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp1|sideburn
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:08:47 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp1|fade
+2025-08-08 14:08:47 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:08:47 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:08:47 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:08:47 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:08:48 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:08:48 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:08:49 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:08:49 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:08:49 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:08:49 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:08:49 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:08:49 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:08:49 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:09:09 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:09:09 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:09:09 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1: No object matches name: |HairModule|AlphaBlacklist|Scalp1
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp1|hairline
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp1|sideburn
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:09:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp1|fade
+2025-08-08 14:09:09 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:09:09 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:09:09 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:09:09 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:09:10 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:09:10 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:09:10 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:09:10 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:09:10 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:09:10 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:09:10 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:09:10 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:09:10 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:11:54 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:11:54 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:11:54 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1: No object matches name: |HairModule|AlphaBlacklist|Scalp1
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp1|hairline
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp1|sideburn
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:11:54 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp1|fade
+2025-08-08 14:11:54 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:11:54 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:11:54 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:11:54 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:11:55 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:11:55 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:11:55 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:11:55 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:11:55 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:11:55 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:11:55 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:11:55 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:11:55 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:11:58 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:11:58 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:11:58 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1: No object matches name: |HairModule|AlphaBlacklist|Scalp1
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp1|hairline
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp1|sideburn
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:11:58 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp1|fade
+2025-08-08 14:11:58 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:11:58 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:11:58 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:11:58 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:11:59 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:11:59 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:11:59 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:11:59 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:11:59 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:11:59 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:11:59 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:11:59 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:11:59 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:20:25 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 14:20:25 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 14:20:25 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:20:25 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 14:20:31 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:20:32 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:20:32 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp2|fade', '|HairModule|AlphaBlacklist|Scalp2|hairline', '|HairModule|AlphaBlacklist|Scalp2', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp2|sideburn', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:20:32 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp2|fade', '|HairModule|AlphaBlacklist|Scalp2|hairline', '|HairModule|AlphaBlacklist|Scalp2', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp2|sideburn', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp2|fade', '|HairModule|AlphaBlacklist|Scalp2|hairline', '|HairModule|AlphaBlacklist|Scalp2', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp2|sideburn', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp2|fade
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp2|hairline
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2: No object matches name: |HairModule|AlphaBlacklist|Scalp2
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp2|sideburn
+2025-08-08 14:20:32 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:20:32 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:20:32 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:20:32 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:20:33 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:20:33 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:20:33 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:20:34 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:20:34 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:20:34 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:20:34 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:20:34 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:20:34 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:20:34 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:21:45 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 14:21:45 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 14:21:45 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:21:45 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 14:21:48 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:21:49 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:21:49 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp3|fade', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|AlphaBlacklist|Scalp3|hairline', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp3|sideburn', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp3', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:21:49 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp3|fade', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|AlphaBlacklist|Scalp3|hairline', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp3|sideburn', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp3', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp3|fade', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|AlphaBlacklist|Scalp3|hairline', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp3|sideburn', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp3', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp3|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp3|fade
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp3|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp3|hairline
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp3|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp3|sideburn
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp3: No object matches name: |HairModule|AlphaBlacklist|Scalp3
+2025-08-08 14:21:49 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:21:49 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:21:49 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:21:49 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:21:50 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:21:50 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:21:50 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:21:51 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:21:51 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:21:51 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:21:51 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:21:51 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:21:51 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:21:51 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:26:48 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 14:26:48 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 14:26:48 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:26:48 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 14:26:51 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:26:55 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:26:55 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|AlphaBlacklist|Scalp4|fade', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp4|hairline', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|AlphaBlacklist|Scalp4', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp4|sideburn']
+2025-08-08 14:26:55 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|AlphaBlacklist|Scalp4|fade', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp4|hairline', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|AlphaBlacklist|Scalp4', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp4|sideburn']
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|AlphaBlacklist|Scalp4|fade', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp4|hairline', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|AlphaBlacklist|Scalp4', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp4|sideburn']
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp4|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp4|fade
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp4|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp4|hairline
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp4: No object matches name: |HairModule|AlphaBlacklist|Scalp4
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:26:55 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp4|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp4|sideburn
+2025-08-08 14:26:55 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:26:55 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:26:55 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:26:55 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:26:56 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:26:56 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:26:56 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:26:56 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:26:56 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:26:56 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:26:56 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:26:56 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:26:56 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:28:55 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 14:28:55 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 14:28:55 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:28:55 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 14:29:01 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:29:02 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:29:02 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|AlphaBlacklist|Scalp5|sideburn', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp5|hairline', '|HairModule|AlphaBlacklist|Scalp5|fade', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|AlphaBlacklist|Scalp5', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:29:02 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|AlphaBlacklist|Scalp5|sideburn', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp5|hairline', '|HairModule|AlphaBlacklist|Scalp5|fade', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|AlphaBlacklist|Scalp5', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|AlphaBlacklist|Scalp5|sideburn', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp5|hairline', '|HairModule|AlphaBlacklist|Scalp5|fade', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|AlphaBlacklist|Scalp5', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp5|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp5|sideburn
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp5|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp5|hairline
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp5|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp5|fade
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp5: No object matches name: |HairModule|AlphaBlacklist|Scalp5
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:29:02 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:29:02 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:29:02 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:29:02 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:29:03 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:29:03 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:29:04 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:29:04 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:29:04 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:29:04 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:29:04 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:29:04 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:29:04 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:29:04 [INFO] STDOUT: [Module Manager] Removed BlendShapes subtree: 1 root(s)
+2025-08-08 14:29:04 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:32:26 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 14:32:26 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 14:32:26 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:32:26 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 14:32:30 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 14:32:30 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 14:32:30 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:32:30 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 14:32:33 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:32:35 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:32:35 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|AlphaBlacklist|Scalp6', '|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|AlphaBlacklist|Scalp6|sideburn', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|AlphaBlacklist|Scalp6|fade', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp6|hairline', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:32:35 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|AlphaBlacklist|Scalp6', '|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|AlphaBlacklist|Scalp6|sideburn', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|AlphaBlacklist|Scalp6|fade', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp6|hairline', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:32:35 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|AlphaBlacklist|Scalp6', '|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|AlphaBlacklist|Scalp6|sideburn', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|AlphaBlacklist|Scalp6|fade', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp6|hairline', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:32:35 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:32:35 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:32:35 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:32:35 [INFO] STDOUT: [Maya Utils] Error creating blendshape: Invalid deformer name was specified.
+2025-08-08 14:32:36 [INFO] STDOUT: [Maya Utils] Error creating blendshape: Invalid deformer name was specified.
+2025-08-08 14:32:36 [INFO] STDOUT: [Maya Utils] Error creating blendshape: Invalid deformer name was specified.
+2025-08-08 14:32:36 [INFO] STDOUT: [Maya Utils] Error creating blendshape: Invalid deformer name was specified.
+2025-08-08 14:32:36 [INFO] STDOUT: [Maya Utils] Successfully created 0 Maya blendshapes
+2025-08-08 14:32:36 [INFO] STDOUT: [Module Manager] Removed BlendShapes subtree: 1 root(s)
+2025-08-08 14:32:36 [INFO] STDOUT: [Module Manager] Set up 0 blendshape controls for module midAfro
+2025-08-08 14:34:02 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 14:34:02 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 14:34:02 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:34:02 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 14:34:05 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:34:09 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:34:09 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|AlphaBlacklist|Scalp7|fade', '|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|AlphaBlacklist|Scalp7|sideburn', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp7', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp7|hairline', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:34:09 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|AlphaBlacklist|Scalp7|fade', '|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|AlphaBlacklist|Scalp7|sideburn', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp7', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp7|hairline', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|AlphaBlacklist|Scalp7|fade', '|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|AlphaBlacklist|Scalp7|sideburn', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp7', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp7|hairline', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp7|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp7|fade
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp7|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp7|sideburn
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp7: No object matches name: |HairModule|AlphaBlacklist|Scalp7
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp7|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp7|hairline
+2025-08-08 14:34:09 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:34:09 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:34:09 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:34:09 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:34:09 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:34:09 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:34:10 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:34:10 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:34:10 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:34:10 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:34:10 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:34:10 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule|AlphaBlacklist|Scalp1', '|HairModule', '|HairModule|TextureAssets', '|HairModule|AlphaBlacklist|Scalp1|hairline', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|AlphaBlacklist|Scalp1|sideburn', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes', '|HairModule|AlphaBlacklist|Scalp1|fade']
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1: No object matches name: |HairModule|AlphaBlacklist|Scalp1
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp1|hairline
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp1|sideburn
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:34:10 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp1|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp1|fade
+2025-08-08 14:34:10 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:34:10 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:34:10 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:34:11 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:34:11 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:34:12 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:34:12 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:34:12 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:34:12 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:34:12 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:34:12 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:34:12 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:34:12 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:41:34 [INFO] STDOUT: [Hair QC Tool] Config loaded from C:\Users\woske\.hair_qc_tool_config.json
+2025-08-08 14:41:34 [INFO] STDOUT: [Hair QC Tool] Reload summary: Reloaded: 14, Skipped: 0, Failed: 0
+2025-08-08 14:41:34 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:41:34 [INFO] STDOUT: [Hair QC Tool] Tool launched successfully
+2025-08-08 14:41:37 [INFO] STDOUT: Warning: Could not clear USD stage cache: type object 'StageCache' has no attribute 'Get'
+2025-08-08 14:41:39 [INFO] STDOUT: [Maya Utils] Trying mayaUSDImport command
+2025-08-08 14:41:39 [INFO] STDOUT: [Maya Utils] mayaUSDImport successful: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp2|fade', '|HairModule|AlphaBlacklist|Scalp2|hairline', '|HairModule|AlphaBlacklist|Scalp2', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp2|sideburn', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:41:39 [INFO] STDOUT: [Maya Utils] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp2|fade', '|HairModule|AlphaBlacklist|Scalp2|hairline', '|HairModule|AlphaBlacklist|Scalp2', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp2|sideburn', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Imported 22 nodes from USD: ['|HairModule|TextureAssets|WhitelistedTextures|AlphaSlots', '|HairModule|TextureAssets|WhitelistedTextures', '|HairModule|AlphaBlacklist', '|HairModule', '|HairModule|TextureAssets', '|HairModule|BlendShapes|longer|longerShape', '|HairModule|BlendShapes|shorter|shorterShape', '|HairModule|BlendShapes|hairline', '|HairModule|BlendShapes|hairline|hairlineShape', '|HairModule|AlphaBlacklist|Scalp2|fade', '|HairModule|AlphaBlacklist|Scalp2|hairline', '|HairModule|AlphaBlacklist|Scalp2', '|HairModule|BlendShapes|longer', '|HairModule|BlendShapes|tilt|tiltShape', '|HairModule|BlendShapes|tilt', '|HairModule|BlendShapes|shorter', '|HairModule|BlendshapeExclusions', '|HairModule|TextureAssets|WhitelistedTextures|NormalTextures', '|HairModule|BaseMesh', '|HairModule|AlphaBlacklist|Scalp2|sideburn', '|HairModule|BaseMesh|BaseMeshShape', '|HairModule|BlendShapes']
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|AlphaSlots
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist: No object matches name: |HairModule|AlphaBlacklist
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule: No object matches name: |HairModule
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets: No object matches name: |HairModule|TextureAssets
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|hairline: No object matches name: |HairModule|BlendShapes|hairline
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2|fade: No object matches name: |HairModule|AlphaBlacklist|Scalp2|fade
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2|hairline: No object matches name: |HairModule|AlphaBlacklist|Scalp2|hairline
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2: No object matches name: |HairModule|AlphaBlacklist|Scalp2
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|longer: No object matches name: |HairModule|BlendShapes|longer
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|tilt: No object matches name: |HairModule|BlendShapes|tilt
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes|shorter: No object matches name: |HairModule|BlendShapes|shorter
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendshapeExclusions: No object matches name: |HairModule|BlendshapeExclusions
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|TextureAssets|WhitelistedTextures|NormalTextures: No object matches name: |HairModule|TextureAssets|WhitelistedTextures|NormalTextures
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BaseMesh: No object matches name: |HairModule|BaseMesh
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|AlphaBlacklist|Scalp2|sideburn: No object matches name: |HairModule|AlphaBlacklist|Scalp2|sideburn
+2025-08-08 14:41:39 [INFO] STDOUT: [Module Manager] Warning: Could not check history for |HairModule|BlendShapes: No object matches name: |HairModule|BlendShapes
+2025-08-08 14:41:39 [INFO] STDOUT: [Maya Utils] Creating blendshapes from USD: C:\Users\woske\Documents\GitRepo\modular_hair_qc\docs\TestDirectory\module\crown\midAfro.usd
+2025-08-08 14:41:39 [INFO] STDOUT: [Maya Utils] Target blendshapes: ['hairline', 'tilt', 'shorter', 'longer']
+2025-08-08 14:41:39 [INFO] STDOUT: [Maya Utils] Found 3265 base points in USD mesh
+2025-08-08 14:41:39 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: hairline
+2025-08-08 14:41:40 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: tilt
+2025-08-08 14:41:40 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: shorter
+2025-08-08 14:41:40 [INFO] STDOUT: [Maya Utils] Created Maya blendshape: longer
+2025-08-08 14:41:40 [INFO] STDOUT: [Maya Utils] Successfully created 4 Maya blendshapes
+2025-08-08 14:41:40 [INFO] STDOUT: [Module Manager] Found blendshape control: h (as hairline) -> BaseMesh_blendShape.h
+2025-08-08 14:41:40 [INFO] STDOUT: [Module Manager] Found blendshape control: t (as tilt) -> BaseMesh_blendShape.t
+2025-08-08 14:41:40 [INFO] STDOUT: [Module Manager] Found blendshape control: s (as shorter) -> BaseMesh_blendShape.s
+2025-08-08 14:41:40 [INFO] STDOUT: [Module Manager] Found blendshape control: l (as longer) -> BaseMesh_blendShape.l
+2025-08-08 14:41:40 [INFO] STDOUT: [Module Manager] Set up 4 blendshape controls for module midAfro
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:08 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
+2025-08-08 14:42:09 [INFO] STDOUT: [Module Manager] Maya blendshape control failed: setAttr: No object matches name: BaseMesh_blendShape.h
