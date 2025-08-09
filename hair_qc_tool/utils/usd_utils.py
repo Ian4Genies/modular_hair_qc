@@ -16,10 +16,12 @@ References:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional, Tuple, List, Dict
+from typing import Optional, Tuple, List, Dict, Any
+import os
 
 import maya.cmds as cmds
 import mayaUsd.lib as maya_usd_lib
+from .logging_utils import get_logger
 
 try:
     # pxr is typically available in the Maya USD environment
@@ -53,6 +55,8 @@ class StandardPrimPaths:
 
 class USDUtils:
     """Utility methods for USD operations in Maya following minimal-load rules."""
+
+    _LOG = get_logger(__name__)
 
     # ----------------------
     # Viewport (USD Proxy)
@@ -91,6 +95,7 @@ class USDUtils:
             stage.Load(prim_path)
             return True
         except Exception:
+            USDUtils._LOG.warning(f"Failed to load prim in viewport: {prim_path}")
             return False
 
     @staticmethod
@@ -103,6 +108,7 @@ class USDUtils:
             stage.Unload(prim_path)
             return True
         except Exception:
+            USDUtils._LOG.warning(f"Failed to unload prim in viewport: {prim_path}")
             return False
 
     @staticmethod
@@ -114,6 +120,7 @@ class USDUtils:
         try:
             return stage.GetPrimAtPath(prim_path).IsValid()
         except Exception:
+            USDUtils._LOG.warning(f"prim_exists_in_view failed for: {prim_path}")
             return False
 
     @staticmethod
@@ -142,6 +149,9 @@ class USDUtils:
             attr.Set(clamped_weight)
             return True
         except Exception:
+            USDUtils._LOG.warning(
+                f"Failed to set blendshape weight: prim={prim_path} shape={shape_name}"
+            )
             return False
 
     # ----------------------
@@ -224,12 +234,26 @@ class BlendshapeConstraint:
 class USDStageManager:
     """Utilities for opening, creating, and saving USD stages."""
 
+    _cache: Dict[str, Tuple[Any, float]] = {}
+
     @staticmethod
     def open_stage(usd_file_path: str):
         if Usd is None:
             return None
         try:
-            return Usd.Stage.Open(str(usd_file_path))
+            path = str(usd_file_path)
+            # Use mtime-based cache to avoid reopening unchanged stages
+            try:
+                mtime = os.path.getmtime(path)
+            except Exception:
+                mtime = 0.0
+            cached = USDStageManager._cache.get(path)
+            if cached and cached[1] == mtime:
+                return cached[0]
+            stage = Usd.Stage.Open(path)
+            if stage:
+                USDStageManager._cache[path] = (stage, mtime)
+            return stage
         except Exception:
             return None
 
@@ -238,7 +262,11 @@ class USDStageManager:
         if Usd is None:
             return None
         try:
-            return Usd.Stage.CreateNew(str(usd_file_path))
+            path = str(usd_file_path)
+            stage = Usd.Stage.CreateNew(path)
+            # Invalidate any cached entry; mtime will update after save
+            USDStageManager._cache.pop(path, None)
+            return stage
         except Exception:
             return None
 
@@ -248,6 +276,16 @@ class USDStageManager:
             return False
         try:
             stage.GetRootLayer().Save()
+            # Refresh cache mtime
+            try:
+                root_path = stage.GetRootLayer().realPath
+                if root_path:
+                    USDStageManager._cache[root_path] = (
+                        stage,
+                        os.path.getmtime(root_path) if os.path.exists(root_path) else 0.0,
+                    )
+            except Exception:
+                pass
             return True
         except Exception:
             return False
@@ -266,6 +304,10 @@ class USDStageManager:
         except Exception:
             return None
 
+    @staticmethod
+    def clear_cache() -> None:
+        USDStageManager._cache.clear()
+
 
 class USDGroupUtils:
     """Group USD operations (whitelists and discovery)."""
@@ -281,6 +323,7 @@ class USDGroupUtils:
                 return []
             return sorted([p.stem for p in group_dir.glob("*.usd")])
         except Exception:
+            get_logger(__name__).warning("Failed to list groups from directory")
             return []
 
     @staticmethod
@@ -491,6 +534,138 @@ class USDStyleUtils:
                 rel.SetTargets(targets)
             return True
         except Exception:
+            return False
+
+    # ----------------------
+    # Animation Rules (BlendshapeRules + TimelineMetadata)
+    # ----------------------
+    @staticmethod
+    def read_animation_rules(stage, rules_root: str = f"{StandardPrimPaths.STYLE_ROOT}/AnimationRules") -> Dict[str, Any]:
+        data: Dict[str, Any] = {
+            "ruleDescriptions": [],
+            "customRules": {},
+            "timeline": {},
+        }
+        if stage is None:
+            return data
+        try:
+            root = stage.GetPrimAtPath(rules_root)
+            if not root or not root.IsValid():
+                return data
+            # BlendshapeRules
+            bsr = stage.GetPrimAtPath(f"{rules_root}/BlendshapeRules")
+            if bsr and bsr.IsValid():
+                desc_attr = bsr.GetAttribute("ruleDescriptions")
+                if desc_attr:
+                    try:
+                        data["ruleDescriptions"] = list(desc_attr.Get() or [])
+                    except Exception:
+                        data["ruleDescriptions"] = []
+                # Collect any other custom attributes
+                try:
+                    custom: Dict[str, Any] = {}
+                    for attr in bsr.GetAttributes():
+                        name = attr.GetName()
+                        if name == "ruleDescriptions":
+                            continue
+                        try:
+                            custom[name] = attr.Get()
+                        except Exception:
+                            custom[name] = None
+                    data["customRules"] = custom
+                except Exception:
+                    data["customRules"] = {}
+            # TimelineMetadata
+            tmeta = stage.GetPrimAtPath(f"{rules_root}/TimelineMetadata")
+            if tmeta and tmeta.IsValid():
+                tl: Dict[str, Any] = {}
+                for key in ("frameRate", "timeUnit", "looping", "keyframes", "keyframeLabels"):
+                    try:
+                        attr = tmeta.GetAttribute(key)
+                        tl[key] = attr.Get() if attr else None
+                    except Exception:
+                        tl[key] = None
+                data["timeline"] = tl
+            return data
+        except Exception:
+            get_logger(__name__).warning("Failed to read AnimationRules")
+            return data
+
+    @staticmethod
+    def write_animation_rules(
+        stage,
+        rule_descriptions: Optional[List[str]] = None,
+        custom_rules: Optional[Dict[str, Any]] = None,
+        timeline: Optional[Dict[str, Any]] = None,
+        rules_root: str = f"{StandardPrimPaths.STYLE_ROOT}/AnimationRules",
+    ) -> bool:
+        if stage is None or Sdf is None:
+            return False
+        try:
+            # Ensure root and subprims exist
+            _ = USDStageManager.get_or_define_prim(stage, rules_root, "Xform")
+            bsr = USDStageManager.get_or_define_prim(stage, f"{rules_root}/BlendshapeRules", "Xform")
+            tmd = USDStageManager.get_or_define_prim(stage, f"{rules_root}/TimelineMetadata", "Xform")
+
+            if bsr and rule_descriptions is not None:
+                attr = bsr.CreateAttribute("ruleDescriptions", Sdf.ValueTypeNames.StringArray)
+                try:
+                    attr.Set(list(rule_descriptions))
+                except Exception:
+                    attr.Set([])
+            if bsr and custom_rules:
+                for key, value in custom_rules.items():
+                    # Best-effort typing
+                    if isinstance(value, str):
+                        attr = bsr.CreateAttribute(key, Sdf.ValueTypeNames.String)
+                        attr.Set(value)
+                    elif isinstance(value, (list, tuple)) and all(isinstance(v, str) for v in value):
+                        attr = bsr.CreateAttribute(key, Sdf.ValueTypeNames.StringArray)
+                        attr.Set(list(value))
+                    elif isinstance(value, int):
+                        attr = bsr.CreateAttribute(key, Sdf.ValueTypeNames.Int)
+                        attr.Set(value)
+                    elif isinstance(value, float):
+                        attr = bsr.CreateAttribute(key, Sdf.ValueTypeNames.Float)
+                        attr.Set(value)
+                    elif isinstance(value, bool):
+                        attr = bsr.CreateAttribute(key, Sdf.ValueTypeNames.Bool)
+                        attr.Set(bool(value))
+                    else:
+                        attr = bsr.CreateAttribute(key, Sdf.ValueTypeNames.String)
+                        attr.Set(str(value))
+
+            if tmd and timeline is not None:
+                key_types = {
+                    "frameRate": Sdf.ValueTypeNames.Int,
+                    "timeUnit": Sdf.ValueTypeNames.String,
+                    "looping": Sdf.ValueTypeNames.Bool,
+                    "keyframes": Sdf.ValueTypeNames.IntArray,
+                    "keyframeLabels": Sdf.ValueTypeNames.StringArray,
+                }
+                for key, vtype in key_types.items():
+                    if key not in timeline:
+                        continue
+                    value = timeline.get(key)
+                    attr = tmd.CreateAttribute(key, vtype)
+                    try:
+                        if vtype == Sdf.ValueTypeNames.IntArray:
+                            attr.Set([int(v) for v in value])
+                        elif vtype == Sdf.ValueTypeNames.StringArray:
+                            attr.Set([str(v) for v in value])
+                        elif vtype == Sdf.ValueTypeNames.Int:
+                            attr.Set(int(value))
+                        elif vtype == Sdf.ValueTypeNames.Bool:
+                            attr.Set(bool(value))
+                        elif vtype == Sdf.ValueTypeNames.String:
+                            attr.Set(str(value))
+                        else:
+                            attr.Set(value)
+                    except Exception:
+                        pass
+            return True
+        except Exception:
+            get_logger(__name__).warning("Failed to write AnimationRules")
             return False
 
     @staticmethod

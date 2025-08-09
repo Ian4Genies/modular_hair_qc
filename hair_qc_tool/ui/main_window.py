@@ -9,6 +9,7 @@ import maya.cmds as cmds
 from pathlib import Path
 
 from ..config import config
+from ..utils.usd_utils import USDGroupUtils
 
 
 class HairQCMainWindow(QtWidgets.QMainWindow):
@@ -441,15 +442,10 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         
         if not config.usd_directory:
             return
-        
-        group_dir = config.usd_directory / "Group"
-        if not group_dir.exists():
-            return
-        
-        # Find all .usd files in Group directory
-        for usd_file in group_dir.glob("*.usd"):
-            group_name = usd_file.stem
-            self.group_list.addItem(group_name)
+        # Use utility to list groups per Step 2 utilities
+        groups = USDGroupUtils.list_groups(config.usd_directory)
+        for name in groups:
+            self.group_list.addItem(name)
     
     # Event handlers (placeholder implementations)
     def on_group_selected(self, row):
