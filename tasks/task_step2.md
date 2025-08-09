@@ -18,8 +18,8 @@ Track granular tasks for Step 2 from `task_list.md`. Follow prim paths in `docs/
 - [x] Viewport minimal-load ops (proxy-based)
 - [x] BlendshapeRules serialization (AnimationRules block) — read/write
 - [x] Logging integration for utils
-- [ ] Unit/smoke tests in Maya USD env
-- [ ] UI data refresh wiring (modules/styles, beyond groups)
+- [x] Smoke test / debug command in UI
+- [ ] UI data refresh wiring (modules/styles population beyond basic listing)
 
 ## Notes
 - Readers are resilient to missing prims/attrs and return empty structures.
@@ -27,5 +27,5 @@ Track granular tasks for Step 2 from `task_list.md`. Follow prim paths in `docs/
 - Writers create container prims when absent and set relationships/attributes idempotently.
 
 ## Follow-ups
-- Implement additional UI wiring: load module/style data when group is selected, using the new utils.
+- Implement additional UI wiring: load module/style data and state into editors; show exclusions/constraints.
 - Add asset path resolver helpers if needed for validation workflows.

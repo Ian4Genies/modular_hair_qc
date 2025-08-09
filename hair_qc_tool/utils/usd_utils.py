@@ -327,6 +327,165 @@ class USDGroupUtils:
             return []
 
     @staticmethod
+    def open_group_stage(usd_directory, group_name: str):
+        """Open and return the USD stage for the specified group name.
+
+        Uses the cached stage opener; returns None on failure.
+        """
+        try:
+            from pathlib import Path
+            base = Path(usd_directory) if not isinstance(usd_directory, Path) else usd_directory
+            group_file = base / "Group" / f"{group_name}.usd"
+            if not group_file.exists():
+                return None
+            return USDStageManager.open_stage(str(group_file))
+        except Exception:
+            get_logger(__name__).warning("Failed to open group stage")
+            return None
+
+    # ----------------------
+    # Create / Rename / Delete
+    # ----------------------
+    @staticmethod
+    def _normalize_group_name(name: str) -> str:
+        sanitized = (name or "").strip().replace(" ", "_")
+        # Remove illegal filesystem characters
+        illegal = '\\/:*?"<>|'
+        sanitized = "".join(ch for ch in sanitized if ch not in illegal)
+        return sanitized.lower()
+
+    @staticmethod
+    def create_group(usd_directory, group_name: str) -> bool:
+        """Create a new Group USD with minimal containers.
+
+        - Defines /HairGroup, /HairGroup/ModuleWhitelist/{Scalp,Crown,Tail,Bang}
+        - Defines /HairGroup/AlphaWhitelist/Scalp/{fade,hairline,sideburn}
+        - Sets empty arrays for attributes; Scalp whitelist may include scalp module path
+        """
+        try:
+            from pathlib import Path
+            base = Path(usd_directory) if not isinstance(usd_directory, Path) else usd_directory
+            if not base:
+                return False
+            group = USDGroupUtils._normalize_group_name(group_name)
+            if not group:
+                return False
+            group_dir = base / "Group"
+            group_dir.mkdir(parents=True, exist_ok=True)
+            target = group_dir / f"{group}.usd"
+            if target.exists():
+                return False
+
+            # Create stage and define structure
+            stage = USDStageManager.create_new_stage(str(target))
+            if stage is None:
+                # Fallback: write a minimal usda file
+                content = f"""#usda 1.0\n\n""" \
+                    f"def \"HairGroup\" {{\n" \
+                    f"    def \"ModuleWhitelist\" {{\n" \
+                    f"        def \"Scalp\" {{ asset[] moduleFiles = [@module/scalp/scalp.usd@] }}\n" \
+                    f"        def \"Crown\" {{ asset[] moduleFiles = [] }}\n" \
+                    f"        def \"Tail\"  {{ asset[] moduleFiles = [] }}\n" \
+                    f"        def \"Bang\"  {{ asset[] moduleFiles = [] }}\n" \
+                    f"    }}\n" \
+                    f"    def \"AlphaWhitelist\" {{\n" \
+                    f"        def \"Scalp\" {{\n" \
+                    f"            def \"fade\"     {{ asset[] whitelistedTextures = [] }}\n" \
+                    f"            def \"hairline\" {{ asset[] whitelistedTextures = [] }}\n" \
+                    f"            def \"sideburn\" {{ asset[] whitelistedTextures = [] }}\n" \
+                    f"        }}\n" \
+                    f"    }}\n" \
+                    f"}}\n"
+                with open(target, "w", encoding="utf-8") as f:
+                    f.write(content)
+                return True
+
+            # Define container prims
+            grp = USDStageManager.get_or_define_prim(stage, StandardPrimPaths.GROUP_ROOT, "Xform")
+            if grp is None:
+                return False
+            # Define module whitelist and alpha whitelist roots
+            mw_root = USDStageManager.get_or_define_prim(stage, StandardPrimPaths.GROUP_MODULE_WHITELIST_ROOT, "Xform")
+            # Define alpha whitelist root
+            aw_root = USDStageManager.get_or_define_prim(stage, StandardPrimPaths.GROUP_ALPHA_WHITELIST_ROOT, "Xform")
+            # Check if any of the roots are None or Sdf is None
+            if mw_root is None or aw_root is None or Sdf is None:
+                return False
+
+            # Module whitelist children
+            for slot in ("Scalp", "Crown", "Tail", "Bang"):
+                # Get or define the child prim of the module whitelist root
+                child = USDStageManager.get_or_define_prim(stage, f"{StandardPrimPaths.GROUP_MODULE_WHITELIST_ROOT}/{slot}", "Xform")
+                if child:
+                    attr = child.CreateAttribute("moduleFiles", Sdf.ValueTypeNames.AssetArray)
+                    # Seed scalp with default path; others empty
+                    if slot == "Scalp":
+                        try:
+                            attr.Set([Sdf.AssetPath("module/scalp/scalp.usd")])
+                        except Exception:
+                            attr.Set([])
+                    else:
+                        attr.Set([])
+
+            # Alpha whitelist categories
+            for cat in ("fade", "hairline", "sideburn"):
+                cat_prim = USDStageManager.get_or_define_prim(stage, f"{StandardPrimPaths.GROUP_ALPHA_WHITELIST_ROOT}/{cat}", "Xform")
+                if cat_prim:
+                    attr = cat_prim.CreateAttribute("whitelistedTextures", Sdf.ValueTypeNames.AssetArray)
+                    attr.Set([])
+
+            return USDStageManager.save_stage(stage)
+        except Exception:
+            return False
+
+    @staticmethod
+    def rename_group(usd_directory, old_name: str, new_name: str) -> bool:
+        """Rename a group file on disk, validating the new name."""
+        try:
+            from pathlib import Path
+            base = Path(usd_directory) if not isinstance(usd_directory, Path) else usd_directory
+            if not base:
+                return False
+            group_dir = base / "Group"
+            # Get the source and destination file paths
+            src = group_dir / f"{USDGroupUtils._normalize_group_name(old_name)}.usd"
+            dst = group_dir / f"{USDGroupUtils._normalize_group_name(new_name)}.usd"
+            # Check if the source file exists
+            if not src.exists():
+                return False
+            # Check if the destination file exists
+            if dst.exists():
+                return False
+            # Rename the source file to the destination file
+            src.rename(dst)
+            # Clear cache to avoid stale handles
+            USDStageManager.clear_cache()
+            return True
+        except Exception:
+            return False
+
+    @staticmethod
+    def delete_group(usd_directory, group_name: str) -> bool:
+        """Delete a group file from disk."""
+        try:
+            from pathlib import Path
+            # Get the base directory
+            base = Path(usd_directory) if not isinstance(usd_directory, Path) else usd_directory
+            if not base:
+                return False
+            # Get the path to the group file
+            path = base / "Group" / f"{USDGroupUtils._normalize_group_name(group_name)}.usd"
+            # Check if the group file exists
+            if not path.exists():
+                return False
+            # Unlink the group file
+            path.unlink()
+            USDStageManager.clear_cache()
+            return True
+        except Exception:
+            return False
+
+    @staticmethod
     def read_module_whitelist(stage, module_whitelist_root: str = StandardPrimPaths.GROUP_MODULE_WHITELIST_ROOT) -> Dict[str, List[str]]:
         """Read module whitelist entries from a Group stage.
 

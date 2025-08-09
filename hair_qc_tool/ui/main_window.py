@@ -9,6 +9,17 @@ import maya.cmds as cmds
 from pathlib import Path
 
 from ..config import config
+from ..utils.logging_utils import get_logger
+from ..utils.usd_utils import (
+    USDGroupUtils,
+    USDStageManager,
+    USDStyleUtils,
+    StandardPrimPaths,
+    CrossModuleExclusion,
+    BlendshapeConstraint,
+)
+import tempfile
+import os
 from ..utils.usd_utils import USDGroupUtils
 
 
@@ -155,6 +166,12 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         about_action = QtWidgets.QAction('About Hair QC Tool', self)
         about_action.triggered.connect(self.show_about)
         help_menu.addAction(about_action)
+
+        # Smoke tests action
+        smoke_action = QtWidgets.QAction('Run USD Utils Smoke Test', self)
+        smoke_action.setStatusTip('Run a quick validation of USD read/write and cache behavior')
+        smoke_action.triggered.connect(self.run_smoke_tests)
+        help_menu.addAction(smoke_action)
     
     def create_group_section(self):
         """Create group selection section"""
@@ -174,7 +191,13 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         group_controls = QtWidgets.QHBoxLayout()
         self.add_group_btn = QtWidgets.QPushButton("Add Group")
         self.add_group_btn.clicked.connect(self.add_group)
+        self.rename_group_btn = QtWidgets.QPushButton("Rename")
+        self.rename_group_btn.clicked.connect(self.rename_group)
+        self.delete_group_btn = QtWidgets.QPushButton("Delete")
+        self.delete_group_btn.clicked.connect(self.delete_group)
         group_controls.addWidget(self.add_group_btn)
+        group_controls.addWidget(self.rename_group_btn)
+        group_controls.addWidget(self.delete_group_btn)
         group_controls.addStretch()
         
         group_layout.addLayout(group_controls)
@@ -453,7 +476,66 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         if row >= 0:
             group_name = self.group_list.item(row).text()
             self.statusBar().showMessage(f"Selected group: {group_name}")
-            # TODO: Load modules and styles for this group
+            self.load_group_data(group_name)
+
+    def load_group_data(self, group_name: str):
+        if not config.usd_directory:
+            return
+        stage = USDGroupUtils.open_group_stage(config.usd_directory, group_name)
+        module_whitelist = USDGroupUtils.read_module_whitelist(stage)
+        alpha_whitelist = USDGroupUtils.read_alpha_whitelist(stage)
+        self.populate_module_list_from_whitelist(module_whitelist)
+        self.populate_alpha_list_from_whitelist(alpha_whitelist)
+        self.populate_style_list()
+
+    def populate_module_list_from_whitelist(self, module_whitelist):
+        self.module_list.setRowCount(0)
+        rows = []
+        for module_type, asset_paths in module_whitelist.items():
+            for asset in asset_paths:
+                # Normalize like @module/crown/simple.usd@ → (crown, simple)
+                clean = str(asset).strip('@')
+                parts = clean.split('/')
+                name = parts[-1].replace('.usd', '') if parts else clean
+                type_guess = parts[1] if len(parts) > 1 else module_type
+                rows.append((type_guess, name))
+        self.module_list.setRowCount(len(rows))
+        for r, (type_name, name) in enumerate(rows):
+            self.module_list.setItem(r, 0, QtWidgets.QTableWidgetItem(type_name))
+            self.module_list.setItem(r, 1, QtWidgets.QTableWidgetItem(name))
+
+    def populate_alpha_list_from_whitelist(self, alpha_whitelist):
+        self.alpha_list.setRowCount(0)
+        rows = []
+        for category, textures in alpha_whitelist.items():
+            for tex in textures:
+                rows.append((True, tex))
+        self.alpha_list.setRowCount(len(rows))
+        for r, (whitelisted, path) in enumerate(rows):
+            self.alpha_list.setItem(r, 0, QtWidgets.QTableWidgetItem("Yes" if whitelisted else "No"))
+            self.alpha_list.setItem(r, 1, QtWidgets.QTableWidgetItem(str(path)))
+            self.alpha_list.setItem(r, 2, QtWidgets.QTableWidgetItem(""))
+
+    def populate_style_list(self):
+        # Minimal wiring: list existing style files; status left blank for now
+        self.style_list.setRowCount(0)
+        if not config.usd_directory:
+            return
+        style_dir = Path(config.usd_directory) / "style"
+        if not style_dir.exists():
+            return
+        styles = sorted(style_dir.glob("*.usd"))
+        self.style_list.setRowCount(len(styles))
+        for r, s in enumerate(styles):
+            self.style_list.setItem(r, 0, QtWidgets.QTableWidgetItem(""))
+            # Attempt to split by underscores for columns if pattern matches
+            parts = s.stem.split('_')
+            crown = parts[1] if len(parts) > 1 else ""
+            tail = parts[2] if len(parts) > 2 else ""
+            bang = parts[3] if len(parts) > 3 else ""
+            self.style_list.setItem(r, 1, QtWidgets.QTableWidgetItem(crown))
+            self.style_list.setItem(r, 2, QtWidgets.QTableWidgetItem(tail))
+            self.style_list.setItem(r, 3, QtWidgets.QTableWidgetItem(bang))
     
     def on_module_selected(self, current_item, previous_item):
         """Handle module selection change"""
@@ -479,8 +561,26 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
     
     def add_group(self):
         """Add new group"""
-        # TODO: Implement group creation
-        pass
+        # Check if the USD directory is set
+        if not config.usd_directory:
+            QtWidgets.QMessageBox.warning(self, "No Directory", "Set a USD directory first (File > Change USD Directory)")
+            return
+        # Get the group name from the user
+        name, ok = QtWidgets.QInputDialog.getText(self, "Add Group", "Group name:")
+        if not ok or not name:
+            # If the user cancels or doesn't enter a name, return
+            return
+        # Create the group
+        created = USDGroupUtils.create_group(config.usd_directory, name)
+        if not created:
+            QtWidgets.QMessageBox.warning(self, "Create Failed", "Could not create group. It may already exist or the name is invalid.")
+            return
+        self.refresh_data()
+        # Select the new group if present
+        items = self.group_list.findItems(name.lower().replace(" ", "_"), QtCore.Qt.MatchExactly)
+        if items:
+            row = self.group_list.row(items[0])
+            self.group_list.setCurrentRow(row)
     
     def add_module(self):
         """Add new module"""
@@ -501,6 +601,58 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
         """Save current module to USD"""
         # TODO: Implement module saving
         pass
+
+    def rename_group(self):
+        """Rename selected group"""
+        # Check if the USD directory is set
+        if not config.usd_directory:
+            return
+        # Get the current group name
+        row = self.group_list.currentRow()
+        # Check if a group is selected
+        if row < 0:
+            return
+        # Get the current group name
+        old_name = self.group_list.item(row).text()
+        new_name, ok = QtWidgets.QInputDialog.getText(self, "Rename Group", "New name:", text=old_name)
+        # Check if the user cancels or doesn't enter a name, or the new name is the same as the old name
+        if not ok or not new_name or new_name == old_name:
+            return
+        # Rename the group
+        ok = USDGroupUtils.rename_group(config.usd_directory, old_name, new_name)
+        # Check if the group was renamed
+        if not ok:
+            QtWidgets.QMessageBox.warning(self, "Rename Failed", "Could not rename group. Target may already exist or the name is invalid.")
+            return
+        self.refresh_data()
+        # Reselect new name
+        items = self.group_list.findItems(new_name.lower().replace(" ", "_"), QtCore.Qt.MatchExactly)
+        if items:
+            self.group_list.setCurrentItem(items[0])
+
+    def delete_group(self):
+        """Delete selected group"""
+        if not config.usd_directory:
+            return
+        row = self.group_list.currentRow()
+        if row < 0:
+            return
+        name = self.group_list.item(row).text()
+        confirm = QtWidgets.QMessageBox.question(
+            self,
+            "Delete Group",
+            f"Delete group '{name}'? This removes the USD file from disk.",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+        )
+        # Check if the user cancels or doesn't confirm
+        if confirm != QtWidgets.QMessageBox.Yes:
+            return
+        # Delete the group
+        ok = USDGroupUtils.delete_group(config.usd_directory, name)
+        if not ok:
+            QtWidgets.QMessageBox.warning(self, "Delete Failed", "Could not delete group.")
+            return
+        self.refresh_data()
     
     def generate_styles(self):
         """Generate style combinations"""
@@ -694,4 +846,69 @@ class HairQCMainWindow(QtWidgets.QMainWindow):
             <li>Ctrl+S - Save current</li>
             <li>Ctrl+O - Change directory</li>
             </ul>"""
+        )
+
+    def run_smoke_tests(self):
+        """Run minimal smoke tests for USD utils without touching real assets."""
+        log = get_logger(__name__)
+        results = []
+        try:
+            fd, temp_path = tempfile.mkstemp(suffix=".usda", prefix="hair_qc_smoke_")
+            os.close(fd)
+            stage = USDStageManager.create_new_stage(temp_path)
+            ok = stage is not None
+            results.append(f"Create stage: {'OK' if ok else 'FAIL'}")
+            if not ok:
+                raise RuntimeError("create stage failed")
+
+            USDStageManager.get_or_define_prim(stage, StandardPrimPaths.STYLE_ROOT, "Xform")
+            wrote = USDStyleUtils.write_animation_rules(
+                stage,
+                rule_descriptions=["Test rule A", "Test rule B"],
+                custom_rules={"lengthConstraint": "Crown.lengthen.max = 0.7"},
+                timeline={"frameRate": 24, "timeUnit": "frames", "looping": False, "keyframes": [1, 10], "keyframeLabels": ["Start", "End"]},
+            )
+            results.append(f"Write AnimationRules: {'OK' if wrote else 'FAIL'}")
+            save_ok = USDStageManager.save_stage(stage)
+            results.append(f"Save stage: {'OK' if save_ok else 'FAIL'}")
+
+            reopened = USDStageManager.open_stage(temp_path)
+            rr = USDStyleUtils.read_animation_rules(reopened)
+            roundtrip_ok = bool(rr.get("ruleDescriptions")) and rr.get("timeline", {}).get("frameRate") == 24
+            results.append(f"Read AnimationRules round-trip: {'OK' if roundtrip_ok else 'FAIL'}")
+
+            exc_ok = USDStyleUtils.write_cross_module_exclusions(
+                reopened,
+                [CrossModuleExclusion(name="TestExcl", target_prim_paths=[f"{StandardPrimPaths.STYLE_MODULES_ROOT}/Crown/BlendShapes/volumeOut", f"{StandardPrimPaths.STYLE_MODULES_ROOT}/Bang/BlendShapes/spread"])],
+            )
+            con_ok = USDStyleUtils.write_blendshape_constraints(
+                reopened,
+                [BlendshapeConstraint(name="TestCon", constrained_prim_paths=[f"{StandardPrimPaths.STYLE_MODULES_ROOT}/Crown/BlendShapes/lengthen", f"{StandardPrimPaths.STYLE_MODULES_ROOT}/Tail/BlendShapes/lengthen"], max_weights=[0.7, 0.5])],
+            )
+            save2 = USDStageManager.save_stage(reopened)
+            re2 = USDStageManager.open_stage(temp_path)
+            exc_read = USDStyleUtils.read_cross_module_exclusions(re2)
+            con_read = USDStyleUtils.read_blendshape_constraints(re2)
+            results.append(f"Write/Read exclusions: {'OK' if (exc_ok and len(exc_read) >= 1) else 'FAIL'}")
+            results.append(f"Write/Read constraints: {'OK' if (con_ok and len(con_read) >= 1) else 'FAIL'}")
+
+            st1 = USDStageManager.open_stage(temp_path)
+            st2 = USDStageManager.open_stage(temp_path)
+            cache_ok = st1 is st2
+            results.append(f"Stage cache reuse: {'OK' if cache_ok else 'FAIL'}")
+
+        except Exception as e:
+            results.append(f"Exception: {e}")
+            log.warning(f"Smoke test failed: {e}")
+        finally:
+            try:
+                if 'temp_path' in locals() and os.path.exists(temp_path):
+                    os.remove(temp_path)
+            except Exception:
+                pass
+
+        QtWidgets.QMessageBox.information(
+            self,
+            "USD Utils Smoke Test",
+            "\n".join(results) or "No results"
         )
