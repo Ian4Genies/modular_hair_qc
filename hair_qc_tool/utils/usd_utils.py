@@ -521,6 +521,102 @@ class USDGroupUtils:
             return results
 
     @staticmethod
+    def write_module_whitelist(stage, data: Dict[str, List[str]], module_whitelist_root: str = StandardPrimPaths.GROUP_MODULE_WHITELIST_ROOT) -> bool:
+        """Write the entire module whitelist mapping (type -> asset paths).
+
+        - Creates missing container prims as needed
+        - Normalizes values to Sdf.AssetPath
+        - Keeps ordering stable by sorting paths
+        """
+        if stage is None or Sdf is None:
+            return False
+        try:
+            root = USDStageManager.get_or_define_prim(stage, module_whitelist_root, "Xform")
+            if root is None:
+                return False
+            for module_type, assets in (data or {}).items():
+                # Normalize module type casing (Scalp/Crown/Tail/Bang)
+                type_name = str(module_type)
+                type_name = type_name[:1].upper() + type_name[1:].lower()
+                child_path = f"{module_whitelist_root}/{type_name}"
+                child = USDStageManager.get_or_define_prim(stage, child_path, "Xform")
+                if child is None:
+                    continue
+                attr = child.CreateAttribute("moduleFiles", Sdf.ValueTypeNames.AssetArray)
+                try:
+                    normalized = sorted({str(a).replace("\\", "/") for a in (assets or [])})
+                    asset_paths = [Sdf.AssetPath(p) for p in normalized]
+                except Exception:
+                    asset_paths = []
+                attr.Set(asset_paths)
+            return True
+        except Exception:
+            return False
+
+    @staticmethod
+    def add_module_to_whitelist(stage, module_type: str, asset_path: str, module_whitelist_root: str = StandardPrimPaths.GROUP_MODULE_WHITELIST_ROOT) -> bool:
+        """Add an asset path to a module type's whitelist if not present."""
+        if stage is None or Sdf is None:
+            return False
+        try:
+            type_name = str(module_type)
+            type_name = type_name[:1].upper() + type_name[1:].lower()
+            child_path = f"{module_whitelist_root}/{type_name}"
+            child = USDStageManager.get_or_define_prim(stage, child_path, "Xform")
+            if child is None:
+                return False
+            attr = child.CreateAttribute("moduleFiles", Sdf.ValueTypeNames.AssetArray)
+            values = attr.Get() or []
+            existing: List[str] = []
+            for v in values:
+                try:
+                    existing.append(str(v.path) if hasattr(v, "path") else str(v))
+                except Exception:
+                    existing.append(str(v))
+            normalized = str(asset_path).replace("\\", "/")
+            if normalized not in existing:
+                existing.append(normalized)
+                existing = sorted(set(existing))
+                try:
+                    attr.Set([Sdf.AssetPath(p) for p in existing])
+                except Exception:
+                    return False
+            return True
+        except Exception:
+            return False
+
+    @staticmethod
+    def remove_module_from_whitelist(stage, module_type: str, asset_path: str, module_whitelist_root: str = StandardPrimPaths.GROUP_MODULE_WHITELIST_ROOT) -> bool:
+        """Remove an asset path from a module type's whitelist if present."""
+        if stage is None or Sdf is None:
+            return False
+        try:
+            type_name = str(module_type)
+            type_name = type_name[:1].upper() + type_name[1:].lower()
+            child_path = f"{module_whitelist_root}/{type_name}"
+            child = USDStageManager.get_or_define_prim(stage, child_path, "Xform")
+            if child is None:
+                return False
+            attr = child.CreateAttribute("moduleFiles", Sdf.ValueTypeNames.AssetArray)
+            values = attr.Get() or []
+            existing: List[str] = []
+            for v in values:
+                try:
+                    existing.append(str(v.path) if hasattr(v, "path") else str(v))
+                except Exception:
+                    existing.append(str(v))
+            normalized = str(asset_path).replace("\\", "/")
+            if normalized in existing:
+                filtered = [p for p in existing if p != normalized]
+                try:
+                    attr.Set([Sdf.AssetPath(p) for p in filtered])
+                except Exception:
+                    return False
+            return True
+        except Exception:
+            return False
+
+    @staticmethod
     def read_alpha_whitelist(stage, alpha_whitelist_root: str = StandardPrimPaths.GROUP_ALPHA_WHITELIST_ROOT) -> Dict[str, List[str]]:
         """Read scalp alpha whitelist categories to asset paths mapping."""
         results: Dict[str, List[str]] = {}
